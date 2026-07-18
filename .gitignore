@@ -1,5 +1,8 @@
 artifacts/*
 !artifacts/.gitkeep
+!artifacts/smoke-20260718T125325Z/
+!artifacts/smoke-20260718T125325Z/**
+
 __pycache__/
 *.pyc
 .venv/

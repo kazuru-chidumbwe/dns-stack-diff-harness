@@ -32,9 +32,10 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Distro kernel package | `linux-image-6.8.0-134-generic` `6.8.0-134.134` |
 | Docker / Compose | `29.1.3` / `2.40.3` |
 | Hardware / VM | QEMU/KVM |
-| Manifest SHA-256 | `36da41f5dd5115e8b800e4011638466127e282d1b49d4e3810189946c036123d` |
+| Manifest SHA-256 | `6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560` |
+| Frozen manifest | [`artifacts/smoke-20260718T125325Z/manifest.json`](artifacts/smoke-20260718T125325Z/manifest.json) |
 
-Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has the shared-kernel limits documented in `SCOPE-ISOLATION.md`.
+Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has the shared-kernel limits documented in `SCOPE-ISOLATION.md`. The frozen manifest is committed on the tag so the cited SHA-256 is independently checkable. Later `make smoke` runs stay gitignored and will produce a different hash; match `pass: true` and `divergence_count: 0`.
 
 ## Status
 
@@ -56,9 +57,11 @@ Requirements: Docker Compose, Python 3.12+.
 git clone https://github.com/kazuru-chidumbwe/dns-stack-diff-harness
 cd dns-stack-diff-harness
 git checkout blog-dns01-2026-07
+sha256sum artifacts/smoke-20260718T125325Z/manifest.json
+# expect: 6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560
 docker compose -f deploy/compose.yaml up -d --build
 make smoke
-# record uname -r, docker version, manifest SHA-256
+# new run SHA will differ; require pass=true and divergence_count=0
 ```
 
 Smoke harness failure: identical `NOERROR` plus RRset containing `203.0.113.10` required; any smoke-axis mismatch is Class C, not a finding.
