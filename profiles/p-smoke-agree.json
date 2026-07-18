@@ -1,0 +1,27 @@
+{
+  "id": "P-SMOKE-AGREE",
+  "intent": "Benign A record via controlled auth — expect agreement (instrument check)",
+  "status": "active",
+  "layer": "application",
+  "adversary": {
+    "position": "none",
+    "capability": [],
+    "win_condition": "None — smoke gate. Any RCODE/RRset divergence is a harness/Class C failure."
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "dnsmasq": "off",
+    "notes": "Matched non-validating for lab.stackdiff. so defaults (Unbound strict vs dnsmasq off) cannot manufacture a smoke failure"
+  },
+  "query": {
+    "name": "agree.lab.stackdiff.",
+    "type": "A"
+  },
+  "expect": {
+    "rcode": "NOERROR",
+    "answers_contain": ["203.0.113.10"],
+    "divergence": "none"
+  },
+  "class_hint": "C_if_divergent_else_pass"
+}

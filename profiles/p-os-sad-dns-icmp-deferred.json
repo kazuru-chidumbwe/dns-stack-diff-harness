@@ -1,0 +1,39 @@
+{
+  "id": "P-OS-SAD-DNS-ICMP-DEFERRED",
+  "intent": "SAD DNS-class ICMP msgs-per-sec token bucket — deferred until lab kernel shape pinned",
+  "status": "deferred-os-layer",
+  "layer": "os",
+  "adversary": {
+    "position": "off-path",
+    "capability": [
+      "ICMP-based ephemeral port inference via icmp_msgs_per_sec / icmp_msgs_burst token-bucket side channel"
+    ],
+    "win_condition": "Off-path cache poisoning via ICMP rate-limit leakage with differential success across path hops"
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "dnsmasq": "off",
+    "notes": "DNSSEC not the variable; posture pinned matched for consistency"
+  },
+  "query": {
+    "name": "agree.lab.stackdiff.",
+    "type": "A"
+  },
+  "isolation": {
+    "runner": "docker-netns",
+    "kernel": "pin-uname-r-confirm-icmp-global-allow-shape",
+    "icmp_ratelimit_scope": "per-netns-if-v6.12-shaped-else-host-global",
+    "mechanism": "net/ipv4/icmp.c icmp_global_allow(); compare v6.11 host-wide icmp_global vs v6.12 net->ipv4.icmp_global_*",
+    "introducing_commit_full": "b056b4cd9178f7a1d5d57f7b48b073c29729ddaa",
+    "verification": "2026-07-18 tag diff torvalds/linux v6.11 vs v6.12 net/ipv4/icmp.c"
+  },
+  "notes": "Not Klein. Prefer tag-diff evidence over truncated hashes. See docs/SCOPE-ISOLATION.md.",
+  "class_hint": "out_of_scope_until_kernel_pinned",
+  "references": [
+    "SAD DNS / CVE-2020-25705 (Man et al., CCS); saddns.net",
+    "Primary mitigation: https://github.com/torvalds/linux/commit/b38e7819cae946e2edf869e604af1e65a5d241c5 (randomize limiter, 5.10+)",
+    "Netns isolation: https://github.com/torvalds/linux/commit/b056b4cd9178f7a1d5d57f7b48b073c29729ddaa (v6.11→v6.12 tag shape)",
+    "torvalds/linux tags v6.11 vs v6.12 net/ipv4/icmp.c"
+  ]
+}

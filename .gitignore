@@ -1,0 +1,11 @@
+artifacts/*
+!artifacts/.gitkeep
+__pycache__/
+*.pyc
+.venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+logs/

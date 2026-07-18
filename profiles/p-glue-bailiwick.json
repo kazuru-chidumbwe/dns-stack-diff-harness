@@ -1,0 +1,33 @@
+{
+  "id": "P-GLUE-BAILIWICK",
+  "intent": "Out-of-bailiwick glue in ADDITIONAL — path-role stand-ins may disagree on cache/use",
+  "status": "active",
+  "layer": "application",
+  "adversary": {
+    "position": "malicious-but-trusted-upstream",
+    "capability": [
+      "Crafted DNS response content",
+      "Out-of-bailiwick glue / ADDITIONAL records"
+    ],
+    "win_condition": "One hop caches or uses out-of-bailiwick glue that the other hop rejects or ignores — path inconsistency"
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "dnsmasq": "off",
+    "notes": "Matched non-validating so bailiwick accept/reject is not confounded by Unbound default DNSSEC"
+  },
+  "query": {
+    "name": "www.lab.stackdiff.",
+    "type": "A"
+  },
+  "expect": {
+    "answers_contain": ["203.0.113.20"],
+    "divergence": "measure",
+    "notes": "Answer RRset should still carry www A from auth; ADDITIONAL glue is the stress. Divergence on answers/rcode/hang is recorded, not auto-Class-B."
+  },
+  "injector": "mitm-additional-glue",
+  "notes": "MITM mode additional-glue. Application-layer only.",
+  "class_hint": "A_or_B_after_analysis",
+  "references": ["bailiwick / glue policy divergence; measurement not discovery claim"]
+}

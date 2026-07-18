@@ -1,0 +1,13 @@
+$ORIGIN lab.stackdiff.
+$TTL 60
+@       IN SOA ns.lab.stackdiff. hostmaster.lab.stackdiff. (
+            2026071801 ; serial
+            60         ; refresh
+            30         ; retry
+            3600       ; expire
+            30         ; minimum
+            )
+@       IN NS  ns.lab.stackdiff.
+ns      IN A   172.30.0.10
+agree   IN A   203.0.113.10
+www     IN A   203.0.113.20

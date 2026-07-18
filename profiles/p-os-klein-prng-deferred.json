@@ -1,0 +1,32 @@
+{
+  "id": "P-OS-KLEIN-PRNG-DEFERRED",
+  "intent": "Klein-class shared prandom / cross-layer port prediction — deferred",
+  "status": "deferred-os-layer",
+  "layer": "os",
+  "adversary": {
+    "position": "off-path",
+    "capability": [
+      "Infer shared kernel prandom state from one network layer",
+      "Predict UDP source ports / correlate cross-layer identifiers"
+    ],
+    "win_condition": "Differential success poisoning or tracking across resolvers that share a host kernel"
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "dnsmasq": "off",
+    "notes": "DNSSEC not the variable; posture pinned matched for consistency"
+  },
+  "query": {
+    "name": "agree.lab.stackdiff.",
+    "type": "A"
+  },
+  "isolation": {
+    "runner": "required-firecracker-or-kata-or-full-vm",
+    "kernel": "unspecified-until-lab-pin",
+    "icmp_ratelimit_scope": "n/a"
+  },
+  "notes": "Klein explicitly demonstrates cross-container attacks on shared prandom. Plain Docker is invalid. See docs/SCOPE-ISOLATION.md.",
+  "class_hint": "out_of_scope_v0",
+  "references": ["Klein cross-layer PRNG (arXiv:2012.07432)"]
+}

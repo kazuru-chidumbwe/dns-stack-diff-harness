@@ -1,0 +1,32 @@
+{
+  "id": "P-MALFORMED-RCODE",
+  "intent": "Malformed upstream response (TuDoor-inspired application-layer pre-processing)",
+  "status": "active",
+  "layer": "application",
+  "adversary": {
+    "position": "on-path",
+    "capability": [
+      "Inject malformed DNS response bytes",
+      "Manipulate response pre-processing edge cases"
+    ],
+    "win_condition": "One hop returns a usable/partial answer (or caches) while the other drops, SERVFAILs, or crashes"
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "dnsmasq": "off",
+    "notes": "Matched non-validating; posture is not the variable under test"
+  },
+  "query": {
+    "name": "agree.lab.stackdiff.",
+    "type": "A"
+  },
+  "expect": {
+    "divergence": "measure",
+    "notes": "Truncated upstream reply. Expect possible SERVFAIL / timeout / dig hard-error divergence; triage before Class A/B."
+  },
+  "injector": "mitm-malformed-response",
+  "notes": "MITM mode malformed-truncated. Application-layer malformed content only.",
+  "class_hint": "A_or_B_or_C_after_analysis",
+  "references": ["TuDoor (IEEE S&P 2024) — motivation/measurement mapping"]
+}
