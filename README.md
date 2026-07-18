@@ -26,7 +26,7 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 
 | Field | Example pin (2026-07-18) |
 | --- | --- |
-| Git tag | `blog-dns01-YYYY-MM` |
+| Git tag | `blog-dns01-2026-07` |
 | Host OS / distro | Ubuntu 24.04.4 LTS (`stackdiff-lab`) |
 | `uname -r` | `6.8.0-134-generic` |
 | Distro kernel package | `linux-image-6.8.0-134-generic` `6.8.0-134.134` |
@@ -53,9 +53,9 @@ No invented finding counts. Adversarial manifests are measurement only until Cla
 Requirements: Docker Compose, Python 3.12+.
 
 ```bash
-git clone <PUBLIC_REPO_URL>
+git clone https://github.com/kazuru-chidumbwe/dns-stack-diff-harness
 cd dns-stack-diff-harness
-git checkout blog-dns01-YYYY-MM   # pin when published; not main
+git checkout blog-dns01-2026-07
 docker compose -f deploy/compose.yaml up -d --build
 make smoke
 # record uname -r, docker version, manifest SHA-256
