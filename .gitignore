@@ -2,6 +2,8 @@ artifacts/*
 !artifacts/.gitkeep
 !artifacts/smoke-20260718T125325Z/
 !artifacts/smoke-20260718T125325Z/**
+!artifacts/adversarial-20260718T130854Z/
+!artifacts/adversarial-20260718T130854Z/**
 
 __pycache__/
 *.pyc

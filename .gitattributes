@@ -2,6 +2,9 @@
 artifacts/smoke-*/manifest.json text eol=lf
 artifacts/smoke-*/manifest.sha256 text eol=lf
 artifacts/smoke-*/README.md text eol=lf
+artifacts/adversarial-*/manifest.json text eol=lf
+artifacts/adversarial-*/manifest.sha256 text eol=lf
+artifacts/adversarial-*/README.md text eol=lf
 *.py text eol=lf
 *.md text eol=lf
 *.json text eol=lf

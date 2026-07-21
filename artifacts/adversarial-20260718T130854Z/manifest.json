@@ -1,0 +1,200 @@
+{
+  "schema": "stackdiff.adversarial.v0",
+  "created_utc": "2026-07-18T13:09:39.013487+00:00",
+  "role": "dns02_application_layer_mitm",
+  "lab_environment": {
+    "uname_r": "6.8.0-134-generic",
+    "uname_a": "Linux stackdiff-lab 6.8.0-134-generic #134-Ubuntu SMP PREEMPT_DYNAMIC Fri Jun 26 18:43:11 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "docker_version": "29.1.3",
+    "platform": "linux"
+  },
+  "results": [
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "injector": "mitm-additional-glue",
+      "mitm_mode": "additional-glue",
+      "adversary": {
+        "position": "malicious-but-trusted-upstream",
+        "capability": [
+          "Crafted DNS response content",
+          "Out-of-bailiwick glue / ADDITIONAL records"
+        ],
+        "win_condition": "One hop caches or uses out-of-bailiwick glue that the other hop rejects or ignores \u2014 path inconsistency"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "dnsmasq": "off",
+        "notes": "Matched non-validating so bailiwick accept/reject is not confounded by Unbound default DNSSEC"
+      },
+      "query": {
+        "name": "www.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 60722\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20"
+        },
+        "dnsmasq": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "aa": true,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3978\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: ee0e093fe17d53e8 (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20"
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash"
+        ],
+        "resolvers": [
+          "dnsmasq",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "aa",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": true,
+            "right_value": false
+          }
+        ],
+        "divergence_count": 1,
+        "class_hint": "C_until_triaged"
+      },
+      "class_hint": "A_or_B_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process."
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "injector": "mitm-malformed-response",
+      "mitm_mode": "malformed-truncated",
+      "adversary": {
+        "position": "on-path",
+        "capability": [
+          "Inject malformed DNS response bytes",
+          "Manipulate response pre-processing edge cases"
+        ],
+        "win_condition": "One hop returns a usable/partial answer (or caches) while the other drops, SERVFAILs, or crashes"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "dnsmasq": "off",
+        "notes": "Matched non-validating; posture is not the variable under test"
+      },
+      "query": {
+        "name": "agree.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "SERVFAIL",
+          "answers": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 24603\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232"
+        },
+        "dnsmasq": {
+          "rcode": null,
+          "answers": [],
+          "aa": null,
+          "ra": null,
+          "error": "dig exit 9",
+          "raw": ";; communications error to 127.0.0.1#9054: timed out\n\n; <<>> DiG 9.18.39-0ubuntu0.24.04.5-Ubuntu <<>> @127.0.0.1 -p 9054 agree.lab.stackdiff. A +time=2 +tries=1 +noall +answer +comments\n; (1 server found)\n;; global options: +cmd\n;; no servers could be reached"
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash"
+        ],
+        "resolvers": [
+          "dnsmasq",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "rcode",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": "SERVFAIL"
+          },
+          {
+            "axis": "aa",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": false
+          },
+          {
+            "axis": "ra",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": true
+          },
+          {
+            "axis": "hang_or_crash",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": "dig exit 9",
+            "right_value": null
+          }
+        ],
+        "divergence_count": 4,
+        "class_hint": "C_until_triaged"
+      },
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process."
+    }
+  ],
+  "summary_table": [
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "mitm_mode": "additional-glue",
+      "divergence_count": 1,
+      "axes": [
+        "aa"
+      ],
+      "class_hint": "A_or_B_after_analysis",
+      "oracle_class_hint": "C_until_triaged"
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "mitm_mode": "malformed-truncated",
+      "divergence_count": 4,
+      "axes": [
+        "aa",
+        "hang_or_crash",
+        "ra",
+        "rcode"
+      ],
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "oracle_class_hint": "C_until_triaged"
+    }
+  ],
+  "disclaimer": "Measurement only. No CVE / exploitable claims in this manifest. Smoke oracle remains make smoke on compose.yaml without this overlay."
+}

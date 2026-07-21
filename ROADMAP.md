@@ -12,6 +12,7 @@
 
 - [x] MITM injector (`deploy/mitm/dns_mitm.py`) + `compose.adversarial.yaml` overlay
 - [x] Activate `P-GLUE-BAILIWICK` + `P-MALFORMED-RCODE` (`make adversarial`)
+- [x] Frozen measurement pin `artifacts/adversarial-20260718T130854Z/` + tag `blog-dns02a-2026-07`
 - [ ] First Class A/B table from pinned manifests + root-cause notes (triage, not auto-label)
 - [ ] Unbound **full recursive** mode enabled (smoke stays forward-only)
 - [ ] Disclosure process before any “exploitable” language

@@ -35,7 +35,16 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Manifest SHA-256 | `6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560` |
 | Frozen manifest | [`artifacts/smoke-20260718T125325Z/manifest.json`](artifacts/smoke-20260718T125325Z/manifest.json) |
 
-Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has the shared-kernel limits documented in `SCOPE-ISOLATION.md`. The frozen manifest is committed on the tag so the cited SHA-256 is independently checkable. Later `make smoke` runs stay gitignored and will produce a different hash; match `pass: true` and `divergence_count: 0`.
+### DNS-02a adversarial pin (measurement)
+
+| Field | Example pin (2026-07-18) |
+| --- | --- |
+| Git tag | `blog-dns02a-2026-07` |
+| Frozen manifest | [`artifacts/adversarial-20260718T130854Z/manifest.json`](artifacts/adversarial-20260718T130854Z/manifest.json) |
+| Manifest SHA-256 | `faa8afbaa1b02f64fdd4a598b7a799c3f45d53af8d4e542c63ec6d8372a7d88a` |
+| Docs | [`docs/ADVERSARIAL.md`](docs/ADVERSARIAL.md) |
+
+Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has the shared-kernel limits documented in `SCOPE-ISOLATION.md`. Frozen manifests are committed on the tags so cited SHA-256 values are independently checkable. Later `make smoke` / `make adversarial` runs stay gitignored and will produce a different hash.
 
 ## Status
 
@@ -45,6 +54,7 @@ Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has th
 | Threat / isolation / schema docs | v0 |
 | Oracle validation smoke (`P-SMOKE-AGREE`) | green (lab pin above) |
 | Application-layer adversarial runner | available (`make adversarial`) |
+| DNS-02a frozen adversarial pin | committed (measurement only) |
 | Klein / SAD DNS profiles | deferred |
 
 No invented finding counts. Adversarial manifests are measurement only until Class A/B triage and disclosure.
@@ -56,9 +66,11 @@ Requirements: Docker Compose, Python 3.12+.
 ```bash
 git clone https://github.com/kazuru-chidumbwe/dns-stack-diff-harness
 cd dns-stack-diff-harness
-git checkout blog-dns01-2026-07
+git checkout blog-dns02a-2026-07
 sha256sum artifacts/smoke-20260718T125325Z/manifest.json
 # expect: 6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560
+sha256sum artifacts/adversarial-20260718T130854Z/manifest.json
+# expect: faa8afbaa1b02f64fdd4a598b7a799c3f45d53af8d4e542c63ec6d8372a7d88a
 docker compose -f deploy/compose.yaml up -d --build
 make smoke
 # new run SHA will differ; require pass=true and divergence_count=0
@@ -66,7 +78,7 @@ make smoke
 
 Smoke harness failure: identical `NOERROR` plus RRset containing `203.0.113.10` required; any smoke-axis mismatch is Class C, not a finding.
 
-Optional: `make adversarial` runs application-layer MITM profiles. It does not replace smoke.
+Optional: `make adversarial` runs application-layer MITM profiles. It does not replace smoke. See [`docs/ADVERSARIAL.md`](docs/ADVERSARIAL.md).
 
 ## Profiles (v0)
 
@@ -92,6 +104,7 @@ Optional: `make adversarial` runs application-layer MITM profiles. It does not r
 - [`docs/SCOPE-ISOLATION.md`](docs/SCOPE-ISOLATION.md)
 - [`docs/SCHEMA.md`](docs/SCHEMA.md)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- [`docs/ADVERSARIAL.md`](docs/ADVERSARIAL.md)
 - [`ROADMAP.md`](ROADMAP.md)
 
 ## License
