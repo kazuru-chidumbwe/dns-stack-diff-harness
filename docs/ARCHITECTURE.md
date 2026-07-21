@@ -59,6 +59,7 @@ Smoke uses Unbound **forward-only** against lab auth — this is the **oracle va
 | [`THREAT-MODEL.md`](THREAT-MODEL.md) | Adversary fields + DNSSEC posture |
 | [`SCOPE-ISOLATION.md`](SCOPE-ISOLATION.md) | Klein vs SAD DNS split; Docker validity |
 | [`SCHEMA.md`](SCHEMA.md) | Profile contract |
+| [`ADVERSARIAL.md`](ADVERSARIAL.md) | Adversarial runner + measurement-only rule |
 
 ## Smoke rule
 

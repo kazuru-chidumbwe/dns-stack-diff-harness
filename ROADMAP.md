@@ -45,4 +45,3 @@ See `docs/SCOPE-ISOLATION.md`.
 - Statistical analysis (repeated runs, confidence intervals on divergence rates)
 - Bring systemd-resolved and CoreDNS into path mode earlier once pair oracle is trusted
 - Quantitative cache-poisoning success probability under pinned profiles (disclosure-gated)
-
