@@ -6,6 +6,20 @@ StackDiff asks whether DNS components that can appear as hops on one resolution 
 
 Synthetic / lab only. Controlled auth; no live Internet authorities for default profiles.
 
+## Blog pins (use the matching tag — not `main`)
+
+Each public essay freezes a **separate** Git tag. Do not swap them.
+
+| Blog | Role | Tag (checkout / cite) | Tree |
+| --- | --- | --- | --- |
+| **DNS-01** (Part 1) | Methodology + smoke gate | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | smoke pin only |
+| **DNS-02a** (Part 2) | First adversarial **measurement** | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | smoke + frozen adversarial pin |
+
+- **DNS-01 essay:** [Path Consistency in Kubernetes DNS Stacks…](https://dev.to/kazuru_73322ef9a7d6ed2b18/path-consistency-in-kubernetes-dns-stacks-do-resolvers-agree-under-adversarial-conditions-4b6g) → cite **`blog-dns01-2026-07`**
+- **DNS-02a essay:** measurement pin → cite **`blog-dns02a-2026-07`** (includes adversarial manifest SHA `faa8afba…`)
+
+Repo root / `main` may move; blog posts always link the **tag trees** above.
+
 ## Threat model
 
 See [`docs/THREAT-MODEL.md`](docs/THREAT-MODEL.md). Every profile must declare adversary position, capability, win condition, and `dnssec_posture`.
