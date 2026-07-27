@@ -6,19 +6,20 @@ StackDiff asks whether DNS components that can appear as hops on one resolution 
 
 Synthetic / lab only. Controlled auth; no live Internet authorities for default profiles.
 
-## Blog pins (use the matching tag — not `main`)
+## Release and blog pins (use a tag — not `main`)
 
-Each public essay freezes a **separate** Git tag. Do not swap them.
+| Role | Tag | Notes |
+| --- | --- | --- |
+| **SemVer / SoftwarX C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
+| **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
+| **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
 
-| Blog | Role | Tag (checkout / cite) | Tree |
-| --- | --- | --- | --- |
-| **DNS-01** (Part 1) | Methodology + smoke gate | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | smoke pin only |
-| **DNS-02a** (Part 2) | First adversarial **measurement** | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | smoke + frozen adversarial pin |
+Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
-- **DNS-01 essay:** [Path Consistency in Kubernetes DNS Stacks…](https://dev.to/kazuru_73322ef9a7d6ed2b18/path-consistency-in-kubernetes-dns-stacks-do-resolvers-agree-under-adversarial-conditions-4b6g) → cite **`blog-dns01-2026-07`**
+- **DNS-01 essay / SoftwarX:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
 - **DNS-02a essay:** measurement pin → cite **`blog-dns02a-2026-07`** (includes adversarial manifest SHA `faa8afba…`)
 
-Repo root / `main` may move; blog posts always link the **tag trees** above.
+See [`docs/TAGS.md`](docs/TAGS.md). Repo root / `main` may move; published claims always link a **tag tree**.
 
 ## Threat model
 
@@ -80,7 +81,7 @@ Requirements: Docker Compose, Python 3.12+.
 ```bash
 git clone https://github.com/kazuru-chidumbwe/dns-stack-diff-harness
 cd dns-stack-diff-harness
-git checkout blog-dns02a-2026-07
+git checkout blog-dns02a-2026-07   # adversarial measurement pin (not SemVer v0.1.0)
 sha256sum artifacts/smoke-20260718T125325Z/manifest.json
 # expect: 6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560
 sha256sum artifacts/adversarial-20260718T130854Z/manifest.json
@@ -89,6 +90,8 @@ docker compose -f deploy/compose.yaml up -d --build
 make smoke
 # new run SHA will differ; require pass=true and divergence_count=0
 ```
+
+For SoftwarX / DNS-01 smoke only: `git checkout v0.1.0` (same tree as `blog-dns01-2026-07`).
 
 Smoke harness failure: identical `NOERROR` plus RRset containing `203.0.113.10` required; any smoke-axis mismatch is Class C, not a finding.
 
