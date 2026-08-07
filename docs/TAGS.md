@@ -4,14 +4,14 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 | Tag | Commit | Purpose |
 | --- | --- | --- |
-| [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | `60d47e1` | First SemVer release (SoftwarX / package cite) |
+| [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | `60d47e1` | First SemVer release (SoftwareX / package cite) |
 | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | `43789fd` | DNS-01 methodology + smoke gate |
 | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | `8fa31c6` | DNS-02a adversarial measurement pin |
 
 ## Quick checkout
 
 ```bash
-# SoftwarX / SemVer
+# SoftwareX / SemVer
 git checkout v0.1.0
 sha256sum artifacts/smoke-20260718T125325Z/manifest.json
 
@@ -25,7 +25,7 @@ sha256sum artifacts/adversarial-20260718T130854Z/manifest.json
 
 ## Tag policy
 
-- **SemVer / SoftwarX C1** → `v0.1.0` (see [`CHANGELOG.md`](../CHANGELOG.md)).
+- **SemVer / SoftwareX C1** → `v0.1.0` (see [`CHANGELOG.md`](../CHANGELOG.md)).
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a measurement essay → `blog-dns02a-2026-07`.
 - Never cite floating `main` for published results.

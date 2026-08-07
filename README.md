@@ -10,13 +10,13 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / SoftwarX C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
+| **SemVer / SoftwareX C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
 | **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
-- **DNS-01 essay / SoftwarX:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
+- **DNS-01 essay / SoftwareX:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
 - **DNS-02a essay:** measurement pin → cite **`blog-dns02a-2026-07`** (includes adversarial manifest SHA `faa8afba…`)
 
 See [`docs/TAGS.md`](docs/TAGS.md). Repo root / `main` may move; published claims always link a **tag tree**.
@@ -91,7 +91,7 @@ make smoke
 # new run SHA will differ; require pass=true and divergence_count=0
 ```
 
-For SoftwarX / DNS-01 smoke only: `git checkout v0.1.0` (same tree as `blog-dns01-2026-07`).
+For SoftwareX / DNS-01 smoke only: `git checkout v0.1.0` (same tree as `blog-dns01-2026-07`).
 
 Smoke harness failure: identical `NOERROR` plus RRset containing `203.0.113.10` required; any smoke-axis mismatch is Class C, not a finding.
 
