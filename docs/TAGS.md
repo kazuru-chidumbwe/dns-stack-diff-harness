@@ -4,14 +4,18 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 | Tag | Purpose |
 | --- | --- |
-| [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | First SemVer release (package / smoke cite) |
+| [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | SemVer + GitHub Release (Zenodo mint hook) · Aug 2026 TNSM pins |
+| [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0) | First SemVer tag (package / smoke cite) |
 | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | DNS-01 methodology + smoke gate |
 | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | DNS-02a July adversarial measurement pin |
-| [`results-dns02-20260815`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/results-dns02-20260815) | TNSM Table II pins — Aug 2026 ADDITIONAL/glue-cache + malformed (`stackdiff.adversarial.v1`) |
+| [`results-dns02-20260815`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/results-dns02-20260815) | TNSM Table II pins — Aug 2026 ADDITIONAL/glue-cache + truncate (`stackdiff.adversarial.v1`) |
 
 ## Quick checkout
 
 ```bash
+# SemVer / Zenodo release tree (preferred package cite)
+git checkout v0.1.1
+
 # SemVer / smoke baseline
 git checkout v0.1.0
 sha256sum artifacts/smoke-20260718T125325Z/manifest.json
@@ -33,7 +37,8 @@ sha256sum artifacts/smoke-20260815T073919Z/manifest.json
 
 ## Tag policy
 
-- **SemVer** → `v0.1.0` (see [`CHANGELOG.md`](../CHANGELOG.md)).
+- **SemVer** → `v0.1.1` (current) · `v0.1.0` (smoke-era). See [`CHANGELOG.md`](../CHANGELOG.md).
+- **GitHub Release on a SemVer tag** is what Zenodo auto-mints when the repo is linked at https://zenodo.org/account/settings/github/
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a July measurement essay → `blog-dns02a-2026-07`.
 - **TNSM archival measurement** → `results-dns02-20260815` (results pin; distinct from SemVer code tag).

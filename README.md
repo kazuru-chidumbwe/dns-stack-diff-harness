@@ -10,13 +10,15 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / tool-paper C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
+| **SemVer / Zenodo Release** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Includes Aug 2026 TNSM pins; GitHub Release triggers Zenodo when linked |
+| **SemVer (smoke baseline)** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0) | DNS-01-era smoke tree |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
 | **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
-- **DNS-01 essay / tool paper smoke:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
+- **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
+- **Package / Zenodo cite (Aug 2026 tree):** cite **`v0.1.1`** GitHub Release (and Zenodo DOI once minted)
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
 - **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
 - **Venue (instrument / measurement paper):** *IEEE Transactions on Network and Service Management* (TNSM) — archival target Dec 2026; ≤10 free pages; measurement-only (Class A/B not published this pass). See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
