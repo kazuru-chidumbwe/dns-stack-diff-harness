@@ -28,6 +28,9 @@ keywords:
 license: Apache-2.0
 version: "0.1.1"
 date-released: "2026-08-16"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21959551"
 preferred-citation:
   type: software
   authors:
@@ -36,6 +39,7 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0002-4099-1059"
   title: "DNS StackDiff harness"
   version: "0.1.1"
-  url: "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.1"
+  doi: "10.5281/zenodo.21959551"
+  url: "https://doi.org/10.5281/zenodo.21959551"
   year: 2026
   month: 8
