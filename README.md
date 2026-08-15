@@ -16,11 +16,12 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
-- **DNS-01 essay / tool paper:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
-- **DNS-02a essay:** measurement pin → cite **`blog-dns02a-2026-07`** (includes adversarial manifest SHA `faa8afba…`)
-- **Venue (instrument paper):** *Journal of Open Research Software* (Software Metapaper) — single-anonymous review; **public repository required**. See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md) for glue/malformed measurement triage (not findings).
+- **DNS-01 essay / tool paper smoke:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
+- **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
+- **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
+- **Venue (instrument / measurement paper):** *IEEE Transactions on Network and Service Management* (TNSM) — archival target Dec 2026; ≤10 free pages; measurement-only (Class A/B not published this pass). See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
 
-See [`docs/TAGS.md`](docs/TAGS.md). Repo root / `main` may move; published claims always link a **tag tree**.
+See [`docs/TAGS.md`](docs/TAGS.md) and [`CITATION.cff`](CITATION.cff). Repo root / `main` may move; published claims always link a **tag tree**.
 
 ## Threat model
 
@@ -51,7 +52,21 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Manifest SHA-256 | `6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560` |
 | Frozen manifest | [`artifacts/smoke-20260718T125325Z/manifest.json`](artifacts/smoke-20260718T125325Z/manifest.json) |
 
-### DNS-02a adversarial pin (measurement)
+### DNS-02 TNSM measurement pin (2026-08-15)
+
+| Field | Value |
+| --- | --- |
+| Results tag | [`results-dns02-20260815`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/results-dns02-20260815) |
+| Adversarial manifest | [`artifacts/adversarial-20260815T073800Z/manifest.json`](artifacts/adversarial-20260815T073800Z/manifest.json) |
+| Adversarial SHA-256 | `cd84b2202aadf57d624446007628d66bcd1df91341115dc833acf7708648d8d7` |
+| Post-restore smoke | [`artifacts/smoke-20260815T073919Z/manifest.json`](artifacts/smoke-20260815T073919Z/manifest.json) |
+| Smoke SHA-256 | `ec5196e0b95dfa1ad7899437c582956f77c0e803d9914c55658677212940990e` |
+| Schema | `stackdiff.adversarial.v1` |
+| Docs | [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md) |
+
+Measurement only. Class A/B labels are not published findings for the TNSM manuscript.
+
+### DNS-02a adversarial pin (July blog)
 
 | Field | Example pin (2026-07-18) |
 | --- | --- |
@@ -70,7 +85,8 @@ Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has th
 | Threat / isolation / schema docs | v0 |
 | Oracle validation smoke (`P-SMOKE-AGREE`) | green (lab pin above) |
 | Application-layer adversarial runner | available (`make adversarial`) |
-| DNS-02a frozen adversarial pin | committed (measurement only) |
+| DNS-02a frozen adversarial pin (July) | committed (measurement only) |
+| DNS-02 TNSM pin (Aug 2026) | committed on `results-dns02-20260815` (measurement only) |
 | Klein / SAD DNS profiles | deferred |
 
 No invented finding counts. Adversarial manifests are measurement only until Class A/B triage and disclosure.
@@ -127,4 +143,4 @@ Optional: `make adversarial` runs application-layer MITM profiles. It does not r
 
 ## License
 
-Apache-2.0 (see `LICENSE`).
+Apache-2.0 — Copyright 2026 Seke Kazuru (see `LICENSE`). Citation metadata: [`CITATION.cff`](CITATION.cff) (ORCID [0009-0002-4099-1059](https://orcid.org/0009-0002-4099-1059)).

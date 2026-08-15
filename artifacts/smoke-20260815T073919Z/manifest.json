@@ -1,0 +1,140 @@
+{
+  "schema": "stackdiff.smoke.v0",
+  "created_utc": "2026-08-15T07:39:19.326882+00:00",
+  "profile_id": "P-SMOKE-AGREE",
+  "role": "oracle_validation_step",
+  "harness_failure_criterion": {
+    "axes": [
+      "rcode",
+      "answers",
+      "hang_or_crash"
+    ],
+    "required_rcode": "NOERROR",
+    "required_answer_contains": "203.0.113.10",
+    "flag_axes_informational": [
+      "aa",
+      "ra"
+    ],
+    "on_fail": "Class C \u2014 stop; not a security finding"
+  },
+  "profile": {
+    "id": "P-SMOKE-AGREE",
+    "intent": "Benign A record via controlled auth \u2014 expect agreement (instrument check)",
+    "status": "active",
+    "layer": "application",
+    "adversary": {
+      "position": "none",
+      "capability": [],
+      "win_condition": "None \u2014 smoke gate. Any RCODE/RRset divergence is a harness/Class C failure."
+    },
+    "dnssec_posture": {
+      "mode": "matched",
+      "unbound": "off-lab-zone",
+      "dnsmasq": "off",
+      "notes": "Matched non-validating for lab.stackdiff. so defaults (Unbound strict vs dnsmasq off) cannot manufacture a smoke failure"
+    },
+    "query": {
+      "name": "agree.lab.stackdiff.",
+      "type": "A"
+    },
+    "expect": {
+      "rcode": "NOERROR",
+      "answers_contain": [
+        "203.0.113.10"
+      ],
+      "divergence": "none"
+    },
+    "class_hint": "C_if_divergent_else_pass"
+  },
+  "resolvers": {
+    "unbound": {
+      "host": "127.0.0.1",
+      "port": 9053
+    },
+    "dnsmasq": {
+      "host": "127.0.0.1",
+      "port": 9054
+    }
+  },
+  "observations": {
+    "unbound": {
+      "rcode": "NOERROR",
+      "answers": [
+        "203.0.113.10"
+      ],
+      "additional": [],
+      "aa": false,
+      "ra": true,
+      "error": null,
+      "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 28563\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t56\tIN\tA\t203.0.113.10"
+    },
+    "dnsmasq": {
+      "rcode": "NOERROR",
+      "answers": [
+        "203.0.113.10"
+      ],
+      "additional": [],
+      "aa": true,
+      "ra": true,
+      "error": null,
+      "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 6490\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 7b0261bbf6ab2fe3 (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+    }
+  },
+  "oracle": {
+    "paired": true,
+    "axes": [
+      "rcode",
+      "answers",
+      "hang_or_crash"
+    ],
+    "resolvers": [
+      "dnsmasq",
+      "unbound"
+    ],
+    "divergences": [],
+    "divergence_count": 0,
+    "class_hint": "pass"
+  },
+  "flag_oracle_informational": {
+    "paired": true,
+    "axes": [
+      "aa",
+      "ra"
+    ],
+    "resolvers": [
+      "dnsmasq",
+      "unbound"
+    ],
+    "divergences": [
+      {
+        "axis": "aa",
+        "left": "dnsmasq",
+        "right": "unbound",
+        "left_value": true,
+        "right_value": false
+      }
+    ],
+    "divergence_count": 1,
+    "class_hint": "C_until_triaged"
+  },
+  "smoke_pass_axes": [
+    "rcode",
+    "answers",
+    "hang_or_crash"
+  ],
+  "lab_environment": {
+    "uname_r": "6.12.101+deb13-amd64",
+    "uname_a": "Linux lab 6.12.101+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.101-1 (2026-08-05) x86_64 GNU/Linux",
+    "docker_version": "26.1.5+dfsg1",
+    "platform": "linux"
+  },
+  "dns02_profiles": [
+    "P-GLUE-BAILIWICK",
+    "P-MALFORMED-RCODE"
+  ],
+  "deferred_os_profiles": [
+    "P-OS-KLEIN-PRNG-DEFERRED",
+    "P-OS-SAD-DNS-ICMP-DEFERRED"
+  ],
+  "pass": true
+}

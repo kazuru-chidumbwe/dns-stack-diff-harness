@@ -1,0 +1,283 @@
+{
+  "schema": "stackdiff.adversarial.v1",
+  "created_utc": "2026-08-15T07:39:14.099085+00:00",
+  "role": "dns02_application_layer_mitm",
+  "lab_environment": {
+    "uname_r": "6.12.101+deb13-amd64",
+    "uname_a": "Linux lab 6.12.101+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.101-1 (2026-08-05) x86_64 GNU/Linux",
+    "docker_version": "26.1.5+dfsg1",
+    "platform": "linux"
+  },
+  "measurement_axes": {
+    "default": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash"
+    ],
+    "glue": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash",
+      "additional",
+      "glue_cache_accept"
+    ]
+  },
+  "results": [
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "injector": "mitm-additional-glue",
+      "mitm_mode": "additional-glue",
+      "adversary": {
+        "position": "malicious-but-trusted-upstream",
+        "capability": [
+          "Crafted DNS response content",
+          "Out-of-bailiwick glue / ADDITIONAL records"
+        ],
+        "win_condition": "One hop caches or uses out-of-bailiwick glue that the other hop rejects or ignores \u2014 path inconsistency"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "dnsmasq": "off",
+        "notes": "Matched non-validating so bailiwick accept/reject is not confounded by Unbound default DNSSEC"
+      },
+      "query": {
+        "name": "www.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 37485\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "NXDOMAIN",
+              "answers": [],
+              "additional": [],
+              "aa": true,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 51056\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232"
+            }
+          }
+        },
+        "dnsmasq": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [
+            "ns.evil.test|198.51.100.66"
+          ],
+          "aa": true,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13299\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 4667caa191803d5b (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20\n\n;; ADDITIONAL SECTION:\nns.evil.test.\t\t60\tIN\tA\t198.51.100.66",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "REFUSED",
+              "answers": [],
+              "additional": [
+                "ns.evil.test|198.51.100.66"
+              ],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 50057\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 2\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 43d95cc7f2297c2c (echoed)\n;; ADDITIONAL SECTION:\nns.evil.test.\t\t60\tIN\tA\t198.51.100.66"
+            }
+          }
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash",
+          "additional",
+          "glue_cache_accept"
+        ],
+        "resolvers": [
+          "dnsmasq",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "aa",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": true,
+            "right_value": false
+          },
+          {
+            "axis": "additional",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": [
+              "ns.evil.test|198.51.100.66"
+            ],
+            "right_value": []
+          }
+        ],
+        "divergence_count": 2,
+        "class_hint": "C_until_triaged"
+      },
+      "class_hint": "A_or_B_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process.",
+      "glue_probe_meta": {
+        "owner": "ns.evil.test.",
+        "injected_ip": "198.51.100.66",
+        "purpose": "Cache-accept probe for out-of-bailiwick ADDITIONAL glue. Client ANSWER for the profile query often strips ADDITIONAL; this follow-up query surfaces whether a hop cached the glue."
+      }
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "injector": "mitm-malformed-response",
+      "mitm_mode": "malformed-truncated",
+      "adversary": {
+        "position": "on-path",
+        "capability": [
+          "Inject malformed DNS response bytes",
+          "Manipulate response pre-processing edge cases"
+        ],
+        "win_condition": "One hop returns a usable/partial answer (or caches) while the other drops, SERVFAILs, or crashes"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "dnsmasq": "off",
+        "notes": "Matched non-validating; posture is not the variable under test"
+      },
+      "query": {
+        "name": "agree.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "SERVFAIL",
+          "answers": [],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 48737\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232",
+          "glue_cache_accept": null
+        },
+        "dnsmasq": {
+          "rcode": null,
+          "answers": [],
+          "additional": [],
+          "aa": null,
+          "ra": null,
+          "error": "dig exit 9",
+          "raw": ";; communications error to 127.0.0.1#9054: timed out\n\n; <<>> DiG 9.20.26-1~deb13u1-Debian <<>> @127.0.0.1 -p 9054 agree.lab.stackdiff. A +time=2 +tries=1 +noall +answer +additional +comments\n; (1 server found)\n;; global options: +cmd\n;; no servers could be reached",
+          "glue_cache_accept": null
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash"
+        ],
+        "resolvers": [
+          "dnsmasq",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "rcode",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": "SERVFAIL"
+          },
+          {
+            "axis": "aa",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": false
+          },
+          {
+            "axis": "ra",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": null,
+            "right_value": true
+          },
+          {
+            "axis": "hang_or_crash",
+            "left": "dnsmasq",
+            "right": "unbound",
+            "left_value": "dig exit 9",
+            "right_value": null
+          }
+        ],
+        "divergence_count": 4,
+        "class_hint": "C_until_triaged"
+      },
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process."
+    }
+  ],
+  "summary_table": [
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "mitm_mode": "additional-glue",
+      "divergence_count": 2,
+      "axes": [
+        "aa",
+        "additional"
+      ],
+      "class_hint": "A_or_B_after_analysis",
+      "oracle_class_hint": "C_until_triaged",
+      "glue_cache_accept": {
+        "unbound": false,
+        "dnsmasq": false
+      }
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "mitm_mode": "malformed-truncated",
+      "divergence_count": 4,
+      "axes": [
+        "aa",
+        "hang_or_crash",
+        "ra",
+        "rcode"
+      ],
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "oracle_class_hint": "C_until_triaged"
+    }
+  ],
+  "disclaimer": "Measurement only. No CVE / exploitable claims in this manifest. Smoke oracle remains make smoke on compose.yaml without this overlay."
+}

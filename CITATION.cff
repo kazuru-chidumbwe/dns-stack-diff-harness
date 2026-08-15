@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+title: "DNS StackDiff harness"
+message: >-
+  If you use this software or its locked-run artifacts, please cite it using
+  the metadata below.
+type: software
+authors:
+  - family-names: Kazuru
+    given-names: Seke
+    orcid: "https://orcid.org/0009-0002-4099-1059"
+    email: kazuruuni@gmail.com
+    affiliation: Independent Researcher
+repository-code: "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness"
+url: "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness"
+abstract: >-
+  Path-consistency differential harness for DNS resolution stacks. Pair-mode
+  Unbound and dnsmasq stand-ins are compared under pinned adversary and DNSSEC
+  posture; checksummed smoke and adversarial manifests support reproducible
+  laboratory measurements (not published vulnerability findings).
+keywords:
+  - DNS
+  - differential testing
+  - path consistency
+  - Kubernetes
+  - Unbound
+  - dnsmasq
+  - measurement
+license: Apache-2.0
+version: "0.1.0"
+date-released: "2026-07-18"
+preferred-citation:
+  type: software
+  authors:
+    - family-names: Kazuru
+      given-names: Seke
+      orcid: "https://orcid.org/0009-0002-4099-1059"
+  title: "DNS StackDiff harness"
+  version: "0.1.0"
+  url: "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0"
+  year: 2026
+  month: 7
