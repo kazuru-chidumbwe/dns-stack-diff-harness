@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from oracle import SECURITY_AXES, compare_observations  # noqa: E402
+from oracle import GLUE_AXES, SECURITY_AXES, compare_observations  # noqa: E402
 from run_smoke import (  # noqa: E402
     RESOLVERS,
     collect_lab_environment,
@@ -30,6 +30,10 @@ from run_smoke import (  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 COMPOSE_BASE = ROOT / "deploy" / "compose.yaml"
 COMPOSE_ADV = ROOT / "deploy" / "compose.adversarial.yaml"
+
+# Must match deploy/mitm/dns_mitm.py additional-glue transform.
+GLUE_OWNER = "ns.evil.test."
+GLUE_IP = "198.51.100.66"
 
 INJECTOR_TO_MODE = {
     "mitm-additional-glue": "additional-glue",
@@ -127,6 +131,29 @@ def load_active_adversarial(profile_ids: list[str] | None) -> list[dict]:
     return profiles
 
 
+def _attach_glue_probe(observations: dict[str, dict]) -> dict[str, dict]:
+    """After glue injection, probe whether each hop cached/uses out-of-bailiwick A."""
+    probes: dict[str, dict] = {}
+    for name, meta in RESOLVERS.items():
+        probe = dig_query(
+            meta["host"],
+            meta["port"],
+            GLUE_OWNER,
+            "A",
+            timeout=4.0,
+        )
+        probes[name] = probe
+        obs = observations[name]
+        obs.setdefault("additional", obs.get("additional") or [])
+        obs["glue_cache_accept"] = GLUE_IP in (probe.get("answers") or [])
+        obs["glue_probe"] = {
+            "query": {"name": GLUE_OWNER, "type": "A"},
+            "expected_ip": GLUE_IP,
+            "observation": probe,
+        }
+    return probes
+
+
 def run_one(profile: dict) -> dict:
     mode = INJECTOR_TO_MODE[profile["injector"]]
     bring_up(mode)
@@ -145,10 +172,18 @@ def run_one(profile: dict) -> dict:
             profile["query"]["type"],
             timeout=4.0,
         )
+        observations[name].setdefault("additional", [])
+        observations[name].setdefault("glue_cache_accept", None)
 
-    oracle = compare_observations(observations, axes=SECURITY_AXES)
+    glue_probes = None
+    axes = SECURITY_AXES
+    if mode == "additional-glue":
+        glue_probes = _attach_glue_probe(observations)
+        axes = GLUE_AXES
+
+    oracle = compare_observations(observations, axes=axes)
     # Measurement axes for DNS-02 table (broader than smoke).
-    return {
+    result = {
         "profile_id": profile["id"],
         "injector": profile["injector"],
         "mitm_mode": mode,
@@ -163,6 +198,17 @@ def run_one(profile: dict) -> dict:
             "notes; do not publish as exploitable without disclosure process."
         ),
     }
+    if glue_probes is not None:
+        result["glue_probe_meta"] = {
+            "owner": GLUE_OWNER,
+            "injected_ip": GLUE_IP,
+            "purpose": (
+                "Cache-accept probe for out-of-bailiwick ADDITIONAL glue. "
+                "Client ANSWER for the profile query often strips ADDITIONAL; "
+                "this follow-up query surfaces whether a hop cached the glue."
+            ),
+        }
+    return result
 
 
 def main() -> int:
@@ -237,22 +283,30 @@ def main() -> int:
     table = []
     for r in results:
         div = r["oracle"].get("divergences") or []
-        table.append(
-            {
-                "profile_id": r["profile_id"],
-                "mitm_mode": r["mitm_mode"],
-                "divergence_count": r["oracle"].get("divergence_count"),
-                "axes": sorted({d["axis"] for d in div}),
-                "class_hint": r.get("class_hint"),
-                "oracle_class_hint": r["oracle"].get("class_hint"),
+        row = {
+            "profile_id": r["profile_id"],
+            "mitm_mode": r["mitm_mode"],
+            "divergence_count": r["oracle"].get("divergence_count"),
+            "axes": sorted({d["axis"] for d in div}),
+            "class_hint": r.get("class_hint"),
+            "oracle_class_hint": r["oracle"].get("class_hint"),
+        }
+        if r["mitm_mode"] == "additional-glue":
+            row["glue_cache_accept"] = {
+                name: (obs or {}).get("glue_cache_accept")
+                for name, obs in (r.get("observations") or {}).items()
             }
-        )
+        table.append(row)
 
     manifest = {
-        "schema": "stackdiff.adversarial.v0",
+        "schema": "stackdiff.adversarial.v1",
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "role": "dns02_application_layer_mitm",
         "lab_environment": lab,
+        "measurement_axes": {
+            "default": list(SECURITY_AXES),
+            "glue": list(GLUE_AXES),
+        },
         "results": results,
         "summary_table": table,
         "disclaimer": (

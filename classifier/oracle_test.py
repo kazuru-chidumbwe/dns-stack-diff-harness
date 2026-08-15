@@ -1,6 +1,12 @@
 import unittest
 
-from oracle import SMOKE_AXES, compare_observations, normalize_answers
+from oracle import (
+    GLUE_AXES,
+    SMOKE_AXES,
+    compare_observations,
+    normalize_additional,
+    normalize_answers,
+)
 
 
 class OracleTests(unittest.TestCase):
@@ -9,6 +15,37 @@ class OracleTests(unittest.TestCase):
             normalize_answers(["203.0.113.10.", "203.0.113.10"]),
             ["203.0.113.10", "203.0.113.10"],
         )
+
+    def test_normalize_additional(self):
+        self.assertEqual(
+            normalize_additional(["Ns.Evil.Test.|198.51.100.66", "ns.evil.test.|198.51.100.66"]),
+            ["ns.evil.test|198.51.100.66", "ns.evil.test|198.51.100.66"],
+        )
+
+    def test_glue_cache_accept_divergence(self):
+        obs = {
+            "unbound": {
+                "rcode": "NOERROR",
+                "answers": ["203.0.113.20"],
+                "additional": [],
+                "aa": False,
+                "ra": True,
+                "error": None,
+                "glue_cache_accept": False,
+            },
+            "dnsmasq": {
+                "rcode": "NOERROR",
+                "answers": ["203.0.113.20"],
+                "additional": [],
+                "aa": True,
+                "ra": True,
+                "error": None,
+                "glue_cache_accept": True,
+            },
+        }
+        result = compare_observations(obs, axes=GLUE_AXES)
+        self.assertTrue(any(d["axis"] == "glue_cache_accept" for d in result["divergences"]))
+        self.assertTrue(any(d["axis"] == "aa" for d in result["divergences"]))
 
     def test_agree(self):
         obs = {

@@ -78,6 +78,45 @@ def _parse_name(buf: bytes, offset: int) -> tuple[str, int]:
     return ".".join(labels) + ".", (orig if jumped else offset)
 
 
+def _empty_obs(*, error: str | None = None, raw: str = "") -> dict:
+    return {
+        "rcode": None,
+        "answers": [],
+        "additional": [],
+        "aa": None,
+        "ra": None,
+        "error": error,
+        "raw": raw,
+    }
+
+
+def _parse_rr_section(
+    data: bytes, offset: int, count: int
+) -> tuple[list[str], list[str], int]:
+    """Parse count RRs starting at offset. Returns (answers_A, additional_A_owner_ip, new_offset).
+
+    Callers decide which list to populate by which section they are reading.
+    A records become IPs for answers; ``owner|ip`` for additional (OPT type 41 skipped).
+    """
+    a_ips: list[str] = []
+    add_rows: list[str] = []
+    for _ in range(count):
+        owner, offset = _parse_name(data, offset)
+        if offset + 10 > len(data):
+            break
+        rtype, _rclass, _ttl, rdlength = struct.unpack("!HHIH", data[offset : offset + 10])
+        offset += 10
+        rdata = data[offset : offset + rdlength]
+        offset += rdlength
+        if rtype == 41:  # OPT / EDNS
+            continue
+        if rtype == 1 and rdlength == 4:
+            ip = ".".join(str(b) for b in rdata)
+            a_ips.append(ip)
+            add_rows.append(f"{owner.rstrip('.').lower()}|{ip}")
+    return a_ips, add_rows, offset
+
+
 def query_udp(host: str, port: int, name: str, qtype: str = "A", timeout: float = 2.0) -> dict:
     qtypes = {"A": 1, "AAAA": 28, "NS": 2, "CNAME": 5}
     qtype_id = qtypes.get(qtype.upper(), 1)
@@ -92,28 +131,14 @@ def query_udp(host: str, port: int, name: str, qtype: str = "A", timeout: float 
         sock.sendto(packet, (host, port))
         data, _ = sock.recvfrom(4096)
     except OSError as exc:
-        return {
-            "rcode": None,
-            "answers": [],
-            "aa": None,
-            "ra": None,
-            "error": str(exc),
-            "raw": "",
-        }
+        return _empty_obs(error=str(exc))
     finally:
         sock.close()
 
     if len(data) < 12:
-        return {
-            "rcode": None,
-            "answers": [],
-            "aa": None,
-            "ra": None,
-            "error": "short response",
-            "raw": data.hex(),
-        }
+        return _empty_obs(error="short response", raw=data.hex())
 
-    _id, flags, qdcount, ancount, _nscount, _arcount = struct.unpack("!HHHHHH", data[:12])
+    _id, flags, qdcount, ancount, nscount, arcount = struct.unpack("!HHHHHH", data[:12])
     rcode = RCODE_NAMES.get(flags & 0xF, str(flags & 0xF))
     aa = bool(flags & 0x0400)
     ra = bool(flags & 0x0080)
@@ -123,24 +148,24 @@ def query_udp(host: str, port: int, name: str, qtype: str = "A", timeout: float 
         offset += 4
 
     answers: list[str] = []
-    for _ in range(ancount):
-        _, offset = _parse_name(data, offset)
-        if offset + 10 > len(data):
-            break
-        rtype, _rclass, _ttl, rdlength = struct.unpack("!HHIH", data[offset : offset + 10])
-        offset += 10
-        rdata = data[offset : offset + rdlength]
-        offset += rdlength
-        if rtype == 1 and rdlength == 4:
-            answers.append(".".join(str(b) for b in rdata))
+    additional: list[str] = []
+    ans_ips, _, offset = _parse_rr_section(data, offset, ancount)
+    answers.extend(ans_ips)
+    _, _, offset = _parse_rr_section(data, offset, nscount)  # authority skipped for v0
+    _, add_rows, offset = _parse_rr_section(data, offset, arcount)
+    additional.extend(add_rows)
 
     return {
         "rcode": rcode,
         "answers": answers,
+        "additional": additional,
         "aa": aa,
         "ra": ra,
         "error": None,
-        "raw": f"udp flags=0x{flags:04x} ancount={ancount}",
+        "raw": (
+            f"udp flags=0x{flags:04x} ancount={ancount} "
+            f"nscount={nscount} arcount={arcount}"
+        ),
     }
 
 
@@ -160,6 +185,7 @@ def dig_query(host: str, port: int, name: str, qtype: str, timeout: float = 3.0)
         "+tries=1",
         "+noall",
         "+answer",
+        "+additional",
         "+comments",
     ]
     try:
@@ -171,21 +197,17 @@ def dig_query(host: str, port: int, name: str, qtype: str, timeout: float = 3.0)
             check=False,
         )
     except subprocess.TimeoutExpired:
-        return {
-            "rcode": None,
-            "answers": [],
-            "aa": None,
-            "ra": None,
-            "error": "timeout",
-            "raw": "",
-        }
+        return _empty_obs(error="timeout")
 
     raw = (proc.stdout or "") + (proc.stderr or "")
     rcode = None
     aa = None
     ra = None
     answers: list[str] = []
+    additional: list[str] = []
+    section: str | None = None
     for line in raw.splitlines():
+        stripped = line.strip()
         if "status:" in line:
             for part in line.split(","):
                 part = part.strip()
@@ -195,10 +217,33 @@ def dig_query(host: str, port: int, name: str, qtype: str, timeout: float = 3.0)
             flags = line.split(":", 1)[1].strip().split(";")[0]
             aa = "aa" in flags.split()
             ra = "ra" in flags.split()
-        if line and not line.startswith(";") and qtype.upper() in line.split():
-            cols = line.split()
-            if len(cols) >= 5 and cols[3].upper() == qtype.upper():
-                answers.append(cols[4])
+        if stripped.startswith(";;") and "SECTION:" in stripped.upper():
+            upper = stripped.upper()
+            if "ANSWER SECTION" in upper:
+                section = "answer"
+            elif "ADDITIONAL SECTION" in upper:
+                section = "additional"
+            elif "AUTHORITY SECTION" in upper:
+                section = "authority"
+            else:
+                section = None
+            continue
+        if not stripped or stripped.startswith(";"):
+            continue
+        cols = stripped.split()
+        if len(cols) < 5:
+            continue
+        # dig RR: name ttl class type rdata…
+        rr_type = cols[3].upper()
+        if rr_type == "A" and len(cols) >= 5:
+            owner = cols[0].rstrip(".").lower()
+            ip = cols[4]
+            if section == "additional":
+                additional.append(f"{owner}|{ip}")
+            elif section == "answer" or section is None:
+                # +answer alone (no SECTION header) still lands here
+                if section == "answer" or qtype.upper() == "A":
+                    answers.append(ip)
 
     err = None
     if proc.returncode != 0 and not answers:
@@ -206,6 +251,7 @@ def dig_query(host: str, port: int, name: str, qtype: str, timeout: float = 3.0)
     return {
         "rcode": rcode,
         "answers": answers,
+        "additional": additional,
         "aa": aa,
         "ra": ra,
         "error": err,

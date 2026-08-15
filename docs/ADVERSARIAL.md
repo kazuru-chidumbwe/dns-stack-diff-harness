@@ -8,10 +8,12 @@ Two active profiles under identical upstream conditions (Unbound + dnsmasq path-
 
 | Profile | Injector mode | Intent |
 | --- | --- | --- |
-| `P-GLUE-BAILIWICK` | `additional-glue` | Out-of-bailiwick ADDITIONAL glue |
+| `P-GLUE-BAILIWICK` | `additional-glue` | Out-of-bailiwick ADDITIONAL glue + **cache-accept probe** (`ns.evil.test.`) |
 | `P-MALFORMED-RCODE` | `malformed-truncated` | Truncated / malformed upstream reply |
 
-Results are **measurement only**. Manifests record divergences + `class_hint`. Do not publish Class A/B or “exploitable” language without separate triage and disclosure.
+For glue, the oracle uses `GLUE_AXES` (`additional`, `glue_cache_accept` in addition to the security axes). Client ANSWER often strips ADDITIONAL; the follow-up probe is the primary bailiwick signal.
+
+Results are **measurement only**. Manifests record divergences + `class_hint`. Do not publish Class A/B or “exploitable” language without separate triage and disclosure. See [`TRIAGE-DNS02-2026-08-15.md`](TRIAGE-DNS02-2026-08-15.md).
 
 ## Run
 

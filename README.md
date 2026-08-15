@@ -10,14 +10,15 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / SoftwareX C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
+| **SemVer / tool-paper C1** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0) | Same tree as DNS-01; see [`CHANGELOG.md`](CHANGELOG.md) |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
 | **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
-- **DNS-01 essay / SoftwareX:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
+- **DNS-01 essay / tool paper:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
 - **DNS-02a essay:** measurement pin → cite **`blog-dns02a-2026-07`** (includes adversarial manifest SHA `faa8afba…`)
+- **Venue (instrument paper):** *Journal of Open Research Software* (Software Metapaper) — single-anonymous review; **public repository required**. See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md) for glue/malformed measurement triage (not findings).
 
 See [`docs/TAGS.md`](docs/TAGS.md). Repo root / `main` may move; published claims always link a **tag tree**.
 
