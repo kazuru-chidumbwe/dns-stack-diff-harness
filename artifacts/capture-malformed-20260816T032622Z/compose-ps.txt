@@ -1,0 +1,5 @@
+NAME               IMAGE                    COMMAND                  SERVICE   CREATED          STATUS                            PORTS
+deploy-auth-1      coredns/coredns:1.11.3   "/coredns -conf /Cor…"   auth      16 seconds ago   Up 11 seconds                     53/tcp, 53/udp
+deploy-dnsmasq-1   alpine:3.20              "/bin/sh -c 'apk add…"   dnsmasq   14 seconds ago   Up 8 seconds                      0.0.0.0:9054->53/tcp, 0.0.0.0:9054->53/udp, :::9054->53/tcp, :::9054->53/udp
+deploy-mitm-1      python:3.12-alpine       "python /app/dns_mit…"   mitm      15 seconds ago   Up 10 seconds                     
+deploy-unbound-1   mvance/unbound:1.20.0    "/unbound.sh"            unbound   14 seconds ago   Up 8 seconds (health: starting)   0.0.0.0:9053->53/tcp, 0.0.0.0:9053->53/udp, :::9053->53/tcp, :::9053->53/udp

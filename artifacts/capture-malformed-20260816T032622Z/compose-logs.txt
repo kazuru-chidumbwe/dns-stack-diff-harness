@@ -1,0 +1,7 @@
+[2Kmitm-1  | mitm mode=malformed-truncated listen=0.0.0.0:53 upstream=172.30.0.10:53
+[2Kdnsmasq-1  | dnsmasq[1]: started, version 2.90 cache disabled
+[2Kdnsmasq-1  | dnsmasq[1]: compile time options: IPv6 GNU-getopt no-DBus no-UBus no-i18n no-IDN DHCP DHCPv6 no-Lua TFTP no-conntrack ipset no-nftset auth no-cryptohash no-DNSSEC loop-detect inotify dumpfile
+[2Kdnsmasq-1  | dnsmasq[1]: using nameserver 172.30.0.11#53
+[2Kdnsmasq-1  | dnsmasq[1]: query[A] agree.lab.stackdiff from 172.30.0.1
+[2Kdnsmasq-1  | dnsmasq[1]: forwarded agree.lab.stackdiff to 172.30.0.11
+[2Kdnsmasq-1  | dnsmasq[14]: query[A] agree.lab.stackdiff from 172.30.0.1

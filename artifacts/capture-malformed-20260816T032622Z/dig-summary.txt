@@ -1,0 +1,32 @@
+=== unbound-udp rc=0 ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 30963
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+rc=0
+=== dnsmasq-udp rc=9 ===
+;; communications error to 127.0.0.1#9054: timed out
+
+; <<>> DiG 9.20.26-1~deb13u1-Debian <<>> @127.0.0.1 -p 9054 agree.lab.stackdiff. A +time=2 +tries=1 +noall +answer +additional +comments
+; (1 server found)
+;; global options: +cmd
+;; no servers could be reached
+rc=9
+=== unbound-tcp rc=0 ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 12875
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+rc=0
+=== dnsmasq-tcp rc=9 ===
+;; communications error to 127.0.0.1#9054: end of file
+
+; <<>> DiG 9.20.26-1~deb13u1-Debian <<>> @127.0.0.1 -p 9054 agree.lab.stackdiff. A +tcp +time=2 +tries=1 +noall +answer +additional +comments
+; (1 server found)
+;; global options: +cmd
+;; no servers could be reached
+rc=9

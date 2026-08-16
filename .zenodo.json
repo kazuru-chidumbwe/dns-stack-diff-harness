@@ -1,6 +1,6 @@
 {
-  "title": "StackDiff: path-consistency DNS differential harness (v0.1.1)",
-  "description": "Checksummed smoke and adversarial manifests for Unbound/dnsmasq pair-mode path-consistency measurements, including the August 2026 DNS-02 observation matrix (results tag results-dns02-20260815). Companion software and data for the IEEE TNSM StackDiff manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
+  "title": "StackDiff: path-consistency DNS differential harness (v0.1.2)",
+  "description": "Checksummed smoke, adversarial, malformed-capture, and robustness manifests for Unbound/dnsmasq pair-mode path-consistency measurements (results tag results-dns02-20260815; Package B capture-malformed-20260816T032622Z; Package C robustness-20260816T034020Z). Companion software and data for the IEEE TNSM StackDiff manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
   "creators": [
     {
       "name": "Kazuru, Seke",
@@ -21,12 +21,18 @@
   "license": "Apache-2.0",
   "upload_type": "software",
   "access_right": "open",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "related_identifiers": [
     {
       "scheme": "url",
       "identifier": "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness",
       "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "scheme": "doi",
+      "identifier": "10.5281/zenodo.21959551",
+      "relation": "isVersionOf",
       "resource_type": "software"
     },
     {

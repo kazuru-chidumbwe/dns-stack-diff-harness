@@ -1,0 +1,164 @@
+python3 classifier/validate_profiles.py
+SCHEMA OK (5 profiles)
+python3 deploy/mitm/mitm_test.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+python3 classifier/run_robustness.py --repeats 10 --control-repeats 5
+=== passthrough control ×5 ===
+  control 1/5
+  control 2/5
+  control 3/5
+  control 4/5
+  control 5/5
+=== P-GLUE-BAILIWICK ×10 ===
+  P-GLUE-BAILIWICK 1/10
+  P-GLUE-BAILIWICK 2/10
+  P-GLUE-BAILIWICK 3/10
+  P-GLUE-BAILIWICK 4/10
+  P-GLUE-BAILIWICK 5/10
+  P-GLUE-BAILIWICK 6/10
+  P-GLUE-BAILIWICK 7/10
+  P-GLUE-BAILIWICK 8/10
+  P-GLUE-BAILIWICK 9/10
+  P-GLUE-BAILIWICK 10/10
+=== P-MALFORMED-RCODE ×10 ===
+  P-MALFORMED-RCODE 1/10
+  P-MALFORMED-RCODE 2/10
+  P-MALFORMED-RCODE 3/10
+  P-MALFORMED-RCODE 4/10
+  P-MALFORMED-RCODE 5/10
+  P-MALFORMED-RCODE 6/10
+  P-MALFORMED-RCODE 7/10
+  P-MALFORMED-RCODE 8/10
+  P-MALFORMED-RCODE 9/10
+  P-MALFORMED-RCODE 10/10
+=== role-order reverse dig ===
+{
+  "stamp": "20260816T034020Z",
+  "adversarial": {
+    "P-GLUE-BAILIWICK": {
+      "n": 10,
+      "D_histogram": {
+        "2": 8,
+        "5": 2
+      },
+      "modal_D": 2,
+      "modal_D_fraction": 0.8,
+      "modal_axes": [
+        "aa",
+        "additional"
+      ],
+      "modal_axes_fraction": 0.8,
+      "stable_D": false,
+      "stable_axes": false
+    },
+    "P-MALFORMED-RCODE": {
+      "n": 10,
+      "D_histogram": {
+        "4": 10
+      },
+      "modal_D": 4,
+      "modal_D_fraction": 1.0,
+      "modal_axes": [
+        "aa",
+        "hang_or_crash",
+        "ra",
+        "rcode"
+      ],
+      "modal_axes_fraction": 1.0,
+      "stable_D": true,
+      "stable_axes": true
+    }
+  },
+  "controls": {
+    "passthrough": {
+      "n": 5,
+      "smoke_pass_n": 5,
+      "smoke_pass_rate": 1.0,
+      "smoke_D_histogram": {
+        "0": 5
+      },
+      "security_D_histogram": {
+        "1": 5
+      }
+    }
+  }
+}
+adversarial: {
+  "P-GLUE-BAILIWICK": {
+    "n": 10,
+    "D_histogram": {
+      "2": 8,
+      "5": 2
+    },
+    "modal_D": 2,
+    "modal_D_fraction": 0.8,
+    "modal_axes": [
+      "aa",
+      "additional"
+    ],
+    "modal_axes_fraction": 0.8,
+    "stable_D": false,
+    "stable_axes": false
+  },
+  "P-MALFORMED-RCODE": {
+    "n": 10,
+    "D_histogram": {
+      "4": 10
+    },
+    "modal_D": 4,
+    "modal_D_fraction": 1.0,
+    "modal_axes": [
+      "aa",
+      "hang_or_crash",
+      "ra",
+      "rcode"
+    ],
+    "modal_axes_fraction": 1.0,
+    "stable_D": true,
+    "stable_axes": true
+  }
+}
+controls passthrough: {
+  "n": 5,
+  "smoke_pass_n": 5,
+  "smoke_pass_rate": 1.0,
+  "smoke_D_histogram": {
+    "0": 5
+  },
+  "security_D_histogram": {
+    "1": 5
+  }
+}
+role_order: [
+  {
+    "profile_id": "P-GLUE-BAILIWICK",
+    "dig_order": [
+      "dnsmasq",
+      "unbound"
+    ],
+    "divergence_count": 2,
+    "axes": [
+      "aa",
+      "additional"
+    ]
+  },
+  {
+    "profile_id": "P-MALFORMED-RCODE",
+    "dig_order": [
+      "dnsmasq",
+      "unbound"
+    ],
+    "divergence_count": 4,
+    "axes": [
+      "aa",
+      "hang_or_crash",
+      "ra",
+      "rcode"
+    ]
+  }
+]
+wrote ./artifacts/robustness-20260816T034020Z

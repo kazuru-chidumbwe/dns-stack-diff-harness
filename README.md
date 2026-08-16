@@ -10,7 +10,8 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / Zenodo Release** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Includes Aug 2026 TNSM pins; GitHub Release triggers Zenodo when linked |
+| **SemVer / Zenodo Release** | [`v0.1.2`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.2) | Package B+C pins + Aug DNS-02; GitHub Release triggers Zenodo when linked |
+| **SemVer (Aug DNS-02 only)** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Aug 2026 TNSM measurement pins (pre–Package B/C) |
 | **SemVer (smoke baseline)** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0) | DNS-01-era smoke tree |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
 | **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
@@ -18,9 +19,11 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
 - **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
-- **Package / Zenodo cite (Aug 2026 tree):** cite **`v0.1.1`** GitHub Release (and Zenodo DOI once minted)
+- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** GitHub Release (concept DOI [10.5281/zenodo.21959551](https://doi.org/10.5281/zenodo.21959551))
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
 - **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
+- **Package B malformed timeline:** `artifacts/capture-malformed-20260816T032622Z/` (bridge pcap SHA `463c23b5…`)
+- **Package C robustness:** `artifacts/robustness-20260816T034020Z/` (manifest SHA `fe42a81d…`) · `make robustness`
 - **Venue (instrument / measurement paper):** *IEEE Transactions on Network and Service Management* (TNSM) — archival target Dec 2026; ≤10 free pages; measurement-only (Class A/B not published this pass). See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
 
 See [`docs/TAGS.md`](docs/TAGS.md) and [`CITATION.cff`](CITATION.cff). Repo root / `main` may move; published claims always link a **tag tree**.
@@ -64,6 +67,8 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Post-restore smoke | [`artifacts/smoke-20260815T073919Z/manifest.json`](artifacts/smoke-20260815T073919Z/manifest.json) |
 | Smoke SHA-256 | `ec5196e0b95dfa1ad7899437c582956f77c0e803d9914c55658677212940990e` |
 | Schema | `stackdiff.adversarial.v1` |
+| Package B capture | [`artifacts/capture-malformed-20260816T032622Z/`](artifacts/capture-malformed-20260816T032622Z/) · bridge pcap SHA `463c23b5…` |
+| Package C robustness | [`artifacts/robustness-20260816T034020Z/`](artifacts/robustness-20260816T034020Z/) · manifest SHA `fe42a81d…` |
 | Docs | [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md) |
 
 Measurement only. Class A/B labels are not published findings for the TNSM manuscript.
@@ -89,6 +94,7 @@ Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has th
 | Application-layer adversarial runner | available (`make adversarial`) |
 | DNS-02a frozen adversarial pin (July) | committed (measurement only) |
 | DNS-02 TNSM pin (Aug 2026) | committed on `results-dns02-20260815` (measurement only) |
+| Package B / C (malformed + robustness) | committed on `v0.1.2` |
 | Klein / SAD DNS profiles | deferred |
 
 No invented finding counts. Adversarial manifests are measurement only until Class A/B triage and disclosure.
@@ -115,6 +121,8 @@ For SoftwareX / DNS-01 smoke only: `git checkout v0.1.0` (same tree as `blog-dns
 Smoke harness failure: identical `NOERROR` plus RRset containing `203.0.113.10` required; any smoke-axis mismatch is Class C, not a finding.
 
 Optional: `make adversarial` runs application-layer MITM profiles. It does not replace smoke. See [`docs/ADVERSARIAL.md`](docs/ADVERSARIAL.md).
+
+Optional: `make robustness` repeats adversarial profiles with a passthrough control and role-order probe (`artifacts/robustness-*/`).
 
 ## Profiles (v0)
 

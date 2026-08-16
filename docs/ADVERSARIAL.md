@@ -18,15 +18,27 @@ Results are **measurement only**. Manifests record divergences + `class_hint`. D
 ## Run
 
 ```bash
-git checkout blog-dns02a-2026-07   # or main after that tag lands
+git checkout v0.1.2
 docker compose -f deploy/compose.yaml up -d --build
 make smoke          # instrument still green
 make adversarial    # writes artifacts/adversarial-<UTC>/manifest.json
+make robustness     # Package C: repeats + passthrough + role-order
 ```
 
-After the run, topology restores to smoke (direct-to-auth). Optional: re-check `make smoke`.
+After adversarial / robustness, topology restores toward smoke. Optional: re-check `make smoke`.
 
-## Frozen public pin (DNS-02a)
+Malformed packet timeline helper (Package B): `scripts/capture-malformed-timeline.sh` → `artifacts/capture-malformed-<UTC>/`.
+
+## Frozen public pins (Aug 2026 + Package B/C)
+
+| Role | Path | Verify |
+| --- | --- | --- |
+| Adversarial (Table IV) | `artifacts/adversarial-20260815T073800Z/` | SHA `cd84b220…` |
+| Post-restore smoke | `artifacts/smoke-20260815T073919Z/` | SHA `ec5196e0…` |
+| Malformed capture (Table VII) | `artifacts/capture-malformed-20260816T032622Z/` | bridge pcap `463c23b5…` |
+| Robustness (Table IX) | `artifacts/robustness-20260816T034020Z/` | manifest `fe42a81d…` |
+
+## Frozen public pin (DNS-02a July)
 
 | Field | Value |
 | --- | --- |
