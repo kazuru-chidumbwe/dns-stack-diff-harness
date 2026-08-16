@@ -30,7 +30,9 @@ version: "0.1.2"
 date-released: "2026-08-16"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.21959551"
+    value: "10.5281/zenodo.21961205"
+  - type: doi
+    value: "10.5281/zenodo.21959550"
 preferred-citation:
   type: software
   authors:
@@ -39,7 +41,7 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0002-4099-1059"
   title: "DNS StackDiff harness"
   version: "0.1.2"
-  doi: "10.5281/zenodo.21959551"
-  url: "https://doi.org/10.5281/zenodo.21959551"
+  doi: "10.5281/zenodo.21961205"
+  url: "https://doi.org/10.5281/zenodo.21961205"
   year: 2026
   month: 8

@@ -1,4 +1,4 @@
-# DNS Stack Diff Harness
+﻿# DNS Stack Diff Harness
 
 Path-consistency differential harness for Linux / Kubernetes-style DNS resolution stacks.
 
@@ -19,7 +19,7 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
 - **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
-- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** GitHub Release (concept DOI [10.5281/zenodo.21959551](https://doi.org/10.5281/zenodo.21959551))
+- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** GitHub Release (version DOI [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550)))
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
 - **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
 - **Package B malformed timeline:** `artifacts/capture-malformed-20260816T032622Z/` (bridge pcap SHA `463c23b5…`)
