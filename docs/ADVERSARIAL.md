@@ -4,14 +4,17 @@ Application-layer MITM profiles via `make adversarial`. This does **not** replac
 
 ## What it measures
 
-Two active profiles under identical upstream conditions (Unbound + CoreDNS-forwarder path-role stand-ins):
+Profiles under identical upstream conditions (Unbound + CoreDNS-forwarder path-role stand-ins):
 
 | Profile | Injector mode | Intent |
 | --- | --- | --- |
-| `P-GLUE-BAILIWICK` | `additional-glue` | Out-of-bailiwick ADDITIONAL glue + **cache-accept probe** (`ns.evil.test.`) |
-| `P-MALFORMED-RCODE` | `malformed-truncated` | Truncated / malformed upstream reply |
+| `P-GLUE-BAILIWICK` | `additional-glue` | Out-of-bailiwick ADDITIONAL glue + **cache-accept probe** (`ns.evil.test.`) — labeled **negative control** for Layer-2 CVE currency |
+| `P-GLUE-AUTHORITY-NS` | `authority-ns-glue` | Promiscuous NS in AUTHORITY + A in ADDITIONAL — Layer-2 primary; **requires positive control** |
+| `P-MALFORMED-RCODE` | `malformed-truncate` | Truncated / malformed upstream reply (payload-truncation) |
 
 For glue, the oracle uses `GLUE_AXES` (`additional`, `glue_cache_accept` in addition to the security axes). Client ANSWER often strips ADDITIONAL; the follow-up probe is the primary bailiwick signal.
+
+**CVE-2025-11411 positive control:** default Unbound adversarial pin uses `forward-zone` → MITM and **cannot** arm the iterator-path CVE. Before interpreting 1.24.1/1.24.2 cells, follow [`POSITIVE-CONTROL-CVE11411.md`](POSITIVE-CONTROL-CVE11411.md) (vendor vector + iterate config + prime + `true` on 1.24.0).
 
 Results are **measurement only**. Manifests record divergences + `class_hint`. Do not publish Class A/B or “exploitable” language without separate triage and disclosure. See [`TRIAGE-DNS02-2026-08-15.md`](TRIAGE-DNS02-2026-08-15.md).
 
