@@ -26,13 +26,13 @@ Profiles are schema-first: new adversarial cases should land as JSON under `prof
 
 ## Required `dnssec_posture` object
 
-Unbound validates by default; dnsmasq does not unless configured. Pin the posture so divergences are design choices, not accidents.
+Unbound validates by default; CoreDNS-as-forwarder does not validate unless configured. Pin the posture so divergences are design choices, not accidents.
 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `mode` | `matched` · `deliberately_mismatched` | Matched = same validation intent for this profile |
 | `unbound` | string | e.g. `off-lab-zone` · `validate` · `default-strict` |
-| `dnsmasq` | string | e.g. `off` · `validate-with-trust-anchor` |
+| `coredns_fwd` | string | e.g. `off` · `validate-with-trust-anchor` |
 | `notes` | string | Why this posture for this profile |
 
 Smoke must use `mode: matched` with both resolvers non-validating for the lab zone.
@@ -62,7 +62,7 @@ Smoke must use `mode: matched` with both resolvers non-validating for the lab zo
   "dnssec_posture": {
     "mode": "matched",
     "unbound": "off-lab-zone",
-    "dnsmasq": "off",
+    "coredns_fwd": "off",
     "notes": "Matched non-validating so bailiwick logic is not confounded by DNSSEC defaults"
   },
   "query": { "name": "www.lab.stackdiff.", "type": "A" },

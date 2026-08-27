@@ -4,7 +4,7 @@
 
 - Threat model + scope/isolation docs (written)
 - Profile schema with adversary + `dnssec_posture`
-- Two resolvers: Unbound + dnsmasq (path-role stand-ins)
+- Two resolvers: Unbound + CoreDNS-as-forwarder (path-role stand-ins; replaces v0 dnsmasq)
 - `P-SMOKE-AGREE` green and pinned (Unbound **forward-only** = oracle validation step)
 - Application-layer only under plain Docker; record `uname -r` on every pin
 

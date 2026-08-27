@@ -4,7 +4,7 @@ Application-layer MITM profiles via `make adversarial`. This does **not** replac
 
 ## What it measures
 
-Two active profiles under identical upstream conditions (Unbound + dnsmasq path-role stand-ins):
+Two active profiles under identical upstream conditions (Unbound + CoreDNS-forwarder path-role stand-ins):
 
 | Profile | Injector mode | Intent |
 | --- | --- | --- |

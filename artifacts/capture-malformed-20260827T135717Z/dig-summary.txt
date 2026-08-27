@@ -1,0 +1,34 @@
+=== unbound-udp rc=0 ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 51507
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+rc=0
+=== coredns_fwd-udp rc=0 ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 56045
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: ec3f5f4f1369dbc1 (echoed)
+rc=0
+=== unbound-tcp rc=0 ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 26723
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+rc=0
+=== coredns_fwd-tcp rc=9 ===
+;; communications error to 127.0.0.1#9054: timed out
+
+; <<>> DiG 9.20.26-1~deb13u1-Debian <<>> @127.0.0.1 -p 9054 agree.lab.stackdiff. A +tcp +time=2 +tries=1 +noall +answer +additional +comments
+; (1 server found)
+;; global options: +cmd
+;; no servers could be reached
+rc=9

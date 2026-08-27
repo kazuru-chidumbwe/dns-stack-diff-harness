@@ -22,18 +22,12 @@ services:
       - "9053:53/udp"
       - "9053:53/tcp"
 
-  # alpine-based dnsmasq — strm/dnsmasq timed out on host-published 9054 in lab
-  dnsmasq:
-    image: alpine:3.20
-    user: "0:0"
-    command:
-      - /bin/sh
-      - -c
-      - |
-        apk add --no-cache dnsmasq >/dev/null
-        exec dnsmasq -k --conf-file=/etc/dnsmasq.conf
+  # CoreDNS-as-forwarder stand-in (NodeLocal-class role). Replaces v0 dnsmasq.
+  coredns_fwd:
+    image: coredns/coredns:1.11.3
+    command: ["-conf", "/Corefile"]
     volumes:
-      - ./resolvers/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
+      - ./resolvers/coredns-fwd/Corefile:/Corefile:ro
     depends_on:
       - auth
     networks:

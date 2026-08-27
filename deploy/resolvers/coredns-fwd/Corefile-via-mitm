@@ -1,0 +1,6 @@
+# CoreDNS forwarder stand-in — path via MITM then auth (adversarial overlay).
+. {
+    forward . 172.30.0.11
+    log
+    errors
+}

@@ -6,11 +6,11 @@
 
 **Path mode (later):** chain stub → node-local → CoreDNS → upstream; same profiles and oracle apply to consecutive hops once the pair-mode oracle is trusted.
 
-## Role stand-ins (why Unbound + dnsmasq)
+## Role stand-ins (why Unbound + CoreDNS-forwarder)
 
 | Binary | Path role approximated |
 | --- | --- |
-| dnsmasq | Local forwarder/cache ≈ NodeLocal DNSCache / systemd-resolved |
+| coredns_fwd | Local forwarder/cache ≈ NodeLocal DNSCache / systemd-resolved |
 | Unbound | Full recursive / validating ≈ CoreDNS recursive or upstream resolver |
 
 Standalone binaries first; containerized CoreDNS / systemd-resolved later so harness bugs are not conflated with path-specific behavior.
@@ -25,7 +25,7 @@ Profile corpus ──────► dig / client
                   ┌─────────┴─────────┐
                   ▼                   ▼
              ┌─────────┐         ┌─────────┐
-             │ Unbound │         │ dnsmasq │
+             │ Unbound │         │coredns_fwd│
              └────┬────┘         └────┬────┘
                   └─────────┬─────────┘
                             ▼

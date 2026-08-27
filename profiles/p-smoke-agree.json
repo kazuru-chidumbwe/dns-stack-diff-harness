@@ -11,8 +11,8 @@
   "dnssec_posture": {
     "mode": "matched",
     "unbound": "off-lab-zone",
-    "dnsmasq": "off",
-    "notes": "Matched non-validating for lab.stackdiff. so defaults (Unbound strict vs dnsmasq off) cannot manufacture a smoke failure"
+    "coredns_fwd": "off",
+    "notes": "Matched non-validating for lab.stackdiff. so defaults (Unbound strict vs CoreDNS-forwarder off) cannot manufacture a smoke failure"
   },
   "query": {
     "name": "agree.lab.stackdiff.",

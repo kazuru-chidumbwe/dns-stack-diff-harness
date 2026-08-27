@@ -14,7 +14,7 @@
   "dnssec_posture": {
     "mode": "matched",
     "unbound": "off-lab-zone",
-    "dnsmasq": "off",
+    "coredns_fwd": "off",
     "notes": "Matched non-validating so bailiwick accept/reject is not confounded by Unbound default DNSSEC"
   },
   "query": {

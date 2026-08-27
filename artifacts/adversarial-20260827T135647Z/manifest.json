@@ -1,0 +1,124 @@
+{
+  "schema": "stackdiff.adversarial.v1",
+  "created_utc": "2026-08-27T13:57:17.823216+00:00",
+  "role": "dns02_application_layer_mitm",
+  "lab_environment": {
+    "uname_r": "6.12.101+deb13-amd64",
+    "uname_a": "Linux lab 6.12.101+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.101-1 (2026-08-05) x86_64 GNU/Linux",
+    "docker_version": "26.1.5+dfsg1",
+    "platform": "linux"
+  },
+  "measurement_axes": {
+    "default": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash"
+    ],
+    "glue": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash",
+      "additional",
+      "glue_cache_accept"
+    ]
+  },
+  "results": [
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "injector": "mitm-malformed-response",
+      "mitm_mode": "malformed-truncated",
+      "adversary": {
+        "position": "on-path",
+        "capability": [
+          "Inject malformed DNS response bytes",
+          "Manipulate response pre-processing edge cases"
+        ],
+        "win_condition": "One hop returns a usable/partial answer (or caches) while the other drops, SERVFAILs, or crashes"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "coredns_fwd": "off",
+        "notes": "Matched non-validating; posture is not the variable under test"
+      },
+      "query": {
+        "name": "agree.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "SERVFAIL",
+          "answers": [],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 27113\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232",
+          "glue_cache_accept": null
+        },
+        "coredns_fwd": {
+          "rcode": "FORMERR",
+          "answers": [],
+          "additional": [],
+          "aa": false,
+          "ra": false,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 63819\n;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 48cb307b582b1f3c (echoed)",
+          "glue_cache_accept": null
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash"
+        ],
+        "resolvers": [
+          "coredns_fwd",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "rcode",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": "FORMERR",
+            "right_value": "SERVFAIL"
+          },
+          {
+            "axis": "ra",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": false,
+            "right_value": true
+          }
+        ],
+        "divergence_count": 2,
+        "class_hint": "C_until_triaged"
+      },
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process."
+    }
+  ],
+  "summary_table": [
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "mitm_mode": "malformed-truncated",
+      "divergence_count": 2,
+      "axes": [
+        "ra",
+        "rcode"
+      ],
+      "class_hint": "A_or_B_or_C_after_analysis",
+      "oracle_class_hint": "C_until_triaged"
+    }
+  ],
+  "disclaimer": "Measurement only. No CVE / exploitable claims in this manifest. Smoke oracle remains make smoke on compose.yaml without this overlay."
+}

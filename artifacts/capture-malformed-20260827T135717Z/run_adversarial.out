@@ -1,0 +1,15 @@
+=== P-MALFORMED-RCODE injector=mitm-malformed-response ===
+wrote /opt/atlas/repos/dns-stack-diff-harness/artifacts/adversarial-20260827T135801Z/manifest.json
+[
+  {
+    "profile_id": "P-MALFORMED-RCODE",
+    "mitm_mode": "malformed-truncated",
+    "divergence_count": 2,
+    "axes": [
+      "ra",
+      "rcode"
+    ],
+    "class_hint": "A_or_B_or_C_after_analysis",
+    "oracle_class_hint": "C_until_triaged"
+  }
+]

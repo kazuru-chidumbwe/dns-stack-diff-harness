@@ -1,0 +1,1 @@
+[2Kmitm-1  | mitm mode=malformed-truncated listen=0.0.0.0:53 upstream=172.30.0.10:53

@@ -10,7 +10,8 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / Zenodo Release** | [`v0.1.2`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.2) | Package B+C pins + Aug DNS-02; GitHub Release triggers Zenodo when linked |
+| **SemVer / Zenodo Release** | [`v0.1.2`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.2) | Package B+C pins + Aug DNS-02 (dnsmasq stand-in); GitHub Release triggers Zenodo when linked |
+| **SemVer (CoreDNS-forwarder)** | [`v0.1.3`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.3) | Unbound + CoreDNS-as-forwarder; Package B/C 27 Aug 2026 |
 | **SemVer (Aug DNS-02 only)** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Aug 2026 TNSM measurement pins (pre–Package B/C) |
 | **SemVer (smoke baseline)** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0) | DNS-01-era smoke tree |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
@@ -19,12 +20,13 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
 - **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
-- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** GitHub Release (version DOI [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550)))
+- **Package / Zenodo cite (Aug 2026 + Package B/C, dnsmasq):** cite **`v0.1.2`** GitHub Release (version DOI [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550)))
+- **CoreDNS-forwarder measurement pin (27 Aug 2026):** cite **`v0.1.3`** / **`results-coredns-fwd-20260827`** — glue SHA `1f55f603…` · malformed SHA `00e05564…` · Package C SHA `3021c9a4…`
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
-- **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
-- **Package B malformed timeline:** `artifacts/capture-malformed-20260816T032622Z/` (bridge pcap SHA `463c23b5…`)
-- **Package C robustness:** `artifacts/robustness-20260816T034020Z/` (manifest SHA `fe42a81d…`) · `make robustness`
-- **Venue (instrument / measurement paper):** *IEEE Transactions on Network and Service Management* (TNSM) — archival target Dec 2026; ≤10 free pages; measurement-only (Class A/B not published this pass). See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
+- **TNSM archival measurement pin (Aug 2026, dnsmasq):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
+- **Package B malformed timeline (CoreDNS-fwd):** `artifacts/capture-malformed-20260827T135717Z/` (bridge pcap SHA `a4f43423…`)
+- **Package C robustness (CoreDNS-fwd):** `artifacts/robustness-20260827T140756Z/` (manifest SHA `3021c9a4…`) · `make robustness`
+- **Venue path:** CNSM-first under current programme lock; TNSM archival pack remains paused pending content upgrade. See manuscript notes in the Atlas programme workspace (not this public repo).
 
 See [`docs/TAGS.md`](docs/TAGS.md) and [`CITATION.cff`](CITATION.cff). Repo root / `main` may move; published claims always link a **tag tree**.
 
@@ -88,13 +90,14 @@ Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has th
 
 | Item | State |
 | --- | --- |
-| Compose topology (Unbound + dnsmasq + auth) | v0 |
+| Compose topology (Unbound + CoreDNS-forwarder + auth) | v0 |
 | Threat / isolation / schema docs | v0 |
 | Oracle validation smoke (`P-SMOKE-AGREE`) | green (lab pin above) |
 | Application-layer adversarial runner | available (`make adversarial`) |
 | DNS-02a frozen adversarial pin (July) | committed (measurement only) |
-| DNS-02 TNSM pin (Aug 2026) | committed on `results-dns02-20260815` (measurement only) |
-| Package B / C (malformed + robustness) | committed on `v0.1.2` |
+| DNS-02 TNSM pin (Aug 2026, dnsmasq) | committed on `results-dns02-20260815` (measurement only) |
+| CoreDNS-forwarder pin (27 Aug 2026) | committed on `v0.1.3` / `results-coredns-fwd-20260827` |
+| Package B / C (malformed + robustness) | `v0.1.2` (dnsmasq) · `v0.1.3` (CoreDNS-fwd) |
 | Klein / SAD DNS profiles | deferred |
 
 No invented finding counts. Adversarial manifests are measurement only until Class A/B triage and disclosure.
@@ -130,6 +133,7 @@ Optional: `make robustness` repeats adversarial profiles with a passthrough cont
 | --- | --- | --- | --- |
 | `P-SMOKE-AGREE` | application | active | Oracle validation (forward-only) |
 | `P-GLUE-BAILIWICK` | application | active | Out-of-bailiwick ADDITIONAL glue |
+| `P-GLUE-AUTHORITY-NS` | application | active | AUTHORITY NS + ADDITIONAL A (CVE-shaped measurement; not a vulnerability claim) |
 | `P-MALFORMED-RCODE` | application | active | Truncated/malformed upstream reply |
 | `P-OS-KLEIN-PRNG-DEFERRED` | os | deferred | Shared prandom / cross-container |
 | `P-OS-SAD-DNS-ICMP-DEFERRED` | os | deferred | ICMP side channel; pin kernel story |

@@ -20,7 +20,7 @@ REQUIRED = (
     "class_hint",
 )
 ADV_REQUIRED = ("position", "capability", "win_condition")
-DNSSEC_REQUIRED = ("mode", "unbound", "dnsmasq", "notes")
+DNSSEC_REQUIRED = ("mode", "unbound", "coredns_fwd", "notes")
 POSITIONS = {"none", "on-path", "off-path", "malicious-but-trusted-upstream"}
 LAYERS = {"application", "os"}
 STATUSES = {"active", "scaffold", "deferred-os-layer"}

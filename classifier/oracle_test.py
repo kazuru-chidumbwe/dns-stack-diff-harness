@@ -33,7 +33,7 @@ class OracleTests(unittest.TestCase):
                 "error": None,
                 "glue_cache_accept": False,
             },
-            "dnsmasq": {
+            "coredns_fwd": {
                 "rcode": "NOERROR",
                 "answers": ["203.0.113.20"],
                 "additional": [],
@@ -56,7 +56,7 @@ class OracleTests(unittest.TestCase):
                 "ra": True,
                 "error": None,
             },
-            "dnsmasq": {
+            "coredns_fwd": {
                 "rcode": "NOERROR",
                 "answers": ["203.0.113.10"],
                 "aa": False,
@@ -77,7 +77,7 @@ class OracleTests(unittest.TestCase):
                 "ra": True,
                 "error": None,
             },
-            "dnsmasq": {
+            "coredns_fwd": {
                 "rcode": "NOERROR",
                 "answers": ["203.0.113.10"],
                 "aa": True,
@@ -99,7 +99,7 @@ class OracleTests(unittest.TestCase):
                 "ra": True,
                 "error": None,
             },
-            "dnsmasq": {
+            "coredns_fwd": {
                 "rcode": "SERVFAIL",
                 "answers": [],
                 "aa": False,

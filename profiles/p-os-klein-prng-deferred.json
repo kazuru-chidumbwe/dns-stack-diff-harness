@@ -14,7 +14,7 @@
   "dnssec_posture": {
     "mode": "matched",
     "unbound": "off-lab-zone",
-    "dnsmasq": "off",
+    "coredns_fwd": "off",
     "notes": "DNSSEC not the variable; posture pinned matched for consistency"
   },
   "query": {

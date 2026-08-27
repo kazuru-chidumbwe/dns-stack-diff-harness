@@ -1,0 +1,37 @@
+{
+  "id": "P-GLUE-AUTHORITY-NS",
+  "intent": "Promiscuous NS in AUTHORITY plus matching A in ADDITIONAL (CVE-2025-11411-shaped measurement)",
+  "status": "active",
+  "layer": "application",
+  "adversary": {
+    "position": "malicious-but-trusted-upstream",
+    "capability": [
+      "Crafted DNS response content",
+      "Unsolicited NS RRSet in AUTHORITY",
+      "Matching address records in ADDITIONAL"
+    ],
+    "win_condition": "One hop caches or uses the injected NS/address glue that the other hop rejects — path inconsistency under a CVE-2025-11411-shaped transform"
+  },
+  "dnssec_posture": {
+    "mode": "matched",
+    "unbound": "off-lab-zone",
+    "coredns_fwd": "off",
+    "notes": "Matched non-validating so accept/reject is not confounded by Unbound default DNSSEC"
+  },
+  "query": {
+    "name": "www.lab.stackdiff.",
+    "type": "A"
+  },
+  "expect": {
+    "answers_contain": ["203.0.113.20"],
+    "divergence": "measure",
+    "notes": "Answer RRset should still carry www A from auth. AUTHORITY NS + ADDITIONAL A are the stress. Measurement only — not a vulnerability claim."
+  },
+  "injector": "mitm-authority-ns-glue",
+  "notes": "MITM mode authority-ns-glue. Application-layer only. Distinct from additional-glue (ADDITIONAL-only).",
+  "class_hint": "A_or_B_after_analysis",
+  "references": [
+    "CVE-2025-11411 / CVE-2025-40778 shaped transform for version-sweep measurement",
+    "RFC 2181 section 5.4.1 ranking of data"
+  ]
+}

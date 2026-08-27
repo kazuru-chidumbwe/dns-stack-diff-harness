@@ -1,0 +1,8 @@
+# CoreDNS stand-in configured as a forwarder (NodeLocal-class role).
+# Smoke: forward directly to auth. Adversarial overlay swaps Corefile to via-mitm.
+# No cache plugin: CoreDNS forbids cache TTL 0; omit for deterministic smoke/adv.
+. {
+    forward . 172.30.0.10
+    log
+    errors
+}

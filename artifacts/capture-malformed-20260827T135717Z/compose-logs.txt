@@ -1,0 +1,5 @@
+[2Kcoredns_fwd-1  | .:53
+[2Kcoredns_fwd-1  | CoreDNS-1.11.3
+[2Kcoredns_fwd-1  | linux/amd64, go1.21.11, a6338e9
+[2Kcoredns_fwd-1  | [INFO] 172.30.0.1:47293 - 56045 "A IN agree.lab.stackdiff. udp 60 false 1232" FORMERR qr,rd 37 0.000602038s
+[2Kmitm-1         | mitm mode=malformed-truncated listen=0.0.0.0:53 upstream=172.30.0.10:53

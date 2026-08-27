@@ -1,6 +1,6 @@
 {
-  "title": "StackDiff: path-consistency DNS differential harness (v0.1.2)",
-  "description": "Checksummed smoke, adversarial, malformed-capture, and robustness manifests for Unbound/dnsmasq pair-mode path-consistency measurements (results tag results-dns02-20260815; Package B capture-malformed-20260816T032622Z; Package C robustness-20260816T034020Z). Companion software and data for the IEEE TNSM StackDiff manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
+  "title": "StackDiff: path-consistency DNS differential harness (v0.1.3)",
+  "description": "Checksummed smoke, adversarial, malformed-capture, and robustness manifests for Unbound and CoreDNS-as-forwarder pair-mode path-consistency measurements (results tag results-coredns-fwd-20260827; Package B capture-malformed-20260827T135717Z; Package C robustness-20260827T140756Z). Companion software and data for the StackDiff manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
   "creators": [
     {
       "name": "Kazuru, Seke",
@@ -13,7 +13,7 @@
     "differential testing",
     "path consistency",
     "Unbound",
-    "dnsmasq",
+    "CoreDNS",
     "measurement",
     "Kubernetes",
     "eBPF-adjacent networking"
@@ -21,7 +21,7 @@
   "license": "Apache-2.0",
   "upload_type": "software",
   "access_right": "open",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "related_identifiers": [
     {
       "scheme": "url",
@@ -37,7 +37,7 @@
     },
     {
       "scheme": "url",
-      "identifier": "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/results-dns02-20260815",
+      "identifier": "https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/results-coredns-fwd-20260827",
       "relation": "isIdenticalTo",
       "resource_type": "dataset"
     }

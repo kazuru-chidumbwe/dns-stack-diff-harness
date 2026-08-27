@@ -29,7 +29,7 @@ from oracle import SMOKE_AXES, compare_observations  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 RESOLVERS = {
     "unbound": {"host": "127.0.0.1", "port": 9053},
-    "dnsmasq": {"host": "127.0.0.1", "port": 9054},
+    "coredns_fwd": {"host": "127.0.0.1", "port": 9054},
 }
 
 RCODE_NAMES = {

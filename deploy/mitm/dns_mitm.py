@@ -2,10 +2,12 @@
 """UDP DNS MITM for StackDiff DNS-02 application-layer profiles.
 
 Modes:
-  passthrough          — forward upstream reply unchanged
-  additional-glue      — append out-of-bailiwick A in ADDITIONAL
-  malformed-truncated     — cut the upstream reply mid-packet
-  malformed-bad-pointer — overwrite a name pointer to an invalid offset
+  passthrough              — forward upstream reply unchanged
+  additional-glue          — append unrelated A in ADDITIONAL only
+  authority-ns-glue        — inject promiscuous NS in AUTHORITY + A in ADDITIONAL
+                             (CVE-2025-11411-shaped; measurement only)
+  malformed-truncated         — cut the upstream reply mid-packet
+  malformed-bad-pointer     — overwrite a name pointer to an invalid offset
 
 Not a fuzzer. Deterministic transforms only.
 """
@@ -30,6 +32,37 @@ def encode_name(name: str) -> bytes:
     return bytes(out)
 
 
+def skip_name(packet: bytes, offset: int) -> int:
+    while offset < len(packet):
+        lab = packet[offset]
+        if lab == 0:
+            return offset + 1
+        if lab & 0xC0 == 0xC0:
+            return offset + 2
+        offset += 1 + (lab & 0x3F)
+        if offset > len(packet):
+            raise ValueError("truncated name")
+    raise ValueError("bad name")
+
+
+def skip_question(packet: bytes, offset: int) -> int:
+    offset = skip_name(packet, offset)
+    if offset + 4 > len(packet):
+        raise ValueError("truncated question")
+    return offset + 4
+
+
+def skip_rr(packet: bytes, offset: int) -> int:
+    offset = skip_name(packet, offset)
+    if offset + 10 > len(packet):
+        raise ValueError("truncated rr")
+    rdlen = struct.unpack("!H", packet[offset + 8 : offset + 10])[0]
+    end = offset + 10 + rdlen
+    if end > len(packet):
+        raise ValueError("truncated rdata")
+    return end
+
+
 def append_additional_a(packet: bytes, owner: str, ipv4: str, ttl: int = 60) -> bytes:
     """Append one ADDITIONAL A RR; bump ARCOUNT."""
     if len(packet) < 12:
@@ -41,6 +74,42 @@ def append_additional_a(packet: bytes, owner: str, ipv4: str, ttl: int = 60) -> 
         raise ValueError(f"bad ipv4: {ipv4}")
     rr = encode_name(owner) + struct.pack("!HHIH", 1, 1, ttl, 4) + ip_bytes
     return header + packet[12:] + rr
+
+
+def append_authority_ns_and_additional_a(
+    packet: bytes,
+    zone: str,
+    ns_name: str,
+    ipv4: str,
+    ttl: int = 60,
+) -> bytes:
+    """Insert NS in AUTHORITY and matching A in ADDITIONAL (section-order aware).
+
+    Shape used for CVE-2025-11411-style measurement: a promiscuous NS RRSet in
+    AUTHORITY plus address records in ADDITIONAL for that NS name. Not a claim
+    that this packet alone reproduces any CVE in production.
+    """
+    if len(packet) < 12:
+        return packet
+    id_, flags, qd, an, ns, ar = struct.unpack("!HHHHHH", packet[:12])
+    offset = 12
+    for _ in range(qd):
+        offset = skip_question(packet, offset)
+    for _ in range(an):
+        offset = skip_rr(packet, offset)
+    for _ in range(ns):
+        offset = skip_rr(packet, offset)
+    auth_end = offset  # start of ADDITIONAL (may be EOF)
+
+    ns_rdata = encode_name(ns_name)
+    ns_rr = encode_name(zone) + struct.pack("!HHIH", 2, 1, ttl, len(ns_rdata)) + ns_rdata
+    ip_bytes = bytes(int(x) for x in ipv4.split("."))
+    if len(ip_bytes) != 4:
+        raise ValueError(f"bad ipv4: {ipv4}")
+    a_rr = encode_name(ns_name) + struct.pack("!HHIH", 1, 1, ttl, 4) + ip_bytes
+
+    header = struct.pack("!HHHHHH", id_, flags, qd, an, ns + 1, ar + 1)
+    return header + packet[12:auth_end] + ns_rr + packet[auth_end:] + a_rr
 
 
 def malformed_truncate(packet: bytes, keep: int = 20) -> bytes:
@@ -67,8 +136,15 @@ def transform(mode: str, packet: bytes) -> bytes:
     if mode == "passthrough":
         return packet
     if mode == "additional-glue":
-        # Outside lab.stackdiff. bailiwick — classic glue-policy stress.
+        # Unrelated name-server address in ADDITIONAL only (RFC 2181 ranking stress).
         return append_additional_a(packet, "ns.evil.test.", "198.51.100.66")
+    if mode == "authority-ns-glue":
+        return append_authority_ns_and_additional_a(
+            packet,
+            zone="lab.stackdiff.",
+            ns_name="ns.evil.test.",
+            ipv4="198.51.100.66",
+        )
     if mode == "malformed-truncated":
         return malformed_truncate(packet)
     if mode == "malformed-bad-pointer":
@@ -112,6 +188,7 @@ def main() -> int:
         choices=(
             "passthrough",
             "additional-glue",
+            "authority-ns-glue",
             "malformed-truncated",
             "malformed-bad-pointer",
         ),

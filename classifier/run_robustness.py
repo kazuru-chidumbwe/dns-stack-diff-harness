@@ -61,7 +61,7 @@ def restore_smoke_topology() -> None:
             "--force-recreate",
             "--remove-orphans",
             "unbound",
-            "dnsmasq",
+            "coredns_fwd",
             "auth",
         ],
         cwd=str(ROOT),
@@ -115,8 +115,8 @@ def run_one_role_order(profile: dict, reverse: bool) -> dict:
         )
         observations[name].setdefault("additional", [])
         observations[name].setdefault("glue_cache_accept", None)
-    axes = GLUE_AXES if mode == "additional-glue" else SECURITY_AXES
-    if mode == "additional-glue":
+    axes = GLUE_AXES if mode in ("additional-glue", "authority-ns-glue") else SECURITY_AXES
+    if mode in ("additional-glue", "authority-ns-glue"):
         from run_adversarial import _attach_glue_probe
 
         _attach_glue_probe(observations)

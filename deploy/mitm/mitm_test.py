@@ -11,6 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "deploy" / "mitm"))
 from dns_mitm import (  # noqa: E402
     append_additional_a,
+    append_authority_ns_and_additional_a,
     encode_name,
     malformed_bad_pointer,
     malformed_truncate,
@@ -35,6 +36,23 @@ class MitmTests(unittest.TestCase):
         self.assertEqual(struct.unpack("!HHHHHH", out[:12])[5], 1)
         self.assertGreater(len(out), len(base))
         self.assertIn(encode_name("ns.evil.test."), out)
+
+    def test_authority_ns_glue_bumps_nscount_and_arcount(self) -> None:
+        base = _minimal_answer()
+        out = append_authority_ns_and_additional_a(
+            base,
+            zone="lab.stackdiff.",
+            ns_name="ns.evil.test.",
+            ipv4="198.51.100.66",
+        )
+        _id, _flags, qd, an, ns, ar = struct.unpack("!HHHHHH", out[:12])
+        self.assertEqual(ns, 1)
+        self.assertEqual(ar, 1)
+        self.assertIn(encode_name("lab.stackdiff."), out)
+        self.assertIn(encode_name("ns.evil.test."), out)
+        # NS type = 2 appears in authority; A type = 1 in additional
+        self.assertIn(struct.pack("!HH", 2, 1), out)
+        self.assertGreater(len(transform("authority-ns-glue", base)), len(base))
 
     def test_truncate(self) -> None:
         base = _minimal_answer()

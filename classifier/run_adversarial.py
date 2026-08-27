@@ -31,14 +31,21 @@ ROOT = Path(__file__).resolve().parents[1]
 COMPOSE_BASE = ROOT / "deploy" / "compose.yaml"
 COMPOSE_ADV = ROOT / "deploy" / "compose.adversarial.yaml"
 
-# Must match deploy/mitm/dns_mitm.py additional-glue transform.
+# Must match deploy/mitm/dns_mitm.py glue transforms (ADDITIONAL and/or AUTHORITY).
 GLUE_OWNER = "ns.evil.test."
 GLUE_IP = "198.51.100.66"
 
 INJECTOR_TO_MODE = {
     "mitm-additional-glue": "additional-glue",
+    "mitm-authority-ns-glue": "authority-ns-glue",
     "mitm-malformed-response": "malformed-truncated",
 }
+
+GLUE_MODES = frozenset({"additional-glue", "authority-ns-glue"})
+
+
+def is_glue_mode(mode: str) -> bool:
+    return mode in GLUE_MODES
 
 
 def compose_cmd(*args: str, env: dict | None = None) -> subprocess.CompletedProcess:
@@ -76,7 +83,7 @@ def bring_up(mode: str) -> None:
         "--force-recreate",
         "mitm",
         "unbound",
-        "dnsmasq",
+        "coredns_fwd",
         env={"MITM_MODE": mode},
     )
     if proc.returncode != 0:
@@ -177,7 +184,7 @@ def run_one(profile: dict) -> dict:
 
     glue_probes = None
     axes = SECURITY_AXES
-    if mode == "additional-glue":
+    if is_glue_mode(mode):
         glue_probes = _attach_glue_probe(observations)
         axes = GLUE_AXES
 
@@ -266,7 +273,7 @@ def main() -> int:
             "--force-recreate",
             "--remove-orphans",
             "unbound",
-            "dnsmasq",
+            "coredns_fwd",
         ],
         cwd=str(ROOT),
         capture_output=True,
@@ -291,7 +298,7 @@ def main() -> int:
             "class_hint": r.get("class_hint"),
             "oracle_class_hint": r["oracle"].get("class_hint"),
         }
-        if r["mitm_mode"] == "additional-glue":
+        if is_glue_mode(r["mitm_mode"]):
             row["glue_cache_accept"] = {
                 name: (obs or {}).get("glue_cache_accept")
                 for name, obs in (r.get("observations") or {}).items()

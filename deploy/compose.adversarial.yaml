@@ -36,9 +36,9 @@ services:
       - auth
       - mitm
 
-  dnsmasq:
+  coredns_fwd:
     volumes: !override
-      - ./resolvers/dnsmasq/dnsmasq-via-mitm.conf:/etc/dnsmasq.conf:ro
+      - ./resolvers/coredns-fwd/Corefile-via-mitm:/Corefile:ro
     depends_on:
       - auth
       - mitm

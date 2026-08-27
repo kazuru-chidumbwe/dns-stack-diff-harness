@@ -1,0 +1,9 @@
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 56045
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: ec3f5f4f1369dbc1 (echoed)
+rc=0
