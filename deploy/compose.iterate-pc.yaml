@@ -1,0 +1,32 @@
+# Overlay: iterator-path Unbound + parent referral + attacker NS for CVE-2025-11411 PC.
+# Usage: see scripts/positive_control_cve11411.py
+
+services:
+  parent:
+    image: coredns/coredns:1.11.3
+    command: ["-conf", "/Corefile"]
+    volumes:
+      - ./coredns/Corefile.parent:/Corefile:ro
+      - ./coredns/zones:/zones:ro
+    networks:
+      dnsnet:
+        ipv4_address: 172.30.0.12
+
+  attacker:
+    image: coredns/coredns:1.11.3
+    command: ["-conf", "/Corefile"]
+    volumes:
+      - ./coredns/Corefile.attacker:/Corefile:ro
+    networks:
+      dnsnet:
+        ipv4_address: 172.30.0.66
+
+  unbound:
+    image: ${UNBOUND_IMAGE:-l33tlamer/unbound-recursive:1.24.0}
+    volumes: !override
+      - ./resolvers/unbound/unbound-via-mitm-iterate.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+    depends_on:
+      - auth
+      - mitm
+      - parent
+      - attacker

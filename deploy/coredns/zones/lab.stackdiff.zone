@@ -8,6 +8,9 @@ $TTL 60
             30         ; minimum
             )
 @       IN NS  ns.lab.stackdiff.
-ns      IN A   172.30.0.10
+; Publish MITM as the zone NS address so iterator queries stay on-path
+; (auth remains 172.30.0.10 upstream-only; see compose MITM --upstream).
+ns      IN A   172.30.0.11
 agree   IN A   203.0.113.10
 www     IN A   203.0.113.20
+check   IN A   203.0.113.99

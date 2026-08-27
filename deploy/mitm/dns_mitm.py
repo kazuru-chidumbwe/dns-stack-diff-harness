@@ -141,11 +141,15 @@ def transform(mode: str, packet: bytes) -> bytes:
         # Unrelated name-server address in ADDITIONAL only (RFC 2181 ranking stress).
         return append_additional_a(packet, "ns.evil.test.", "198.51.100.66")
     if mode == "authority-ns-glue":
+        # Vendor pollute1 shape (iter_scrub_promiscuous.rpl): zone-cut NS in AUTHORITY
+        # of a positive A reply. NS target must NOT be under a locally-served empty
+        # zone (e.g. Unbound NXDOMAINs .test); use example. like lab docs.
         return append_authority_ns_and_additional_a(
             packet,
             zone="lab.stackdiff.",
-            ns_name="ns.evil.test.",
-            ipv4="198.51.100.66",
+            ns_name="ns.attacker.example.",
+            # Attacker container on dnsnet (compose.iterate-pc); not a public TEST-NET IP.
+            ipv4="172.30.0.66",
         )
     if mode == "malformed-truncated":
         return malformed_truncate(packet)
