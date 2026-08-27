@@ -87,7 +87,9 @@ def append_authority_ns_and_additional_a(
 
     Shape used for CVE-2025-11411-style measurement: a promiscuous NS RRSet in
     AUTHORITY plus address records in ADDITIONAL for that NS name. Not a claim
-    that this packet alone reproduces any CVE in production.
+    that this packet alone reproduces any CVE. Positive control requires an
+    iterator-path Unbound topology + vendor test vector — see
+    docs/POSITIVE-CONTROL-CVE11411.md.
     """
     if len(packet) < 12:
         return packet

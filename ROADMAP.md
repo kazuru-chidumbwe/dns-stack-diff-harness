@@ -15,10 +15,11 @@
 - [x] Frozen measurement pin `artifacts/adversarial-20260718T130854Z/` + tag `blog-dns02a-2026-07`
 - [x] Oracle surfaces ADDITIONAL + glue **cache-accept probe** (`GLUE_AXES`) — lab pass 2026-08-15
 - [x] Author triage notes for glue AA-noise vs cache-accept + malformed robustness — [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md)
+- [ ] Unbound **full recursive / iterator** path for CVE-11411 positive control ([`docs/POSITIVE-CONTROL-CVE11411.md`](docs/POSITIVE-CONTROL-CVE11411.md)) — **Week-1 gate before 1.24.1/1.24.2**
+- [ ] Port NLnet `patch_CVE-2025-11411_*` test vectors into MITM; `glue_cache_accept=true` on 1.24.0
 - [ ] First Class A/B table from pinned manifests + root-cause notes (triage, not auto-label)
-- [ ] Unbound **full recursive** mode enabled (smoke stays forward-only)
 - [ ] Disclosure process before any “exploitable” language
-- Draw structural inspiration from ResolverFuzz-style differential cases (no CVE overlap claims)
+- Draw structural inspiration from ResolverFuzz-style differential cases (no CVE overlap claims until PC passes)
 
 ## Path mode (after oracle trusted)
 
