@@ -1,0 +1,16 @@
+$ORIGIN stackdiff.
+$TTL 60
+@       IN SOA ns.stackdiff. hostmaster.stackdiff. (
+            2026082701
+            60
+            30
+            3600
+            30
+            )
+@       IN NS  ns.stackdiff.
+ns      IN A   172.30.0.12
+; Delegation: child lab.stackdiff → MITM (on-path authority)
+lab     IN NS  ns.lab.stackdiff.
+ns.lab.stackdiff. IN A 172.30.0.11
+; In-bailiwick A for pollute1 attacker NS (no subzone — answer directly)
+ns.attacker IN A 172.30.0.66

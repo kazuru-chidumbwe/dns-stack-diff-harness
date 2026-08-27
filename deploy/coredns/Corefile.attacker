@@ -1,0 +1,18 @@
+# Attacker NS stand-in for positive-control detection (172.30.0.66 on dnsnet).
+# If Unbound accepts promiscuous zone-cut NS, check.lab.stackdiff is answered here
+# with a distinctive A (not auth's 203.0.113.99).
+
+lab.stackdiff. {
+    template IN A {
+        rcode NOERROR
+        answer "{{ .Name }} 60 IN A 198.51.100.99"
+    }
+    log
+    errors
+}
+. {
+    template IN A {
+        rcode NXDOMAIN
+        answer "{{ .Name }} 60 IN SOA . . 1 3600 1200 604800 30"
+    }
+}

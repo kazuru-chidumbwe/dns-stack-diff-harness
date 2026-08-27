@@ -1,0 +1,9 @@
+# Mini-parent for lab.stackdiff (iterator prime path — not stubbing the child).
+# Unbound stubs *this* zone only; child NS is learned via referral then updated
+# by promiscuous AUTHORITY NS on positive answers (CVE-2025-11411 path).
+
+stackdiff. {
+    file /zones/stackdiff.zone
+    log
+    errors
+}

