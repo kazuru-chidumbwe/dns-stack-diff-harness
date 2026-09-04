@@ -1,0 +1,5 @@
+NAME                            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   CONTAINERS   IMAGES                                          SELECTOR
+daemonset.apps/node-local-dns   1         1         1       1            1           <none>          31s   node-cache   registry.k8s.io/dns/k8s-dns-node-cache:1.23.1   k8s-app=node-local-dns
+
+NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE                      NOMINATED NODE   READINESS GATES
+pod/node-local-dns-bjhk6   1/1     Running   0          28s   172.18.0.2   stackdiff-control-plane   <none>           <none>

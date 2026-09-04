@@ -28,6 +28,18 @@ SMOKE_AXES = (
     "hang_or_crash",
 )
 
+# Header / section axes that are undefined (⊥) when a role yields no DNS message.
+NULL_GATED_AXES = frozenset(
+    {
+        "rcode",
+        "answers",
+        "aa",
+        "ra",
+        "additional",
+        "glue_cache_accept",
+    }
+)
+
 
 def normalize_answers(answers: list[str] | None) -> list[str]:
     return sorted(a.strip().lower().rstrip(".") for a in (answers or []) if a)
@@ -48,13 +60,30 @@ def normalize_additional(records: list[str] | None) -> list[str]:
     return sorted(out)
 
 
+def has_dns_message(obs: dict[str, Any]) -> bool:
+    """True if dig received a DNS response message (not client timeout / hard error)."""
+    if obs.get("error"):
+        return False
+    # Explicit null rcode from parsers that record silence without error string.
+    if obs.get("rcode") in (None, "", "null", "NULL"):
+        return False
+    return True
+
+
 def compare_observations(
     obs: dict[str, dict[str, Any]],
     axes: Iterable[str] = SECURITY_AXES,
+    *,
+    null_aware: bool = True,
 ) -> dict[str, Any]:
     """Compare per-resolver observations on selected security-relevant axes.
 
     obs: {resolver_name: {rcode, answers, aa, ra, error, additional?, glue_cache_accept?}}
+
+    When ``null_aware`` is True (default), a stand-in with no DNS message sets
+    header/section axes to ⊥ and those axes do not enter the divergence count.
+    ``hang_or_crash`` remains scored. Set ``null_aware=False`` for the legacy
+    ungated triage view (can inflate D(p) via RCODE/AA/RA vs silence).
     """
     axis_set = tuple(axes)
     names = sorted(obs.keys())
@@ -65,9 +94,22 @@ def compare_observations(
             "divergences": [],
             "class_hint": "C",
             "detail": "need at least two resolvers",
+            "null_aware": null_aware,
         }
 
+    message_present = {n: has_dns_message(obs[n]) for n in names}
+
+    def defined(name: str, axis: str) -> bool:
+        if not null_aware:
+            return True
+        if axis == "hang_or_crash":
+            return True
+        if axis in NULL_GATED_AXES and not message_present[name]:
+            return False
+        return True
+
     divergences: list[dict[str, Any]] = []
+    gated_skipped: list[dict[str, Any]] = []
     base = names[0]
     base_obs = obs[base]
 
@@ -75,6 +117,17 @@ def compare_observations(
         o = obs[other]
         for axis in ("rcode", "aa", "ra", "glue_cache_accept"):
             if axis not in axis_set:
+                continue
+            if not (defined(base, axis) and defined(other, axis)):
+                if null_aware and axis in NULL_GATED_AXES:
+                    gated_skipped.append(
+                        {
+                            "axis": axis,
+                            "left": base,
+                            "right": other,
+                            "reason": "null_response_undefined",
+                        }
+                    )
                 continue
             if base_obs.get(axis) != o.get(axis):
                 divergences.append(
@@ -87,7 +140,19 @@ def compare_observations(
                     }
                 )
         if "answers" in axis_set:
-            if normalize_answers(base_obs.get("answers")) != normalize_answers(o.get("answers")):
+            if not (defined(base, "answers") and defined(other, "answers")):
+                if null_aware:
+                    gated_skipped.append(
+                        {
+                            "axis": "answers",
+                            "left": base,
+                            "right": other,
+                            "reason": "null_response_undefined",
+                        }
+                    )
+            elif normalize_answers(base_obs.get("answers")) != normalize_answers(
+                o.get("answers")
+            ):
                 divergences.append(
                     {
                         "axis": "answers",
@@ -98,18 +163,29 @@ def compare_observations(
                     }
                 )
         if "additional" in axis_set:
-            left_add = normalize_additional(base_obs.get("additional"))
-            right_add = normalize_additional(o.get("additional"))
-            if left_add != right_add:
-                divergences.append(
-                    {
-                        "axis": "additional",
-                        "left": base,
-                        "right": other,
-                        "left_value": left_add,
-                        "right_value": right_add,
-                    }
-                )
+            if not (defined(base, "additional") and defined(other, "additional")):
+                if null_aware:
+                    gated_skipped.append(
+                        {
+                            "axis": "additional",
+                            "left": base,
+                            "right": other,
+                            "reason": "null_response_undefined",
+                        }
+                    )
+            else:
+                left_add = normalize_additional(base_obs.get("additional"))
+                right_add = normalize_additional(o.get("additional"))
+                if left_add != right_add:
+                    divergences.append(
+                        {
+                            "axis": "additional",
+                            "left": base,
+                            "right": other,
+                            "left_value": left_add,
+                            "right_value": right_add,
+                        }
+                    )
         if "hang_or_crash" in axis_set:
             if bool(base_obs.get("error")) != bool(o.get("error")):
                 divergences.append(
@@ -130,4 +206,7 @@ def compare_observations(
         "divergences": divergences,
         "divergence_count": len(divergences),
         "class_hint": class_hint,
+        "null_aware": null_aware,
+        "message_present": message_present,
+        "gated_skipped": gated_skipped,
     }

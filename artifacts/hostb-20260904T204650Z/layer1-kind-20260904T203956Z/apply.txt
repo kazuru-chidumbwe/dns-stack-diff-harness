@@ -1,0 +1,4 @@
+serviceaccount/node-local-dns created
+service/kube-dns-upstream created
+configmap/node-local-dns created
+daemonset.apps/node-local-dns created

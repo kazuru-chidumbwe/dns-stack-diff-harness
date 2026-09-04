@@ -32,7 +32,7 @@ COMPOSE_BASE = ROOT / "deploy" / "compose.yaml"
 COMPOSE_ADV = ROOT / "deploy" / "compose.adversarial.yaml"
 
 # Must match deploy/mitm/dns_mitm.py glue transforms (ADDITIONAL and/or AUTHORITY).
-GLUE_OWNER = "ns.attacker.example."
+GLUE_OWNER = "ns.evil.test."
 GLUE_IP = "198.51.100.66"
 
 INJECTOR_TO_MODE = {

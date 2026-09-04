@@ -1,0 +1,3 @@
+NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE                      NOMINATED NODE   READINESS GATES
+coredns-668d6bf9bc-9kpj5   1/1     Running   0          28s   10.244.0.4   stackdiff-control-plane   <none>           <none>
+coredns-668d6bf9bc-dppts   1/1     Running   0          28s   10.244.0.3   stackdiff-control-plane   <none>           <none>

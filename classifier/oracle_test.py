@@ -2,6 +2,7 @@ import unittest
 
 from oracle import (
     GLUE_AXES,
+    SECURITY_AXES,
     SMOKE_AXES,
     compare_observations,
     normalize_additional,
@@ -110,6 +111,31 @@ class OracleTests(unittest.TestCase):
         result = compare_observations(obs, axes=SMOKE_AXES)
         self.assertGreaterEqual(result["divergence_count"], 1)
         self.assertTrue(any(d["axis"] == "rcode" for d in result["divergences"]))
+
+    def test_null_aware_gates_header_axes(self):
+        """SERVFAIL vs dig timeout: only hang_or_crash enters null-aware D(p)."""
+        obs = {
+            "unbound": {
+                "rcode": "SERVFAIL",
+                "answers": [],
+                "aa": False,
+                "ra": True,
+                "error": None,
+            },
+            "dnsmasq": {
+                "rcode": None,
+                "answers": [],
+                "aa": False,
+                "ra": False,
+                "error": "dig exit 9",
+            },
+        }
+        gated = compare_observations(obs, axes=SECURITY_AXES, null_aware=True)
+        self.assertEqual(gated["divergence_count"], 1)
+        self.assertEqual(gated["divergences"][0]["axis"], "hang_or_crash")
+        ungated = compare_observations(obs, axes=SECURITY_AXES, null_aware=False)
+        self.assertGreaterEqual(ungated["divergence_count"], 2)
+        self.assertTrue(any(d["axis"] == "rcode" for d in ungated["divergences"]))
 
 
 if __name__ == "__main__":

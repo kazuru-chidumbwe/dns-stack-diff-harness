@@ -1,0 +1,1081 @@
+{
+  "schema": "stackdiff.robustness.v1",
+  "stamp": "20260904T202608Z",
+  "role": "package_c_robustness",
+  "lab_environment": {
+    "uname_r": "6.8.0-139-generic",
+    "uname_a": "Linux test-server 6.8.0-139-generic #139-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 03:52:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "docker_version": "29.1.3",
+    "platform": "linux"
+  },
+  "repeats": 10,
+  "control_repeats": 5,
+  "role_order_n": 3,
+  "controls": {
+    "passthrough": {
+      "n": 5,
+      "smoke_pass_n": 5,
+      "smoke_pass_rate": 1.0,
+      "smoke_D_histogram": {
+        "0": 5
+      },
+      "security_D_histogram": {
+        "2": 5
+      }
+    }
+  },
+  "adversarial": {
+    "P-GLUE-AUTHORITY-NS": {
+      "n": 10,
+      "D_histogram": {
+        "2": 10
+      },
+      "modal_D": 2,
+      "modal_D_fraction": 1.0,
+      "modal_axes": [
+        "aa",
+        "ra"
+      ],
+      "modal_axes_fraction": 1.0,
+      "stable_D": true,
+      "stable_axes": true
+    },
+    "P-GLUE-BAILIWICK": {
+      "n": 10,
+      "D_histogram": {
+        "3": 10
+      },
+      "modal_D": 3,
+      "modal_D_fraction": 1.0,
+      "modal_axes": [
+        "aa",
+        "additional",
+        "ra"
+      ],
+      "modal_axes_fraction": 1.0,
+      "stable_D": true,
+      "stable_axes": true
+    },
+    "P-MALFORMED-RCODE": {
+      "n": 10,
+      "D_histogram": {
+        "2": 10
+      },
+      "modal_D": 2,
+      "modal_D_fraction": 1.0,
+      "modal_axes": [
+        "ra",
+        "rcode"
+      ],
+      "modal_axes_fraction": 1.0,
+      "stable_D": true,
+      "stable_axes": true
+    }
+  },
+  "adversarial_runs": {
+    "P-GLUE-AUTHORITY-NS": [
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "aa",
+          "ra"
+        ],
+        "mitm_mode": "authority-ns-glue"
+      }
+    ],
+    "P-GLUE-BAILIWICK": [
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      },
+      {
+        "divergence_count": 3,
+        "axes": [
+          "aa",
+          "additional",
+          "ra"
+        ],
+        "mitm_mode": "additional-glue"
+      }
+    ],
+    "P-MALFORMED-RCODE": [
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      },
+      {
+        "divergence_count": 2,
+        "axes": [
+          "ra",
+          "rcode"
+        ],
+        "mitm_mode": "malformed-truncated"
+      }
+    ]
+  },
+  "role_order": [
+    {
+      "profile_id": "P-GLUE-AUTHORITY-NS",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "divergence_count": 2,
+      "axes": [
+        "aa",
+        "ra"
+      ]
+    },
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "divergence_count": 3,
+      "axes": [
+        "aa",
+        "additional",
+        "ra"
+      ]
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "divergence_count": 2,
+      "axes": [
+        "ra",
+        "rcode"
+      ]
+    }
+  ],
+  "post_smoke_rc": 0,
+  "post_smoke_tail": "wrote /opt/atlas/repos/dns-stack-diff-harness/artifacts/smoke-20260904T203720Z/manifest.json\npass=True divergences=0\nlab.uname_r=6.8.0-139-generic docker=29.1.3\n",
+  "controls_full": {
+    "passthrough": {
+      "n": 5,
+      "smoke_pass_n": 5,
+      "smoke_pass_rate": 1.0,
+      "smoke_D_histogram": {
+        "0": 5
+      },
+      "security_D_histogram": {
+        "2": 5
+      },
+      "runs": [
+        {
+          "control": "passthrough-agree",
+          "mitm_mode": "passthrough",
+          "query": {
+            "name": "agree.lab.stackdiff.",
+            "type": "A"
+          },
+          "observations": {
+            "unbound": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 6194\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            },
+            "coredns_fwd": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": true,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 53852\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: e652b005d7b8799f (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            }
+          },
+          "oracle_smoke": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [],
+            "divergence_count": 0,
+            "class_hint": "pass"
+          },
+          "oracle_security": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "aa",
+              "ra",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [
+              {
+                "axis": "aa",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": true,
+                "right_value": false
+              },
+              {
+                "axis": "ra",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": false,
+                "right_value": true
+              }
+            ],
+            "divergence_count": 2,
+            "class_hint": "C_until_triaged"
+          },
+          "expect": {
+            "smoke_divergence_count": 0
+          },
+          "smoke_pass": true
+        },
+        {
+          "control": "passthrough-agree",
+          "mitm_mode": "passthrough",
+          "query": {
+            "name": "agree.lab.stackdiff.",
+            "type": "A"
+          },
+          "observations": {
+            "unbound": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 23473\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            },
+            "coredns_fwd": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": true,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 42111\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: e2fd00e0108e7215 (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            }
+          },
+          "oracle_smoke": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [],
+            "divergence_count": 0,
+            "class_hint": "pass"
+          },
+          "oracle_security": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "aa",
+              "ra",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [
+              {
+                "axis": "aa",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": true,
+                "right_value": false
+              },
+              {
+                "axis": "ra",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": false,
+                "right_value": true
+              }
+            ],
+            "divergence_count": 2,
+            "class_hint": "C_until_triaged"
+          },
+          "expect": {
+            "smoke_divergence_count": 0
+          },
+          "smoke_pass": true
+        },
+        {
+          "control": "passthrough-agree",
+          "mitm_mode": "passthrough",
+          "query": {
+            "name": "agree.lab.stackdiff.",
+            "type": "A"
+          },
+          "observations": {
+            "unbound": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15828\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            },
+            "coredns_fwd": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": true,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 64390\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 2f5ce38fac369c8f (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            }
+          },
+          "oracle_smoke": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [],
+            "divergence_count": 0,
+            "class_hint": "pass"
+          },
+          "oracle_security": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "aa",
+              "ra",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [
+              {
+                "axis": "aa",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": true,
+                "right_value": false
+              },
+              {
+                "axis": "ra",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": false,
+                "right_value": true
+              }
+            ],
+            "divergence_count": 2,
+            "class_hint": "C_until_triaged"
+          },
+          "expect": {
+            "smoke_divergence_count": 0
+          },
+          "smoke_pass": true
+        },
+        {
+          "control": "passthrough-agree",
+          "mitm_mode": "passthrough",
+          "query": {
+            "name": "agree.lab.stackdiff.",
+            "type": "A"
+          },
+          "observations": {
+            "unbound": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5896\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            },
+            "coredns_fwd": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": true,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 61350\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 96ff60d60c3bebe8 (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            }
+          },
+          "oracle_smoke": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [],
+            "divergence_count": 0,
+            "class_hint": "pass"
+          },
+          "oracle_security": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "aa",
+              "ra",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [
+              {
+                "axis": "aa",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": true,
+                "right_value": false
+              },
+              {
+                "axis": "ra",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": false,
+                "right_value": true
+              }
+            ],
+            "divergence_count": 2,
+            "class_hint": "C_until_triaged"
+          },
+          "expect": {
+            "smoke_divergence_count": 0
+          },
+          "smoke_pass": true
+        },
+        {
+          "control": "passthrough-agree",
+          "mitm_mode": "passthrough",
+          "query": {
+            "name": "agree.lab.stackdiff.",
+            "type": "A"
+          },
+          "observations": {
+            "unbound": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": false,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26635\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            },
+            "coredns_fwd": {
+              "rcode": "NOERROR",
+              "answers": [
+                "203.0.113.10"
+              ],
+              "additional": [],
+              "aa": true,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13788\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: f025df4a11dc621a (echoed)\n;; ANSWER SECTION:\nagree.lab.stackdiff.\t60\tIN\tA\t203.0.113.10"
+            }
+          },
+          "oracle_smoke": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [],
+            "divergence_count": 0,
+            "class_hint": "pass"
+          },
+          "oracle_security": {
+            "paired": true,
+            "axes": [
+              "rcode",
+              "answers",
+              "aa",
+              "ra",
+              "hang_or_crash"
+            ],
+            "resolvers": [
+              "coredns_fwd",
+              "unbound"
+            ],
+            "divergences": [
+              {
+                "axis": "aa",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": true,
+                "right_value": false
+              },
+              {
+                "axis": "ra",
+                "left": "coredns_fwd",
+                "right": "unbound",
+                "left_value": false,
+                "right_value": true
+              }
+            ],
+            "divergence_count": 2,
+            "class_hint": "C_until_triaged"
+          },
+          "expect": {
+            "smoke_divergence_count": 0
+          },
+          "smoke_pass": true
+        }
+      ]
+    }
+  },
+  "role_order_full": [
+    {
+      "profile_id": "P-GLUE-AUTHORITY-NS",
+      "mitm_mode": "authority-ns-glue",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "observations": {
+        "coredns_fwd": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": true,
+          "ra": false,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13889\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 40033f89c3a22176 (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "REFUSED",
+              "answers": [],
+              "additional": [],
+              "aa": false,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 35000\n;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 08f6c9be0b2bf95d (echoed)"
+            }
+          }
+        },
+        "unbound": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 22654\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "NXDOMAIN",
+              "answers": [],
+              "additional": [],
+              "aa": true,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 6928\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232"
+            }
+          }
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash",
+          "additional",
+          "glue_cache_accept"
+        ],
+        "resolvers": [
+          "coredns_fwd",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "aa",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": true,
+            "right_value": false
+          },
+          {
+            "axis": "ra",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": false,
+            "right_value": true
+          }
+        ],
+        "divergence_count": 2,
+        "class_hint": "C_until_triaged"
+      }
+    },
+    {
+      "profile_id": "P-GLUE-BAILIWICK",
+      "mitm_mode": "additional-glue",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "observations": {
+        "coredns_fwd": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [
+            "ns.evil.test|198.51.100.66"
+          ],
+          "aa": true,
+          "ra": false,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 21548\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 5d1aa5977ac5dbe5 (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20\n\n;; ADDITIONAL SECTION:\nns.evil.test.\t\t60\tIN\tA\t198.51.100.66",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "REFUSED",
+              "answers": [],
+              "additional": [
+                "ns.evil.test|198.51.100.66"
+              ],
+              "aa": false,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 48387\n;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 2\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 2bd291d15ac22f66 (echoed)\n;; ADDITIONAL SECTION:\nns.evil.test.\t\t60\tIN\tA\t198.51.100.66"
+            }
+          }
+        },
+        "unbound": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54492\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "NXDOMAIN",
+              "answers": [],
+              "additional": [],
+              "aa": true,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 40831\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232"
+            }
+          }
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash",
+          "additional",
+          "glue_cache_accept"
+        ],
+        "resolvers": [
+          "coredns_fwd",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "aa",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": true,
+            "right_value": false
+          },
+          {
+            "axis": "ra",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": false,
+            "right_value": true
+          },
+          {
+            "axis": "additional",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": [
+              "ns.evil.test|198.51.100.66"
+            ],
+            "right_value": []
+          }
+        ],
+        "divergence_count": 3,
+        "class_hint": "C_until_triaged"
+      }
+    },
+    {
+      "profile_id": "P-MALFORMED-RCODE",
+      "mitm_mode": "malformed-truncated",
+      "dig_order": [
+        "coredns_fwd",
+        "unbound"
+      ],
+      "observations": {
+        "coredns_fwd": {
+          "rcode": "FORMERR",
+          "answers": [],
+          "additional": [],
+          "aa": false,
+          "ra": false,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 53488\n;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 51a9d6462733fe36 (echoed)",
+          "glue_cache_accept": null
+        },
+        "unbound": {
+          "rcode": "SERVFAIL",
+          "answers": [],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 50254\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232",
+          "glue_cache_accept": null
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash"
+        ],
+        "resolvers": [
+          "coredns_fwd",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "rcode",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": "FORMERR",
+            "right_value": "SERVFAIL"
+          },
+          {
+            "axis": "ra",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": false,
+            "right_value": true
+          }
+        ],
+        "divergence_count": 2,
+        "class_hint": "C_until_triaged"
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stackdiff-dns-probe
+  namespace: default
+spec:
+  restartPolicy: Never
+  containers:
+  - name: dig
+    image: instrumentisto/dig:latest
+    command: ["sleep", "120"]

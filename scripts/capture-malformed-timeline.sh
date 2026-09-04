@@ -64,11 +64,11 @@ run_dig() {
 }
 
 run_dig unbound-udp @127.0.0.1 -p 9053 "$QNAME" A +time=2 +tries=1 +noall +answer +additional +comments
-run_dig coredns_fwd-udp @127.0.0.1 -p 9054 "$QNAME" A +time=2 +tries=1 +noall +answer +additional +comments
+run_dig dnsmasq-udp @127.0.0.1 -p 9054 "$QNAME" A +time=2 +tries=1 +noall +answer +additional +comments
 run_dig unbound-tcp @127.0.0.1 -p 9053 "$QNAME" A +tcp +time=2 +tries=1 +noall +answer +additional +comments
-run_dig coredns_fwd-tcp @127.0.0.1 -p 9054 "$QNAME" A +tcp +time=2 +tries=1 +noall +answer +additional +comments
+run_dig dnsmasq-tcp @127.0.0.1 -p 9054 "$QNAME" A +tcp +time=2 +tries=1 +noall +answer +additional +comments
 
-"${COMPOSE[@]}" logs --tail=100 mitm unbound coredns_fwd 2>&1 | tee "$OUT/compose-logs.txt"
+"${COMPOSE[@]}" logs --tail=100 mitm unbound dnsmasq 2>&1 | tee "$OUT/compose-logs.txt"
 
 sleep 1
 sudo kill -INT "$HOST_PID" "$BR_PID" 2>/dev/null || true

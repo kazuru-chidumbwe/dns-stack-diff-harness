@@ -25,7 +25,7 @@ Profile corpus ──────► dig / client
                   ┌─────────┴─────────┐
                   ▼                   ▼
              ┌─────────┐         ┌─────────┐
-             │ Unbound │         │coredns_fwd│
+             │ Unbound │         │ dnsmasq │
              └────┬────┘         └────┬────┘
                   └─────────┬─────────┘
                             ▼

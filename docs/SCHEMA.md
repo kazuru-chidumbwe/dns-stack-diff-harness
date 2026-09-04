@@ -26,7 +26,7 @@ Profiles are schema-first: new adversarial cases should land as JSON under `prof
 
 ## Required `dnssec_posture` object
 
-Unbound validates by default; CoreDNS-as-forwarder does not validate unless configured. Pin the posture so divergences are design choices, not accidents.
+Unbound validates by default; dnsmasq does not unless configured. Pin the posture so divergences are design choices, not accidents.
 
 | Field | Type | Notes |
 | --- | --- | --- |

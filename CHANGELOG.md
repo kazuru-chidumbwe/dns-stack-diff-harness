@@ -1,47 +1,106 @@
 # Changelog
 
+
+
 All notable changes to this project are documented in this file.
 
+
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+
 and this project adheres to [Semantic Versioning](https://semver.org/v2.0.0.html).
 
+
+
 Citation / essay pins (`blog-*`) remain valid reproducibility anchors.
+
 Prefer **SemVer** (`vX.Y.Z`) for package citations; see [`docs/TAGS.md`](docs/TAGS.md).
+
 GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is linked.
+
+
+
+## [0.1.5] — 2026-09-05
+
+### Added
+
+- Null-aware divergence scoring in `classifier/oracle.py` (`null_aware=True` default; ungated triage via `null_aware=False`).
+- Host B campaign pack `artifacts/hostb-20260904T204650Z/` (`PC_ARMED=1`, Unbound 1.20/1.24/1.25 no cache-accept flip, robustness, change-window HOLD, Kind L1 out-of-claims).
+- CoreDNS-forwarder pair path, CVE-2025-11411 positive-control scripts, and related profiles/docs from the Host B upgrade track.
+
+### Changed
+
+- README / Zenodo metadata retargeted to `v0.1.5` (prior Zenodo version DOI remains `10.5281/zenodo.21961205` until next mint).
 
 ## [0.1.2] — 2026-08-16
 
+
+
 ### Added
 
+
+
 - Package B malformed capture pin `artifacts/capture-malformed-20260816T032622Z/` (TNSM Table VII timeline).
+
 - Package C robustness pin `artifacts/robustness-20260816T034020Z/` + `make robustness` / `classifier/run_robustness.py` (TNSM Table IX).
+
 - Replay helper `scripts/capture-malformed-timeline.sh`.
 
+
+
 ### Changed
+
+
 
 - README / TAGS / Zenodo metadata retargeted to `v0.1.2` (concept DOI unchanged).
 
+
+
 ## [0.1.1] — 2026-08-16
+
+
 
 ### Added
 
+
+
 - August 2026 DNS-02 lab pins (`results-dns02-20260815`): ADDITIONAL + glue cache-accept axes; Table II adversarial SHA `cd84b220…`; post-restore smoke SHA `ec5196e0…`.
+
 - `.zenodo.json` for GitHub→Zenodo release metadata.
+
 - `CITATION.cff` (ORCID attribution).
+
+
 
 ### Changed
 
+
+
 - README / venue docs retargeted to IEEE TNSM (archival Dec 2026); measurement-only stance.
+
+
 
 ## [0.1.0] — 2026-07-27
 
+
+
 ### Added
 
+
+
 - First SemVer tag for package / smoke citation (DNS-01 smoke instrument).
+
 - Essay pin `blog-dns01-2026-07` remains the DNS-01 methodology cite.
+
 - Essay pin `blog-dns02a-2026-07` remains the DNS-02a July adversarial measurement cite.
+
 - `CHANGELOG.md` and SemVer tag policy in `docs/TAGS.md`.
 
+
+
 [0.1.2]: https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.2
+
 [0.1.1]: https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1
+
 [0.1.0]: https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.0
+

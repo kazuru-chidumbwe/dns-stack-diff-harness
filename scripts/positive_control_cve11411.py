@@ -117,7 +117,8 @@ def main() -> int:
             compose(["down"], env=env)
         return 1
 
-    referral = dig_unbound("lab.stackdiff.", "NS")
+    # Do NOT dig lab.stackdiff NS before inject: chasing the child NS via MITM→auth
+    # overwrites parent glue (172.30.0.11) with auth A (172.30.0.10) and bypasses MITM.
     time.sleep(0.5)
     prime = dig_unbound(args.query)
     time.sleep(0.5)
@@ -125,6 +126,7 @@ def main() -> int:
     time.sleep(0.5)
     check = dig_unbound("check.lab.stackdiff.")
     ns_probe = dig_unbound("ns.attacker.stackdiff.")
+    referral = dig_unbound("lab.stackdiff.", "NS")
 
     check_answers = check.get("answers") or []
     accept = ATTACKER_CHECK_IP in check_answers

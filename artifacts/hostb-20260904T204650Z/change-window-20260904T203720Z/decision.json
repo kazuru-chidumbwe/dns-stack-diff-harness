@@ -1,0 +1,80 @@
+{
+  "branch": "L2-bounded-null \u2192 axis-moving MITM mode change (pair-mode)",
+  "decision": "HOLD",
+  "gate": "layer3-change-window",
+  "post": {
+    "divergence_count": 3,
+    "divergent_axes": [
+      "aa",
+      "ra",
+      "additional"
+    ],
+    "label": "post-candidate",
+    "mitm_mode": "additional-glue",
+    "obs": {
+      "coredns_fwd": {
+        "aa": true,
+        "additional": [
+          "ns.evil.test|198.51.100.66"
+        ],
+        "answers": [
+          "203.0.113.20"
+        ],
+        "error": null,
+        "glue_cache_accept": false,
+        "ra": false,
+        "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15817\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 49c604bbc63397e2 (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20\n\n;; ADDITIONAL SECTION:\nns.evil.test.\t\t60\tIN\tA\t198.51.100.66",
+        "rcode": "NOERROR"
+      },
+      "unbound": {
+        "aa": false,
+        "additional": [],
+        "answers": [
+          "203.0.113.20"
+        ],
+        "error": null,
+        "glue_cache_accept": false,
+        "ra": true,
+        "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 37716\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+        "rcode": "NOERROR"
+      }
+    }
+  },
+  "pre": {
+    "divergence_count": 2,
+    "divergent_axes": [
+      "aa",
+      "ra"
+    ],
+    "label": "pre",
+    "mitm_mode": "passthrough",
+    "obs": {
+      "coredns_fwd": {
+        "aa": true,
+        "additional": [],
+        "answers": [
+          "203.0.113.20"
+        ],
+        "error": null,
+        "glue_cache_accept": false,
+        "ra": false,
+        "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 21925\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 0c9d318129a0a9de (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+        "rcode": "NOERROR"
+      },
+      "unbound": {
+        "aa": false,
+        "additional": [],
+        "answers": [
+          "203.0.113.20"
+        ],
+        "error": null,
+        "glue_cache_accept": false,
+        "ra": true,
+        "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50583\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+        "rcode": "NOERROR"
+      }
+    }
+  },
+  "rationale": "D(p) grew from 2 to 3 after enabling additional-glue; axes=['aa', 'ra', 'additional']. Hold until understood.",
+  "stamp": "20260904T203720Z"
+}

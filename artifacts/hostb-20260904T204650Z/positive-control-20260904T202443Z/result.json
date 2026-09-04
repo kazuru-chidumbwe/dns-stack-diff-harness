@@ -1,0 +1,80 @@
+{
+  "gate": "positive-control-cve-2025-11411",
+  "image": "l33tlamer/unbound-recursive:1.24.0",
+  "topology": "stub stackdiff. \u2192 parent; lab.stackdiff NS via referral to MITM",
+  "mitm_mode": "authority-ns-glue",
+  "vendor_vector": "pollute1: zone-cut NS\u2192ns.attacker.stackdiff on positive A only",
+  "vendor_source": "vendor/cve-2025-11411/patch_CVE-2025-11411_option_tests.diff",
+  "query": "www.lab.stackdiff.",
+  "ready_observation": {
+    "rcode": "NOERROR",
+    "answers": [
+      "172.30.0.12"
+    ],
+    "additional": [],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 10022\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nns.stackdiff.\t\t30\tIN\tA\t172.30.0.12"
+  },
+  "referral_observation": {
+    "rcode": "NOERROR",
+    "answers": [],
+    "additional": [
+      "ns.lab.stackdiff|172.30.0.10"
+    ],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 39168\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 2\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nlab.stackdiff.\t\t30\tIN\tNS\tns.lab.stackdiff.\n\n;; ADDITIONAL SECTION:\nns.lab.stackdiff.\t30\tIN\tA\t172.30.0.10"
+  },
+  "prime": {
+    "rcode": "NOERROR",
+    "answers": [
+      "203.0.113.20"
+    ],
+    "additional": [],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 1804\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t30\tIN\tA\t203.0.113.20"
+  },
+  "inject_observation": {
+    "rcode": "NOERROR",
+    "answers": [
+      "203.0.113.20"
+    ],
+    "additional": [],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 2893\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t30\tIN\tA\t203.0.113.20"
+  },
+  "check_observation": {
+    "rcode": "NOERROR",
+    "answers": [
+      "198.51.100.99"
+    ],
+    "additional": [],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 11241\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\ncheck.lab.stackdiff.\t30\tIN\tA\t198.51.100.99"
+  },
+  "ns_attacker_probe": {
+    "rcode": "NOERROR",
+    "answers": [
+      "172.30.0.66"
+    ],
+    "additional": [],
+    "aa": false,
+    "ra": true,
+    "error": null,
+    "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 18533\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nns.attacker.stackdiff.\t30\tIN\tA\t172.30.0.66"
+  },
+  "delegation_poisoned": true,
+  "check_still_auth": false,
+  "ns_attacker_resolved": true,
+  "pass": true,
+  "notes": "PASS = check.lab.stackdiff answered by attacker (198.51.100.99). Ready via parent stub; referral prime; inject on child A query."
+}
