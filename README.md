@@ -10,11 +10,11 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer / Zenodo Release** | [`v0.1.5`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.5) | Host B PC+matrix · null-aware oracle · CoreDNS-fwd path |
+| **SemVer / Zenodo Release** | [`v0.1.5`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.5) | Host B PC+matrix · null-aware · Zenodo `10.5281/zenodo.22313122` |
 | **SemVer (C1–C3 / PC)** | [`v0.1.4`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.4) | Kind L1 + PC path (pre–Host B) |
 | **SemVer (CoreDNS-fwd)** | [`v0.1.3`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.3) | CoreDNS-forwarder Package B/C pins |
 | **SemVer (Package B+C)** | [`v0.1.2`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.2) | Aug DNS-02 + Package B/C; Zenodo `10.5281/zenodo.21961205` |
-| **SemVer (Aug DNS-02 only)** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Aug 2026 TNSM measurement pins (pre–Package B/C) |
+| **SemVer (Aug DNS-02 only)** | [`v0.1.1`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.1) | Aug 2026 archival measurement pins (pre–Package B/C) |
 | **SemVer (smoke baseline)** | [`v0.1.0`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/v0.1.0) | DNS-01-era smoke tree |
 | **DNS-01** (Part 1) | [`blog-dns01-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns01-2026-07) | Methodology + smoke gate |
 | **DNS-02a** (Part 2) | [`blog-dns02a-2026-07`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/tree/blog-dns02a-2026-07) | Smoke + frozen adversarial pin |
@@ -22,14 +22,14 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
 - **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
-- **TNSM Host B + null-aware cite:** cite **`v0.1.5`** · pack [`artifacts/hostb-20260904T204650Z/`](artifacts/hostb-20260904T204650Z/) · Zenodo new version **pending mint** (prior DOI [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205))
-- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** (version DOI above; concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550))
+- **Host B + null-aware cite:** cite **`v0.1.5`** · pack [`artifacts/hostb-20260904T204650Z/`](artifacts/hostb-20260904T204650Z/) · Zenodo version DOI [10.5281/zenodo.22313122](https://doi.org/10.5281/zenodo.22313122) (concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550))
+- **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** · Zenodo [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (same concept DOI)
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
-- **TNSM archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
+- **Archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`
 - **Package B malformed timeline:** `artifacts/capture-malformed-20260816T032622Z/` (bridge pcap SHA `463c23b5…`)
 - **Package C robustness:** `artifacts/robustness-20260816T034020Z/` (manifest SHA `fe42a81d…`) · `make robustness`
 - **Null-aware oracle (default):** `compare_observations(..., null_aware=True)` gates RCODE/AA/RA/ADDITIONAL/cache-accept when a role yields no DNS message; `hang_or_crash` still scores. Ungated triage: `null_aware=False` (can inflate $D(p)$).
-- **Venue (instrument / measurement paper):** *IEEE Transactions on Network and Service Management* (TNSM) — archival target Dec 2026; ≤10 free pages; measurement-only (Class A/B not published this pass). See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
+- **Manuscript posture:** measurement-only instrument paper; Class A/B labels are not published findings this pass. See [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md).
 
 See [`docs/TAGS.md`](docs/TAGS.md) and [`CITATION.cff`](CITATION.cff). Repo root / `main` may move; published claims always link a **tag tree**.
 
@@ -62,7 +62,7 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Manifest SHA-256 | `6804627105cd22b51b35e9df1c713f2fe26c5c4d67abb81bfdd2064be99e0560` |
 | Frozen manifest | [`artifacts/smoke-20260718T125325Z/manifest.json`](artifacts/smoke-20260718T125325Z/manifest.json) |
 
-### DNS-02 TNSM measurement pin (2026-08-15)
+### DNS-02 archival measurement pin (2026-08-15)
 
 | Field | Value |
 | --- | --- |
@@ -76,7 +76,7 @@ Record on every pin (also emitted by `make smoke` → `lab_environment` in the m
 | Package C robustness | [`artifacts/robustness-20260816T034020Z/`](artifacts/robustness-20260816T034020Z/) · manifest SHA `fe42a81d…` |
 | Docs | [`docs/TRIAGE-DNS02-2026-08-15.md`](docs/TRIAGE-DNS02-2026-08-15.md) |
 
-Measurement only. Class A/B labels are not published findings for the TNSM manuscript.
+Measurement only. Class A/B labels are not published findings for the archival manuscript.
 
 ### DNS-02a adversarial pin (July blog)
 
@@ -98,7 +98,7 @@ Reproducibility: prefer a pinned kernel for comparable runs. Plain Docker has th
 | Oracle validation smoke (`P-SMOKE-AGREE`) | green (lab pin above) |
 | Application-layer adversarial runner | available (`make adversarial`) |
 | DNS-02a frozen adversarial pin (July) | committed (measurement only) |
-| DNS-02 TNSM pin (Aug 2026) | committed on `results-dns02-20260815` (measurement only) |
+| DNS-02 archival pin (Aug 2026) | committed on `results-dns02-20260815` (measurement only) |
 | Package B / C (malformed + robustness) | committed on `v0.1.2` |
 | Klein / SAD DNS profiles | deferred |
 
@@ -158,4 +158,4 @@ Optional: `make robustness` repeats adversarial profiles with a passthrough cont
 
 ## License
 
-Apache-2.0 — Copyright 2026 Seke Kazuru (see `LICENSE`). Citation metadata: [`CITATION.cff`](CITATION.cff) (ORCID [0009-0002-4099-1059](https://orcid.org/0009-0002-4099-1059)).
+Apache-2.0 — see `LICENSE`. Citation metadata: [`CITATION.cff`](CITATION.cff).

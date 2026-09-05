@@ -1,6 +1,6 @@
 {
   "title": "StackDiff: path-consistency DNS differential harness (v0.1.5)",
-  "description": "Host B positive-control + Unbound version matrix (no cache-accept flip), null-aware divergence oracle, CoreDNS-forwarder pair path, and prior Aug DNS-02 / Package B+C pins. Companion software and data for the IEEE TNSM StackDiff manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
+  "description": "Host B positive-control + Unbound version matrix (no cache-accept flip), null-aware divergence oracle, CoreDNS-forwarder pair path, and prior Aug DNS-02 / Package B+C pins. Companion software and data for the StackDiff instrument manuscript (summary tables only in the paper). Laboratory measurements only — not published vulnerability findings.",
   "creators": [
     {
       "name": "Kazuru, Seke",
