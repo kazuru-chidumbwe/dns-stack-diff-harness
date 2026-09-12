@@ -10,7 +10,8 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer (latest evidence)** | [`v0.1.7`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.7) | Host B version-window PROMOTE instance (Unbound 1.24.0→1.25.1, MITM mode fixed); Zenodo mint pending |
+| **SemVer (latest)** | [`v0.1.8`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.8) | Oracle both-null guard, failure-class fix, ΔD value-pair hardening, image-tag manifest capture, artifact-audit fixes; Zenodo mint pending |
+| **SemVer (version-window)** | [`v0.1.7`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.7) | Host B version-window PROMOTE instance (Unbound 1.24.0→1.25.1, MITM mode fixed); Zenodo mint pending |
 | **SemVer (Kind L1/L2)** | [`v0.1.6`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.6) | Kind L1/L2 evidence packs shipped into `artifacts/`; `.gitignore` allowlist fix; Zenodo mint pending |
 | **SemVer / Zenodo Release** | [`v0.1.5`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.5) | Host B PC+matrix · null-aware · Zenodo `10.5281/zenodo.22313122` |
 | **SemVer (C1–C3 / PC)** | [`v0.1.4`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.4) | Kind L1 + PC path (pre–Host B) |
@@ -25,8 +26,9 @@ Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 
 - **DNS-01 essay / smoke baseline:** cite **`v0.1.0`** or **`blog-dns01-2026-07`**
 - **Host B + null-aware cite:** cite **`v0.1.5`** · pack [`artifacts/hostb-20260904T204650Z/`](artifacts/hostb-20260904T204650Z/) · Zenodo version DOI [10.5281/zenodo.22313122](https://doi.org/10.5281/zenodo.22313122) (concept [10.5281/zenodo.21959550](https://doi.org/10.5281/zenodo.21959550))
-- **Kind L1/L2 evidence packs:** cite **`v0.1.6`** · `artifacts/layer1-kind-20260904T231736Z/` · `artifacts/layer2-kind-20260912T004414Z/` · Zenodo mint pending
-- **Host B version-window PROMOTE instance:** cite **`v0.1.7`** · `artifacts/adversarial-20260912T070427Z/` (pre) · `artifacts/adversarial-20260912T070453Z/` (post) · Zenodo mint pending
+- **Kind L1/L2 evidence packs:** cite **`v0.1.6`** · `artifacts/layer1-kind-20260904T231736Z/` · `artifacts/layer2-kind-20260912T004414Z/` (L2 is a serial NodeLocal→CoreDNS→MITM chain — pass-through fidelity, not independent-hop agreement; see `docs/ARCHITECTURE.md`) · Zenodo mint pending
+- **Host B version-window PROMOTE instance:** cite **`v0.1.7`** · `artifacts/adversarial-20260912T070427Z/` (pre) · `artifacts/adversarial-20260912T070453Z/` (post) · manifests predate image-tag capture (added in `v0.1.8`) · Zenodo mint pending
+- **Oracle hardening + artifact-audit fixes (current):** cite **`v0.1.8`** · `all_null`/`classify_failure`/`delta_divergence` in `classifier/oracle.py` · Zenodo mint pending
 - **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** · Zenodo [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (same concept DOI)
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
 - **Archival measurement pin (Aug 2026):** cite **`results-dns02-20260815`** — adversarial SHA `cd84b220…` · post-restore smoke SHA `ec5196e0…`

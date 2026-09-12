@@ -4,7 +4,8 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 | Tag | Purpose |
 | --- | --- |
-| [`v0.1.7`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.7) | Host B version-window PROMOTE instance (Unbound 1.24.0→1.25.1, MITM mode fixed) |
+| [`v0.1.8`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.8) | Oracle both-null guard + failure-class fix, ΔD value-pair hardening, manifest image-tag capture, artifact-audit fixes (SHA256SUMS, dropped fingerprint) |
+| [`v0.1.7`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.7) | Host B version-window PROMOTE instance (Unbound 1.24.0→1.25.1, MITM mode fixed) — manifests predate image-tag capture |
 | [`v0.1.6`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.6) | Kind L1/L2 evidence packs shipped into `artifacts/`; `.gitignore` allowlist fix |
 | [`v0.1.5`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.5) | SemVer + GitHub Release (Zenodo) · Host B PC+matrix · null-aware oracle |
 | [`v0.1.4`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.4) | SemVer · Kind L1 + positive-control path (pre–Host B) |
@@ -19,7 +20,10 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 ## Quick checkout
 
 ```bash
-# Latest evidence (Host B version-window PROMOTE, Kind L1/L2)
+# Latest (oracle hardening + artifact-audit fixes)
+git checkout v0.1.8
+
+# Host B version-window PROMOTE, Kind L1/L2 evidence
 git checkout v0.1.7
 
 # SemVer / Zenodo release tree (preferred package cite)
@@ -55,7 +59,7 @@ sha256sum artifacts/robustness-20260816T034020Z/manifest.json
 
 ## Tag policy
 
-- **SemVer** → `v0.1.7` (current) · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
+- **SemVer** → `v0.1.8` (current) · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
 - **GitHub Release on a SemVer tag** is what Zenodo auto-mints when the repo is linked at https://zenodo.org/account/settings/github/
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a July measurement essay → `blog-dns02a-2026-07`.
