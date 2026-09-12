@@ -42,6 +42,15 @@ cleanup() {
   fi
   $KUBECTL -n kube-system rollout status deploy/coredns --timeout=120s >/dev/null 2>&1 || true
   $KUBECTL delete ns "$NS" --ignore-not-found --wait=false >/dev/null 2>&1 || true
+  # Finalize SHA256SUMS.txt here, as the last write to run.log in this script
+  # (log() below and all log() calls above append to it via tee -a; hashing
+  # run.log anywhere before cleanup finishes its own logging would be stale).
+  if [[ "$rc" == "0" && -f "$OUT/SHA256SUMS.txt.partial" ]]; then
+    log "finalizing SHA256SUMS.txt (run.log hashed last, after this line)"
+    ( cd "$OUT" && sha256sum ./run.log ) >> "$OUT/SHA256SUMS.txt.partial"
+    sort -k2 "$OUT/SHA256SUMS.txt.partial" -o "$OUT/SHA256SUMS.txt"
+    rm -f "$OUT/SHA256SUMS.txt.partial"
+  fi
   exit "$rc"
 }
 trap cleanup EXIT
@@ -227,40 +236,85 @@ read -r t_post_cd a_post_cd <<<"$(dig_one post-change-coredns 10.96.0.10)"
 read -r t_post_nl a_post_nl <<<"$(dig_one post-change-nodelocal 169.254.20.10)"
 log "POST-CHANGE (immediate)  CoreDNS=$a_post_cd @${t_post_cd}  NodeLocal=$a_post_nl @${t_post_nl}"
 
-# --- Step 4: wait past the cache TTL, then re-query NodeLocal ---
-sleep_for=$((CACHE_TTL + 8))
-log "sleeping ${sleep_for}s past NodeLocal's ${CACHE_TTL}s cache TTL"
-sleep "$sleep_for"
-read -r t_reconv_nl a_reconv_nl <<<"$(dig_one reconverged-nodelocal 169.254.20.10)"
+# --- Step 4: poll NodeLocal every ~1s from the moment of promotion until it
+# reflects the new value, so propagation lag is a first-observation measurement
+# with ~1s resolution, not an upper bound from a single post-hoc sample
+# (Reviewer X: the original single sample at CACHE_TTL+8 only proved
+# "reconverged by then," not how long reconvergence actually took). ---
+POLL_MAX=$((CACHE_TTL + 15))
+poll_deadline="$(python3 -c "print(float('$t_promote') + $POLL_MAX)")"
+recon_epoch=""
+recon_answer=""
+attempt=0
+while true; do
+  attempt=$((attempt + 1))
+  read -r t_poll a_poll <<<"$(dig_one "poll-nodelocal-$(printf '%02d' "$attempt")" 169.254.20.10)"
+  log "POLL #$attempt NodeLocal=$a_poll @${t_poll}"
+  if [[ "$a_poll" == "203.0.113.21" ]]; then
+    recon_epoch="$t_poll"
+    recon_answer="$a_poll"
+    break
+  fi
+  if python3 -c "import sys; sys.exit(0 if float('$t_poll') < float('$poll_deadline') else 1)"; then
+    sleep 1
+  else
+    log "WARN poll window exceeded ${POLL_MAX}s past promote without observing reconvergence"
+    break
+  fi
+done
 read -r t_reconv_cd a_reconv_cd <<<"$(dig_one reconverged-coredns 10.96.0.10)"
-log "RECONVERGED  NodeLocal=$a_reconv_nl @${t_reconv_nl}  CoreDNS=$a_reconv_cd @${t_reconv_cd}"
+log "RECONVERGED  NodeLocal=${recon_answer:-NONE} @${recon_epoch:-NA} (poll #$attempt)  CoreDNS=$a_reconv_cd @${t_reconv_cd}"
 
 # --- decision.json: score D(p) at each stage on the single 'answer' axis ---
-python3 - "$OUT" "$a_pre_nl" "$a_pre_cd" "$a_post_nl" "$a_post_cd" "$a_reconv_nl" "$a_reconv_cd" \
-         "$t_pre_nl" "$t_promote" "$t_post_nl" "$t_reconv_nl" "$CACHE_TTL" <<'PY'
-import json, sys
+python3 - "$OUT" "$a_pre_nl" "$a_pre_cd" "$a_post_nl" "$a_post_cd" "${recon_answer:-NONE}" "$a_reconv_cd" \
+         "$t_pre_nl" "$t_promote" "$t_post_nl" "${recon_epoch:-NaN}" "$attempt" "$CACHE_TTL" <<'PY'
+import json, math, sys
 from pathlib import Path
 
 (out, pre_nl, pre_cd, post_nl, post_cd, rec_nl, rec_cd,
- t_pre_nl, t_promote, t_post_nl, t_reconv_nl, cache_ttl) = sys.argv[1:]
+ t_pre_nl, t_promote, t_post_nl, t_reconv_nl, poll_attempts, cache_ttl) = sys.argv[1:]
 
 def d(a, b):
     return 0 if a == b else 1
 
+t_pre_nl_f, t_promote_f, cache_ttl_f = float(t_pre_nl), float(t_promote), float(cache_ttl)
+lag_measured = None
+try:
+    t_reconv_nl_f = float(t_reconv_nl)
+    if not math.isnan(t_reconv_nl_f):
+        lag_measured = t_reconv_nl_f - t_promote_f
+except ValueError:
+    t_reconv_nl_f = None
+
+# Mechanistic cross-check: the cache entry was populated at t_pre_nl with
+# cache_ttl_s TTL, so it expires at t_pre_nl + cache_ttl_s regardless of when
+# the change was promoted. Predicted lag is time-from-promote to that expiry
+# (0 if the change happened after the entry had already expired).
+lag_predicted = max(0.0, (t_pre_nl_f + cache_ttl_f) - t_promote_f)
+
 report = {
     "gate": "layer3-serial-cache-staleness",
     "chain": "NodeLocal(cache) -> CoreDNS(no cache) -> auth",
-    "cache_ttl_s": int(cache_ttl),
+    "cache_ttl_s": int(cache_ttl_f),
     "pre_change": {"nodelocal": pre_nl, "coredns": pre_cd, "D_answer": d(pre_nl, pre_cd)},
     "post_change_immediate": {"nodelocal": post_nl, "coredns": post_cd, "D_answer": d(post_nl, post_cd)},
     "reconverged": {"nodelocal": rec_nl, "coredns": rec_cd, "D_answer": d(rec_nl, rec_cd)},
     "timestamps_epoch": {
-        "pre_nodelocal_query": float(t_pre_nl),
-        "change_promoted": float(t_promote),
+        "pre_nodelocal_query": t_pre_nl_f,
+        "change_promoted": t_promote_f,
         "post_change_nodelocal_query": float(t_post_nl),
-        "reconverged_nodelocal_query": float(t_reconv_nl),
+        "reconverged_nodelocal_query": t_reconv_nl_f,
     },
-    "propagation_lag_observed_s": float(t_reconv_nl) - float(t_promote),
+    "reconverged_after_poll_attempts": int(poll_attempts),
+    "propagation_lag_measured_s": lag_measured,
+    "propagation_lag_predicted_from_ttl_s": lag_predicted,
+    "measurement_note": (
+        "propagation_lag_measured_s is a first-observation measurement from ~1s-interval "
+        "polling of NodeLocal starting after promotion, resolution ~1 dig round-trip. "
+        "propagation_lag_predicted_from_ttl_s is the independent mechanistic prediction "
+        "(cache entry populated at pre_nodelocal_query, cache_ttl_s TTL, minus elapsed time "
+        "to change_promoted); the two should agree within one poll interval."
+    ),
     "finding": (
         "NodeLocal served a stale cached answer immediately after the authoritative "
         "change was promoted, while CoreDNS (uncached) reflected the change "
@@ -274,13 +328,18 @@ Path(out, "decision.json").write_text(raw, encoding="utf-8")
 print(raw)
 PY
 
-# --- SHA256SUMS ---
+DECISION_SHA="$(sha256sum "$OUT/decision.json" | awk '{print $1}')"
+log "decision SHA-256 $DECISION_SHA"
+log "DONE artifact=$OUT"
+
+# --- SHA256SUMS: hash everything except run.log now. run.log itself is
+# hashed and appended inside cleanup(), below, since the EXIT trap always
+# fires next and its own log() calls append more lines to run.log — hashing
+# it here would produce a checksum the shipped file no longer matches
+# (Reviewer X: an earlier pack's script left this half-finished). ---
 (
   cd "$OUT"
   find . -type f ! -name 'SHA256SUMS.txt*' ! -name run.log -print0 | sort -z | xargs -0 sha256sum
 ) > "$OUT/SHA256SUMS.txt.partial"
-DECISION_SHA="$(sha256sum "$OUT/decision.json" | awk '{print $1}')"
-log "decision SHA-256 $DECISION_SHA"
 
-log "DONE artifact=$OUT"
 echo "$OUT"

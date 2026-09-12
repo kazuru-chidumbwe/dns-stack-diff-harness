@@ -1,3 +1,12 @@
+**Superseded by `layer2-kind-serial-cache-20260912T181106Z`.** External review
+(Reviewer X) correctly identified that this pack's `propagation_lag_observed_s`
+(~30.3s) is an upper bound, not a measurement: it is the sleep duration from
+the change to a single post-hoc sample, not a first-observation of
+reconvergence. The successor pack polls every ~1s and measures directly
+(15.65s, cross-checked against a 15.54s TTL-based prediction). This pack is
+kept in-repo for history; do not cite its `propagation_lag_observed_s` as a
+measured value.
+
 # Layer-2 Kind SERIAL cache-staleness experiment (20260912T130932Z)
 
 **A genuine consecutive-hop chain, not a parallel comparison.** Built in response to

@@ -34,6 +34,8 @@ artifacts/*
 !artifacts/change-window-version-20260912T113953Z/**
 !artifacts/layer2-kind-serial-cache-20260912T130932Z/
 !artifacts/layer2-kind-serial-cache-20260912T130932Z/**
+!artifacts/layer2-kind-serial-cache-20260912T181106Z/
+!artifacts/layer2-kind-serial-cache-20260912T181106Z/**
 
 __pycache__/
 *.pyc
@@ -49,3 +51,5 @@ logs/
 # packs (the exact bug behind Reviewer X item 5) — un-ignore it explicitly
 # per pack rather than relying on rule order.
 !artifacts/layer2-kind-parallel-20260912T112004Z/run.log
+!artifacts/layer2-kind-serial-cache-20260912T130932Z/run.log
+!artifacts/layer2-kind-serial-cache-20260912T181106Z/run.log

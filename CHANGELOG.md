@@ -20,11 +20,17 @@ GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is li
 
 
 
+## [0.1.12] — 2026-09-12
+
+### Fixed
+
+- `scripts/layer2_kind_serial_cache.sh`: replaced the single post-hoc sample (sleep `CACHE_TTL+8`, then one dig) with ~1s-interval polling of NodeLocal from the moment of promotion, recording first-observation time. External review (Reviewer X) correctly identified that the v0.1.11 pack's `propagation_lag_observed_s` (~30.3s) was an upper bound, not a measurement, since the cache entry was populated before the change and its true remaining TTL at promotion time was ~15.1s, not the full 20s. Re-run (`artifacts/layer2-kind-serial-cache-20260912T181106Z/`) measures 15.65s directly, cross-checked against an independent TTL-based prediction of 15.54s (agree within 0.11s). Also fixed the script's SHA256SUMS finalization so `run.log` is hashed after `cleanup()`'s own logging completes, instead of relying on a manual post-run fix.
+
 ## [0.1.11] — 2026-09-12
 
 ### Added
 
-- Real serial-hop cache-staleness experiment (`artifacts/layer2-kind-serial-cache-20260912T130932Z/`, `scripts/layer2_kind_serial_cache.sh`): a genuine consecutive-hop chain (NodeLocal -> CoreDNS -> auth) with NodeLocal's cache enabled, not a parallel comparison and not a bare relay. A real authoritative zone-record change (`www` A: `.20` -> `.21`) is served stale by NodeLocal for ~30s (its 20s cache TTL plus query/rollout timing) while CoreDNS reflects it immediately; both reconverge once the cache entry expires. This is the paper's first result that seriality itself, not implementation difference, produces.
+- Real serial-hop cache-staleness experiment (`artifacts/layer2-kind-serial-cache-20260912T130932Z/`, `scripts/layer2_kind_serial_cache.sh`): a genuine consecutive-hop chain (NodeLocal -> CoreDNS -> auth) with NodeLocal's cache enabled, not a parallel comparison and not a bare relay. A real authoritative zone-record change (`www` A: `.20` -> `.21`) is served stale by NodeLocal for ~30s (its 20s cache TTL plus query/rollout timing) while CoreDNS reflects it immediately; both reconverge once the cache entry expires. This is the paper's first result that seriality itself, not implementation difference, produces. Superseded by v0.1.12's timing fix; kept for history.
 
 ## [0.1.10] — 2026-09-12
 

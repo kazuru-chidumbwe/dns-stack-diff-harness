@@ -4,7 +4,8 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 | Tag | Purpose |
 | --- | --- |
-| [`v0.1.11`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.11) | Real serial-hop cache-staleness experiment (`layer2-kind-serial-cache-20260912T130932Z`): NodeLocal(cache)->CoreDNS->auth chain; real zone-record change served stale by NodeLocal for ~30s, reconverges after cache TTL |
+| [`v0.1.12`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.12) | Serial-hop cache-staleness experiment, timing fixed (`layer2-kind-serial-cache-20260912T181106Z`): ~1s-interval polling measures propagation lag directly (15.65s) instead of a single post-hoc sample; cross-checked against a 15.54s TTL-based prediction |
+| [`v0.1.11`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.11) | Real serial-hop cache-staleness experiment (`layer2-kind-serial-cache-20260912T130932Z`): NodeLocal(cache)->CoreDNS->auth chain; real zone-record change served stale by NodeLocal, reconverges after cache TTL. Superseded by v0.1.12: its ~30s figure was an upper bound (sleep duration), not a measurement |
 | [`v0.1.10`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.10) | Version-window PROMOTE re-run on Host B with image-tag/ID capture in the manifests (`adversarial-20260912T113912Z`/`...113934Z`, decision `change-window-version-20260912T113953Z`) |
 | [`v0.1.9`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.9) | Kind L2 parallel-topology re-run (`layer2-kind-parallel-20260912T112004Z`): NodeLocal and CoreDNS each forward to the MITM independently; malformed-truncate shows a genuine divergence |
 | [`v0.1.8`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.8) | Oracle both-null guard + failure-class fix, ΔD value-pair hardening, manifest image-tag capture, artifact-audit fixes (SHA256SUMS, dropped fingerprint) |
@@ -23,7 +24,10 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 ## Quick checkout
 
 ```bash
-# Latest (serial-hop cache-staleness experiment)
+# Latest (serial-hop cache-staleness experiment, measured timing)
+git checkout v0.1.12
+
+# Previous serial-hop pack (upper-bound timing, superseded)
 git checkout v0.1.11
 
 # Version-window image-tag capture re-run
@@ -71,7 +75,7 @@ sha256sum artifacts/robustness-20260816T034020Z/manifest.json
 
 ## Tag policy
 
-- **SemVer** → `v0.1.11` (current) · `v0.1.10` · `v0.1.9` · `v0.1.8` · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
+- **SemVer** → `v0.1.12` (current) · `v0.1.11` · `v0.1.10` · `v0.1.9` · `v0.1.8` · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
 - **GitHub Release on a SemVer tag** is what Zenodo auto-mints when the repo is linked at https://zenodo.org/account/settings/github/
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a July measurement essay → `blog-dns02a-2026-07`.
