@@ -10,4 +10,4 @@ Lab: Host B `test-server` · kernel 6.8.0-139-generic · Docker 29.1.3 · `PC_AR
 | `change-window-20260904T203720Z/` | HOLD · D 2→3 Class A ADDITIONAL |
 | `layer1-kind-20260904T203956Z/` | Kind present · probe timeout · **out of claims** |
 
-Oracle: null-aware `compare_observations(..., null_aware=True)` is default (TNSM Table IV). Ungated triage: `null_aware=False`.
+Oracle: null-aware `compare_observations(..., null_aware=True)` is default (the paper's pinned-observation table). Ungated triage: `null_aware=False`.

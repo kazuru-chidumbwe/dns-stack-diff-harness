@@ -1,6 +1,6 @@
 # Adversarial pin — Lab Test Server 2026-08-15
 
-Committed reference for TNSM Table II measurement pins (ADDITIONAL glue + malformed). Measurement only — Class A/B not published.
+Committed reference for the paper's ADDITIONAL glue + malformed-truncation measurement pins. Measurement only — Class A/B not published.
 
 | Field | Value |
 | --- | --- |

@@ -1,6 +1,6 @@
 # Malformed capture pin — 2026-08-16 (Package B)
 
-Committed reference for TNSM Table VII (truncated MITM delivery to both stand-ins). Measurement only — not a vulnerability disclosure.
+Committed reference for the paper's bridge-capture delivery validation (truncated MITM delivery to both stand-ins). Measurement only — not a vulnerability disclosure.
 
 | Field | Value |
 | --- | --- |

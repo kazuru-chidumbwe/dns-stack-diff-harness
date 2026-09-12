@@ -1,6 +1,6 @@
 # Robustness campaign pin — 2026-08-16 (Package C)
 
-Committed reference for TNSM Table IX (`make robustness`). Laboratory repeatability — not production prevalence.
+Committed reference for the paper's clean-restart repeatability table (`make robustness`). Laboratory repeatability — not production prevalence.
 
 | Field | Value |
 | --- | --- |

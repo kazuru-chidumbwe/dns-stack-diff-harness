@@ -7,7 +7,7 @@ Gates strongly recommended:
   - adversarial (divergent) profiles
   - optional role-order (dig order) probe
 
-Does not claim prevalence. Records D(p)/axes stability for TNSM evidence depth.
+Does not claim prevalence. Records D(p)/axes stability for the paper's evidence depth.
 """
 
 from __future__ import annotations
