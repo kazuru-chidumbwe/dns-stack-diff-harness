@@ -1,0 +1,43 @@
+=== mode=passthrough tag=baseline q=www.lab.stackdiff. ===
+--- NodeLocal 169.254.20.10 ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50499
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: c9ef6c90a1b4bf28 (echoed)
+;; ANSWER SECTION:
+www.lab.stackdiff.	60	IN	A	203.0.113.20
+
+;; AUTHORITY SECTION:
+lab.stackdiff.		60	IN	NS	ns.lab.stackdiff.
+
+--- CoreDNS 10.96.0.10 ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 21389
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 994c03cb970af8ff (echoed)
+;; ANSWER SECTION:
+www.lab.stackdiff.	60	IN	A	203.0.113.20
+
+;; AUTHORITY SECTION:
+lab.stackdiff.		60	IN	NS	ns.lab.stackdiff.
+
+--- NodeLocal example.com (control; should use node upstream, not MITM) ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 7255
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 13, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 3fdab5b450dd8aa7 (echoed)
+;; ANSWER SECTION:
+example.com.		30	IN	A	104.20.23.154
+example.com.		30	IN	A	172.66.147.243
+

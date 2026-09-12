@@ -1,0 +1,30 @@
+=== mode=malformed-truncate tag=pin q=www.lab.stackdiff. ===
+--- NodeLocal 169.254.20.10 ---
+;; communications error to 169.254.20.10#53: timed out
+;; communications error to 169.254.20.10#53: timed out
+
+; <<>> DiG 9.18.49-1~deb12u2-Debian <<>> @169.254.20.10 www.lab.stackdiff. A +time=3 +tries=2 +noall +answer +authority +additional +comments
+; (1 server found)
+;; global options: +cmd
+;; no servers could be reached
+--- CoreDNS 10.96.0.10 ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 3228
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 20c927da2a976186 (echoed)
+--- NodeLocal example.com (control; should use node upstream, not MITM) ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 31529
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 13, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 8c385d78e8294a64 (echoed)
+;; ANSWER SECTION:
+example.com.		30	IN	A	104.20.23.154
+example.com.		30	IN	A	172.66.147.243
+

@@ -9,7 +9,7 @@
 - Isolation: Kind CNI / hostNetwork NodeLocal; application-layer MITM in-cluster
 - Control: `example.com` via NodeLocal should **not** traverse MITM (node upstream)
 - Claim fence: laboratory Kind path under pinned zone; **not** production Kubernetes; **not** OS-layer channels
-- **Topology note:** NodeLocal forwards `lab.stackdiff` to CoreDNS, which forwards to the MITM (serial, not parallel) — NodeLocal never queries the MITM independently. It relays whatever CoreDNS returns, so hop agreement here is a pass-through fidelity result (does NodeLocal relay adversarial content without stripping it?), not an independent-agreement finding the way the August pair-mode pins are. See `docs/ARCHITECTURE.md` for a parallel-topology re-run plan.
+- **Superseded:** NodeLocal forwards `lab.stackdiff` to CoreDNS, which forwards to the MITM (serial, not parallel) — NodeLocal never queries the MITM independently here, so hop agreement in this pack is a pass-through fidelity result, not independent-agreement. The parallel-topology re-run in `artifacts/layer2-kind-parallel-20260912T112004Z/` is the load-bearing L2 pack; this one is kept for history. See `docs/ARCHITECTURE.md`.
 
 ## Digests
 

@@ -1,0 +1,9 @@
+[L2P 20260912T112004Z] artifact dir /opt/atlas/repos/dns-stack-diff-harness/artifacts/layer2-kind-parallel-20260912T112004Z
+[L2P 20260912T112004Z] backed up CoreDNS + NodeLocal Corefiles
+[L2P 20260912T112004Z] importing images into kosv-control-plane containerd (if missing)
+[L2P 20260912T112004Z] auth ClusterIP=10.96.41.193
+[L2P 20260912T112004Z] mitm mode=passthrough ClusterIP=10.96.6.84
+[L2P 20260912T112004Z] mitm mode=additional-glue ClusterIP=10.96.6.84
+[L2P 20260912T112004Z] mitm mode=malformed-truncate ClusterIP=10.96.6.84
+[L2P 20260912T112004Z] DONE artifact=/opt/atlas/repos/dns-stack-diff-harness/artifacts/layer2-kind-parallel-20260912T112004Z
+[L2P 20260912T112004Z] cleanup rc=0 — restoring ConfigMaps if backed up

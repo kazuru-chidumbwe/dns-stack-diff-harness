@@ -20,6 +20,13 @@ GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is li
 
 
 
+## [0.1.9] — 2026-09-12
+
+### Added
+
+- Kind L2 parallel-topology re-run (`artifacts/layer2-kind-parallel-20260912T112004Z/`, `scripts/layer2_kind_adversarial_parallel.sh`): NodeLocal and CoreDNS each forward `lab.stackdiff` directly to the MITM independently instead of NodeLocal relaying through CoreDNS. Restores the Section III-D pair-mode invariant. Result: passthrough and additional-glue fully agree; malformed-truncate genuinely diverges (NodeLocal client timeout, CoreDNS `FORMERR`) — $D_{\mathrm{null}}=1$ on FailureMode, replicating the August Unbound-vs-dnsmasq malformed finding on an independent resolver pair in a different environment.
+- Prior serial-topology pack (`layer2-kind-20260912T004414Z/`) kept for history, marked superseded in its own `SUMMARY.md`.
+
 ## [0.1.8] — 2026-09-12
 
 ### Fixed

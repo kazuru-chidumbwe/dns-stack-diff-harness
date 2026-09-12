@@ -1,0 +1,1 @@
+mitm mode=passthrough listen=0.0.0.0:53 upstream=10.96.41.193:53
