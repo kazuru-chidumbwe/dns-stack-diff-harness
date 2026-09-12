@@ -18,6 +18,12 @@ artifacts/*
 !artifacts/layer1-kind-20260904T231736Z/**
 !artifacts/layer2-kind-20260912T004414Z/
 !artifacts/layer2-kind-20260912T004414Z/**
+!artifacts/adversarial-20260912T070427Z/
+!artifacts/adversarial-20260912T070427Z/**
+!artifacts/adversarial-20260912T070453Z/
+!artifacts/adversarial-20260912T070453Z/**
+!artifacts/change-window-version-20260912T070513Z/
+!artifacts/change-window-version-20260912T070513Z/**
 
 __pycache__/
 *.pyc

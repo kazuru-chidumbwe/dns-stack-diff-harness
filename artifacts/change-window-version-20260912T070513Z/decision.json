@@ -1,0 +1,27 @@
+{
+  "gate": "layer3-version-window",
+  "held_fixed": "mitm_mode=additional-glue (authority-ns-glue); dnssec_posture; compose topology; dig flags",
+  "changed_field": "unbound_image",
+  "pre": {
+    "image": "l33tlamer/unbound-recursive:1.24.0",
+    "divergence_count": 2,
+    "divergent_axes": [
+      "aa",
+      "ra"
+    ],
+    "source": "artifacts/adversarial-20260912T070427Z"
+  },
+  "post": {
+    "image": "l33tlamer/unbound-recursive:1.25.1",
+    "divergence_count": 2,
+    "divergent_axes": [
+      "aa",
+      "ra"
+    ],
+    "source": "artifacts/adversarial-20260912T070453Z"
+  },
+  "new_axes_vs_pre": [],
+  "decision": "PROMOTE",
+  "rationale": "D(p) pre=2 post=2, axes unchanged (['aa', 'ra']). Version change l33tlamer/unbound-recursive:1.24.0 -> l33tlamer/unbound-recursive:1.25.1 did not grow disagreement under fixed MITM mode.",
+  "branch": "version-bump (pair-mode); MITM mode held fixed -- contrast with layer3_change_window.py (MITM toggled, version fixed)"
+}
