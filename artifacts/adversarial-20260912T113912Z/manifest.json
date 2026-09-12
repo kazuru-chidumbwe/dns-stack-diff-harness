@@ -1,0 +1,189 @@
+{
+  "schema": "stackdiff.adversarial.v1",
+  "created_utc": "2026-09-12T11:39:32.019435+00:00",
+  "role": "dns02_application_layer_mitm",
+  "lab_environment": {
+    "uname_r": "6.8.0-139-generic",
+    "uname_a": "Linux test-server 6.8.0-139-generic #139-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 03:52:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "docker_version": "29.1.3",
+    "platform": "linux"
+  },
+  "container_images": {
+    "unbound": {
+      "tag": "l33tlamer/unbound-recursive:1.24.0",
+      "image_id": "sha256:11b884f2a43619cd041a36838c842454f5e22b7c5f7cf0606b26efad3c597111"
+    },
+    "coredns_fwd": {
+      "tag": "coredns/coredns:1.11.3",
+      "image_id": "sha256:9caabbf6238b189a65d0d6e6ac138de60d6a1c419e5a341fbbb7c78382559c6e"
+    }
+  },
+  "measurement_axes": {
+    "default": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash"
+    ],
+    "glue": [
+      "rcode",
+      "answers",
+      "aa",
+      "ra",
+      "hang_or_crash",
+      "additional",
+      "glue_cache_accept"
+    ]
+  },
+  "results": [
+    {
+      "profile_id": "P-GLUE-AUTHORITY-NS",
+      "injector": "mitm-authority-ns-glue",
+      "mitm_mode": "authority-ns-glue",
+      "adversary": {
+        "position": "malicious-but-trusted-upstream",
+        "capability": [
+          "Crafted DNS response content",
+          "Unsolicited NS RRSet in AUTHORITY",
+          "Matching address records in ADDITIONAL"
+        ],
+        "win_condition": "One hop caches or uses the injected NS/address glue that the other hop rejects \u2014 path inconsistency under a CVE-2025-11411-shaped transform"
+      },
+      "dnssec_posture": {
+        "mode": "matched",
+        "unbound": "off-lab-zone",
+        "coredns_fwd": "off",
+        "notes": "Matched non-validating so accept/reject is not confounded by Unbound default DNSSEC"
+      },
+      "query": {
+        "name": "www.lab.stackdiff.",
+        "type": "A"
+      },
+      "observations": {
+        "unbound": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": false,
+          "ra": true,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 808\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "NXDOMAIN",
+              "answers": [],
+              "additional": [],
+              "aa": true,
+              "ra": true,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 13809\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232"
+            }
+          }
+        },
+        "coredns_fwd": {
+          "rcode": "NOERROR",
+          "answers": [
+            "203.0.113.20"
+          ],
+          "additional": [],
+          "aa": true,
+          "ra": false,
+          "error": null,
+          "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50348\n;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: b67bf6136fa17440 (echoed)\n;; ANSWER SECTION:\nwww.lab.stackdiff.\t60\tIN\tA\t203.0.113.20",
+          "glue_cache_accept": false,
+          "glue_probe": {
+            "query": {
+              "name": "ns.evil.test.",
+              "type": "A"
+            },
+            "expected_ip": "198.51.100.66",
+            "observation": {
+              "rcode": "REFUSED",
+              "answers": [],
+              "additional": [],
+              "aa": false,
+              "ra": false,
+              "error": null,
+              "raw": ";; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 61763\n;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1\n;; WARNING: recursion requested but not available\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n; COOKIE: 7cb5081022a5bd3d (echoed)"
+            }
+          }
+        }
+      },
+      "oracle": {
+        "paired": true,
+        "axes": [
+          "rcode",
+          "answers",
+          "aa",
+          "ra",
+          "hang_or_crash",
+          "additional",
+          "glue_cache_accept"
+        ],
+        "resolvers": [
+          "coredns_fwd",
+          "unbound"
+        ],
+        "divergences": [
+          {
+            "axis": "aa",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": true,
+            "right_value": false
+          },
+          {
+            "axis": "ra",
+            "left": "coredns_fwd",
+            "right": "unbound",
+            "left_value": false,
+            "right_value": true
+          }
+        ],
+        "divergence_count": 2,
+        "class_hint": "C_until_triaged",
+        "null_aware": true,
+        "message_present": {
+          "coredns_fwd": true,
+          "unbound": true
+        },
+        "all_null": false,
+        "gated_skipped": []
+      },
+      "class_hint": "A_or_B_after_analysis",
+      "triage_note": "Divergence recorded only. Class A/B assignment requires root-cause notes; do not publish as exploitable without disclosure process.",
+      "glue_probe_meta": {
+        "owner": "ns.evil.test.",
+        "injected_ip": "198.51.100.66",
+        "purpose": "Cache-accept probe for out-of-bailiwick ADDITIONAL glue. Client ANSWER for the profile query often strips ADDITIONAL; this follow-up query surfaces whether a hop cached the glue."
+      }
+    }
+  ],
+  "summary_table": [
+    {
+      "profile_id": "P-GLUE-AUTHORITY-NS",
+      "mitm_mode": "authority-ns-glue",
+      "divergence_count": 2,
+      "axes": [
+        "aa",
+        "ra"
+      ],
+      "class_hint": "A_or_B_after_analysis",
+      "oracle_class_hint": "C_until_triaged",
+      "glue_cache_accept": {
+        "unbound": false,
+        "coredns_fwd": false
+      }
+    }
+  ],
+  "disclaimer": "Measurement only. No CVE / exploitable claims in this manifest. Smoke oracle remains make smoke on compose.yaml without this overlay."
+}
