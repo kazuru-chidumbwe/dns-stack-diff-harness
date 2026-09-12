@@ -70,6 +70,26 @@ def has_dns_message(obs: dict[str, Any]) -> bool:
     return True
 
 
+def classify_failure(error: str | None) -> str | None:
+    """Normalize a raw dig-failure string into a comparable failure class.
+
+    ``hang_or_crash`` used to compare only presence/absence of ``error``, which
+    scored two different failure kinds (e.g. a client-side timeout vs. a hard
+    connection/exit failure) as agreement just because both were truthy.
+    Comparing classes instead catches that (Reviewer X item 5).
+    """
+    if not error:
+        return None
+    e = error.lower()
+    if "timeout" in e:
+        return "timeout"
+    if e.startswith("dig exit"):
+        return "dig_exit"
+    if "short response" in e:
+        return "short_response"
+    return "other_error"
+
+
 def compare_observations(
     obs: dict[str, dict[str, Any]],
     axes: Iterable[str] = SECURITY_AXES,
@@ -95,9 +115,11 @@ def compare_observations(
             "class_hint": "C",
             "detail": "need at least two resolvers",
             "null_aware": null_aware,
+            "all_null": not any(has_dns_message(obs[n]) for n in names),
         }
 
     message_present = {n: has_dns_message(obs[n]) for n in names}
+    all_null = not any(message_present.values())
 
     def defined(name: str, axis: str) -> bool:
         if not null_aware:
@@ -187,7 +209,7 @@ def compare_observations(
                         }
                     )
         if "hang_or_crash" in axis_set:
-            if bool(base_obs.get("error")) != bool(o.get("error")):
+            if classify_failure(base_obs.get("error")) != classify_failure(o.get("error")):
                 divergences.append(
                     {
                         "axis": "hang_or_crash",
@@ -208,5 +230,6 @@ def compare_observations(
         "class_hint": class_hint,
         "null_aware": null_aware,
         "message_present": message_present,
+        "all_null": all_null,
         "gated_skipped": gated_skipped,
     }

@@ -72,6 +72,7 @@ def pin(label: str, mitm: str) -> dict:
         "obs": obs,
         "divergence_count": cmp["divergence_count"],
         "divergent_axes": [d["axis"] for d in cmp["divergences"]],
+        "all_null": cmp["all_null"],
     }
 
 
@@ -83,7 +84,14 @@ def main() -> int:
     pre = pin("pre", "passthrough")
     post = pin("post-candidate", "additional-glue")
     d_pre, d_post = pre["divergence_count"], post["divergence_count"]
-    if d_post > d_pre:
+    if pre["all_null"] or post["all_null"]:
+        decision = "INCONCLUSIVE"
+        rationale = (
+            f"pre_all_null={pre['all_null']} post_all_null={post['all_null']}: at least "
+            "one pin got no DNS message from either stand-in, so D(p) is undefined (not "
+            "evidence of agreement) — refusing to call this PROMOTE (Reviewer X item 4)."
+        )
+    elif d_post > d_pre:
         decision = "HOLD"
         rationale = (
             f"D(p) grew from {d_pre} to {d_post} after enabling additional-glue; "

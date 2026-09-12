@@ -70,11 +70,21 @@ post = json.load(open(Path(post_dir) / "manifest.json"))["results"][0]
 
 d_pre = pre["oracle"]["divergence_count"]
 d_post = post["oracle"]["divergence_count"]
+pre_all_null = pre["oracle"].get("all_null", False)
+post_all_null = post["oracle"].get("all_null", False)
 axes_pre = sorted(d["axis"] for d in pre["oracle"]["divergences"])
 axes_post = sorted(d["axis"] for d in post["oracle"]["divergences"])
 new_axes = sorted(set(axes_post) - set(axes_pre))
 
-if d_post > d_pre:
+if pre_all_null or post_all_null:
+    decision = "INCONCLUSIVE"
+    rationale = (
+        f"pre_all_null={pre_all_null} post_all_null={post_all_null}: at least one pin "
+        f"got no DNS message from either stand-in under Unbound {pre_image} -> "
+        f"{post_image}, so D(p) is undefined, not evidence of agreement "
+        "(Reviewer X item 4)."
+    )
+elif d_post > d_pre:
     decision = "HOLD"
     rationale = (
         f"D(p) grew from {d_pre} to {d_post} after changing Unbound {pre_image} -> {post_image} "
@@ -98,8 +108,8 @@ report = {
     "gate": "layer3-version-window",
     "held_fixed": "mitm_mode=additional-glue (authority-ns-glue); dnssec_posture; compose topology; dig flags",
     "changed_field": "unbound_image",
-    "pre": {"image": pre_image, "divergence_count": d_pre, "divergent_axes": axes_pre, "source": pre_dir},
-    "post": {"image": post_image, "divergence_count": d_post, "divergent_axes": axes_post, "source": post_dir},
+    "pre": {"image": pre_image, "divergence_count": d_pre, "divergent_axes": axes_pre, "all_null": pre_all_null, "source": pre_dir},
+    "post": {"image": post_image, "divergence_count": d_post, "divergent_axes": axes_post, "all_null": post_all_null, "source": post_dir},
     "new_axes_vs_pre": new_axes,
     "decision": decision,
     "rationale": rationale,
