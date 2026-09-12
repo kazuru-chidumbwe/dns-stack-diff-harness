@@ -76,7 +76,7 @@ sha256sum artifacts/robustness-20260816T034020Z/manifest.json
 ## Tag policy
 
 - **SemVer** → `v0.1.12` (current) · `v0.1.11` · `v0.1.10` · `v0.1.9` · `v0.1.8` · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
-- **GitHub Release on a SemVer tag** is what Zenodo auto-mints when the repo is linked at https://zenodo.org/account/settings/github/
+- Zenodo minting stopped after `v0.1.5` (`.zenodo.json` removed); `v0.1.6` onward cite the GitHub tag directly, not a DOI.
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a July measurement essay → `blog-dns02a-2026-07`.
 - **Archival measurement pin** → `results-dns02-20260815` (results pin; distinct from SemVer code tag).

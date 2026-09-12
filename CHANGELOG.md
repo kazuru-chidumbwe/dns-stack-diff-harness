@@ -16,11 +16,15 @@ Citation / essay pins (`blog-*`) remain valid reproducibility anchors.
 
 Prefer **SemVer** (`vX.Y.Z`) for package citations; see [`docs/TAGS.md`](docs/TAGS.md).
 
-GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is linked.
+Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.1.6` onward cite the GitHub tag directly, not a DOI.
 
 
 
 ## [0.1.12] — 2026-09-12
+
+### Removed
+
+- `.zenodo.json`: stops the GitHub→Zenodo auto-mint metadata. No new DOI has been minted since `v0.1.5`; going forward the manuscript and this repo cite the GitHub tag directly (matches the paper's own citation [24], which already dropped Zenodo). Existing DOIs for `v0.1.2`/`v0.1.5` remain valid and are kept for historical citation.
 
 ### Fixed
 
