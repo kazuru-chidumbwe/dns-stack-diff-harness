@@ -14,6 +14,10 @@ artifacts/*
 !artifacts/robustness-20260816T034020Z/**
 !artifacts/hostb-20260904T204650Z/
 !artifacts/hostb-20260904T204650Z/**
+!artifacts/layer1-kind-20260904T231736Z/
+!artifacts/layer1-kind-20260904T231736Z/**
+!artifacts/layer2-kind-20260912T004414Z/
+!artifacts/layer2-kind-20260912T004414Z/**
 
 __pycache__/
 *.pyc

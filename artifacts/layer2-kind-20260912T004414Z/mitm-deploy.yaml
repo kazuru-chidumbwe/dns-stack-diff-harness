@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stackdiff-mitm
+  namespace: stackdiff-l2
+  labels:
+    app: stackdiff-mitm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: stackdiff-mitm
+  template:
+    metadata:
+      labels:
+        app: stackdiff-mitm
+        stackdiff-mode: "malformed-truncate"
+      annotations:
+        stackdiff.mode: "malformed-truncate"
+    spec:
+      containers:
+      - name: mitm
+        image: python:3.12-slim
+        imagePullPolicy: IfNotPresent
+        command: ["python3", "/app/dns_mitm.py"]
+        args:
+          - "--listen"
+          - "0.0.0.0"
+          - "--port"
+          - "53"
+          - "--upstream"
+          - "10.96.252.132"
+          - "--upstream-port"
+          - "53"
+          - "--mode"
+          - "malformed-truncate"
+        ports:
+        - containerPort: 53
+          protocol: UDP
+        - containerPort: 53
+          protocol: TCP
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add: ["NET_BIND_SERVICE"]
+        volumeMounts:
+        - name: code
+          mountPath: /app
+      volumes:
+      - name: code
+        configMap:
+          name: stackdiff-mitm-code
+          defaultMode: 0755
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stackdiff-mitm
+  namespace: stackdiff-l2
+spec:
+  selector:
+    app: stackdiff-mitm
+  ports:
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: 53

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stackdiff-auth
+  namespace: stackdiff-l2
+  labels:
+    app: stackdiff-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stackdiff-auth
+  template:
+    metadata:
+      labels:
+        app: stackdiff-auth
+    spec:
+      containers:
+      - name: coredns
+        image: registry.k8s.io/coredns/coredns:v1.11.3
+        imagePullPolicy: IfNotPresent
+        args: ["-conf", "/config/Corefile"]
+        ports:
+        - containerPort: 53
+          name: dns-udp
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: zones
+          mountPath: /zones
+      volumes:
+      - name: config
+        configMap:
+          name: stackdiff-auth-config
+          items:
+          - key: Corefile
+            path: Corefile
+      - name: zones
+        configMap:
+          name: stackdiff-auth-config
+          items:
+          - key: lab.stackdiff.zone
+            path: lab.stackdiff.zone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stackdiff-auth
+  namespace: stackdiff-l2
+spec:
+  selector:
+    app: stackdiff-auth
+  ports:
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: 53

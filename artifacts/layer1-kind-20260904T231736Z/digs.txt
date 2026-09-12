@@ -1,0 +1,52 @@
+=== dig NodeLocal 169.254.20.10 ===
+;; Got answer:
+;; WARNING: .local is reserved for Multicast DNS
+;; You are currently testing what happens when an mDNS query is leaked to DNS
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 8363
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 24599d7ec68cd919 (echoed)
+;; ANSWER SECTION:
+kubernetes.default.svc.cluster.local. 30 IN A	10.96.0.1
+
+=== dig CoreDNS kube-dns 10.96.0.10 ===
+;; Got answer:
+;; WARNING: .local is reserved for Multicast DNS
+;; You are currently testing what happens when an mDNS query is leaked to DNS
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 11418
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: ebd0707a31597a49 (echoed)
+;; ANSWER SECTION:
+kubernetes.default.svc.cluster.local. 30 IN A	10.96.0.1
+
+=== dig NodeLocal external (example.com) ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5819
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 1db7e47ef684f6d4 (echoed)
+;; ANSWER SECTION:
+example.com.		30	IN	A	104.20.23.154
+example.com.		30	IN	A	172.66.147.243
+
+=== dig CoreDNS external ===
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 51296
+;; flags: qr aa rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 472a195b48d77019 (echoed)
+;; ANSWER SECTION:
+example.com.		30	IN	A	104.20.23.154
+example.com.		30	IN	A	172.66.147.243
+

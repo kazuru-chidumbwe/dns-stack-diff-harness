@@ -1,0 +1,31 @@
+=== mode=malformed-truncate tag=pin q=www.lab.stackdiff. ===
+--- NodeLocal 169.254.20.10 ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 12559
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 91792982a11b508b (echoed)
+--- CoreDNS 10.96.0.10 ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 37655
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 9f3a39c434006d3d (echoed)
+--- NodeLocal example.com (control; should use node upstream, not MITM) ---
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 60567
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 13, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 619648bd4de142df (echoed)
+;; ANSWER SECTION:
+example.com.		30	IN	A	104.20.23.154
+example.com.		30	IN	A	172.66.147.243
+

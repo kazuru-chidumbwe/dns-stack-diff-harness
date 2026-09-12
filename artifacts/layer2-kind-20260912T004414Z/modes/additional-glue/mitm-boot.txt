@@ -1,0 +1,1 @@
+mitm mode=additional-glue listen=0.0.0.0:53 upstream=10.96.252.132:53
