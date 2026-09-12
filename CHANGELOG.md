@@ -20,6 +20,12 @@ GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is li
 
 
 
+## [0.1.10] — 2026-09-12
+
+### Added
+
+- Re-ran the version-window PROMOTE instance on Host B with `v0.1.9` code (`artifacts/adversarial-20260912T113912Z/` pre, `artifacts/adversarial-20260912T113934Z/` post, decision `artifacts/change-window-version-20260912T113953Z/`). Manifests now carry `container_images` with the configured tag and the resolved image ID read from the live container, closing the gap the `v0.1.7` manifests had (image change previously only asserted by the wrapper script). Same result as before: D(p) pre=2 post=2, axes unchanged (AA, RA), decision PROMOTE — no regression, just independently verifiable provenance.
+
 ## [0.1.9] — 2026-09-12
 
 ### Added

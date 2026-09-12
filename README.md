@@ -10,7 +10,8 @@ Synthetic / lab only. Controlled auth; no live Internet authorities for default 
 
 | Role | Tag | Notes |
 | --- | --- | --- |
-| **SemVer (latest)** | [`v0.1.9`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.9) | Kind L2 parallel-topology re-run: NodeLocal and CoreDNS each forward to the MITM independently; malformed-truncate now shows a genuine divergence; Zenodo mint pending |
+| **SemVer (latest)** | [`v0.1.10`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.10) | Version-window PROMOTE re-run on Host B with image-tag/ID capture in the manifests (was asserted only in decision.json before); Zenodo mint pending |
+| **SemVer (Kind L2 parallel)** | [`v0.1.9`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.9) | Kind L2 parallel-topology re-run: NodeLocal and CoreDNS each forward to the MITM independently; malformed-truncate now shows a genuine divergence; Zenodo mint pending |
 | **SemVer (oracle hardening)** | [`v0.1.8`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.8) | Oracle both-null guard, failure-class fix, ΔD value-pair hardening, image-tag manifest capture, artifact-audit fixes; Zenodo mint pending |
 | **SemVer (version-window)** | [`v0.1.7`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.7) | Host B version-window PROMOTE instance (Unbound 1.24.0→1.25.1, MITM mode fixed); Zenodo mint pending |
 | **SemVer (Kind L1/L2)** | [`v0.1.6`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.6) | Kind L1/L2 evidence packs shipped into `artifacts/`; `.gitignore` allowlist fix; Zenodo mint pending |
@@ -30,7 +31,8 @@ Each public essay freezes a **separate** Git tag. Do not swap essay pins.
 - **Kind L1 evidence pack:** cite **`v0.1.6`** · `artifacts/layer1-kind-20260904T231736Z/` · Zenodo mint pending
 - **Kind L2, parallel topology (load-bearing):** cite **`v0.1.9`** · `artifacts/layer2-kind-parallel-20260912T112004Z/` — NodeLocal and CoreDNS each forward to the MITM independently; passthrough/additional-glue agree, malformed-truncate genuinely diverges (NodeLocal times out, CoreDNS returns FORMERR) · Zenodo mint pending
 - **Kind L2, serial topology (superseded, kept for history):** `v0.1.6` · `artifacts/layer2-kind-20260912T004414Z/` — pass-through fidelity only, not independent-hop agreement; see `docs/ARCHITECTURE.md`
-- **Host B version-window PROMOTE instance:** cite **`v0.1.7`** · `artifacts/adversarial-20260912T070427Z/` (pre) · `artifacts/adversarial-20260912T070453Z/` (post) · manifests predate image-tag capture (added in `v0.1.8`) · Zenodo mint pending
+- **Host B version-window PROMOTE instance (load-bearing):** cite **`v0.1.10`** · `artifacts/adversarial-20260912T113912Z/` (pre) · `artifacts/adversarial-20260912T113934Z/` (post) · `artifacts/change-window-version-20260912T113953Z/` (decision) · manifests carry `container_images` (tag + resolved image ID from `docker inspect`) · Zenodo mint pending
+- **Host B version-window PROMOTE instance (superseded, kept for history):** `v0.1.7` · `artifacts/adversarial-20260912T070427Z/` (pre) · `artifacts/adversarial-20260912T070453Z/` (post) · manifests predate image-tag capture
 - **Oracle hardening + artifact-audit fixes:** cite **`v0.1.8`** · `all_null`/`classify_failure`/`delta_divergence` in `classifier/oracle.py` · Zenodo mint pending
 - **Package / Zenodo cite (Aug 2026 + Package B/C):** cite **`v0.1.2`** · Zenodo [10.5281/zenodo.21961205](https://doi.org/10.5281/zenodo.21961205) (same concept DOI)
 - **DNS-02a essay (July pin):** measurement pin → cite **`blog-dns02a-2026-07`**
