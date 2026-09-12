@@ -1,0 +1,28 @@
+{
+  "cache_ttl_s": 20,
+  "chain": "NodeLocal(cache) -> CoreDNS(no cache) -> auth",
+  "finding": "NodeLocal served a stale cached answer immediately after the authoritative change was promoted, while CoreDNS (uncached) reflected the change instantly; NodeLocal reconverged only after its cache TTL elapsed.",
+  "gate": "layer3-serial-cache-staleness",
+  "post_change_immediate": {
+    "D_answer": 1,
+    "coredns": "203.0.113.21",
+    "nodelocal": "203.0.113.20"
+  },
+  "pre_change": {
+    "D_answer": 0,
+    "coredns": "203.0.113.20",
+    "nodelocal": "203.0.113.20"
+  },
+  "propagation_lag_observed_s": 30.287420988082886,
+  "reconverged": {
+    "D_answer": 0,
+    "coredns": "203.0.113.21",
+    "nodelocal": "203.0.113.21"
+  },
+  "timestamps_epoch": {
+    "change_promoted": 1789218606.6692996,
+    "post_change_nodelocal_query": 1789218608.856888,
+    "pre_nodelocal_query": 1789218601.7598703,
+    "reconverged_nodelocal_query": 1789218636.9567206
+  }
+}

@@ -32,6 +32,8 @@ artifacts/*
 !artifacts/adversarial-20260912T113934Z/**
 !artifacts/change-window-version-20260912T113953Z/
 !artifacts/change-window-version-20260912T113953Z/**
+!artifacts/layer2-kind-serial-cache-20260912T130932Z/
+!artifacts/layer2-kind-serial-cache-20260912T130932Z/**
 
 __pycache__/
 *.pyc

@@ -1,0 +1,17 @@
+0823d65f432d51ec4287a4e22802f8cde858a03f7268db01b4cb934aa9fb78a6  ./auth-corefile
+98297335199b66bf7ed1c9591d257a31866b302c309cc7b93274c6b28cf5dde4  ./auth-deploy.yaml
+22847ad9af7452500838865a67e018076226d8fbfcabf54f8673973571f470f6  ./cm-backup/coredns.Corefile.orig
+bfd3554c4b980d15fd5530a1cd99f18efaaed0dd33ebea7142e838c9b7bb87f4  ./cm-backup/nodelocal.Corefile.orig
+48904ca25cb038a3ab83fb84d594f62e82978292eb3c3ac07d4a20eebfbd0382  ./coredns-corefile-new
+a66cc5a0920d527e6cf96c41dc644cfd422dceb883342c76099fce930b784aec  ./decision.json
+0e90f933b80a3a976b9d695c0efa41075ad40389ea3aec19dc4eeea7fd18bf03  ./digs/post-change-coredns.txt
+ee2213c05575ffc6d5b47ae1e6d01ded0f005c7edde50c6f2cb18e7e1c11741c  ./digs/post-change-nodelocal.txt
+e2792c0a547d49441fa18c55e695a679eead351f1062829790beb0c81c48b2e4  ./digs/pre-coredns.txt
+bc5b38d9cb6ccb9d7f9575bd190ef2ddc8a0c98d8e4131a5e7f3c29b23a1a4ac  ./digs/pre-nodelocal.txt
+ed38f026cc9d150080b09c1d3ea1d4415621fe5661796fadd115cb10ffcacba7  ./digs/reconverged-coredns.txt
+8d432584ea867761b16b15f927ec652e5e46ca3395cf4fe08f64b60c2123e272  ./digs/reconverged-nodelocal.txt
+2fb4f4995260342a5628ddca970cb57867569d7f719719c2cb81f310ce6e01dd  ./lab.stackdiff.zone.v1
+e2d337e338d4b5cb449a596dd32252f660df35186b885b447919458ecc5c8364  ./lab.stackdiff.zone.v2
+e145978d25ed663642551c07cf213c26020d24006dfa77e9d25b33983180b721  ./nodelocal-corefile-new
+b84e9bea6216a79f495aaf5babf483c0af48b53e6bbbae96ceeb9c1dd605fb31  ./run.log
+2d7c0733fe0c4a4a03920157e713f9e304812c77643d2180d2883bc8f84e9367  ./SUMMARY.md
