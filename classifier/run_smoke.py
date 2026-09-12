@@ -317,6 +317,49 @@ def collect_lab_environment() -> dict:
     return env
 
 
+def capture_container_images(
+    compose_files: list, services: list
+) -> dict:
+    """Record each service's configured image tag and resolved image ID.
+
+    Distinguishes "which tag was requested" from "which bytes actually ran": a tag
+    can be repointed without a manifest knowing, unless the content-addressed image
+    ID from the running container itself is also recorded. Read from the live
+    container via `docker inspect`, not asserted by the caller.
+    """
+    base = ["docker", "compose"]
+    for f in compose_files:
+        base += ["-f", str(f)]
+    out: dict = {}
+    for name in services:
+        entry: dict = {"tag": None, "image_id": None}
+        try:
+            cid = subprocess.check_output(
+                base + ["ps", "-q", name], text=True, timeout=10
+            ).strip()
+        except (OSError, subprocess.SubprocessError) as exc:
+            entry["error"] = str(exc)
+            out[name] = entry
+            continue
+        if not cid:
+            entry["error"] = "no running container for service"
+            out[name] = entry
+            continue
+        try:
+            raw = subprocess.check_output(
+                ["docker", "inspect", "--format", "{{.Config.Image}}|{{.Image}}", cid],
+                text=True,
+                timeout=10,
+            ).strip()
+            tag, image_id = raw.split("|", 1)
+            entry["tag"] = tag
+            entry["image_id"] = image_id
+        except (OSError, subprocess.SubprocessError, ValueError) as exc:
+            entry["error"] = str(exc)
+        out[name] = entry
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="StackDiff oracle validation smoke (P-SMOKE-AGREE)"

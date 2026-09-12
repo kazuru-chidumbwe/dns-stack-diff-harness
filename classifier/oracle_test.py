@@ -6,6 +6,7 @@ from oracle import (
     SMOKE_AXES,
     classify_failure,
     compare_observations,
+    delta_divergence,
     normalize_additional,
     normalize_answers,
 )
@@ -199,6 +200,44 @@ class OracleTests(unittest.TestCase):
         }
         result = compare_observations(obs, axes=SECURITY_AXES)
         self.assertEqual(result["divergence_count"], 0)
+
+    def test_delta_divergence_matches_published_glue_result(self):
+        """Regression: August glue pin's ΔD(p)=1 on ADDITIONAL (Table IV) must not change."""
+        baseline = {
+            "dnsmasq": {"rcode": "NOERROR", "answers": ["203.0.113.10"], "aa": True, "ra": True, "error": None, "additional": [], "glue_cache_accept": False},
+            "unbound": {"rcode": "NOERROR", "answers": ["203.0.113.10"], "aa": False, "ra": True, "error": None, "additional": [], "glue_cache_accept": False},
+        }
+        pin = {
+            "dnsmasq": {"rcode": "NOERROR", "answers": ["203.0.113.20"], "aa": True, "ra": True, "error": None, "additional": ["ns.evil.test|198.51.100.66"], "glue_cache_accept": False},
+            "unbound": {"rcode": "NOERROR", "answers": ["203.0.113.20"], "aa": False, "ra": True, "error": None, "additional": [], "glue_cache_accept": False},
+        }
+        baseline_result = compare_observations(baseline, axes=GLUE_AXES)
+        pin_result = compare_observations(pin, axes=GLUE_AXES)
+        self.assertEqual(baseline_result["divergence_count"], 1)
+        self.assertEqual(pin_result["divergence_count"], 2)
+        delta = delta_divergence(pin_result, baseline_result)
+        self.assertEqual(delta["delta_divergence_count"], 1)
+        self.assertEqual(delta["delta_divergences"][0]["axis"], "additional")
+        self.assertEqual(delta["baseline_axes"], ["aa"])
+
+    def test_delta_divergence_catches_baseline_polarity_flip(self):
+        """A baseline axis whose divergent VALUES reverse under the adversary is a new
+        finding — axis-name-only subtraction would wrongly zero it out (Reviewer X item 10)."""
+        baseline = {
+            "r1": {"rcode": "NOERROR", "answers": ["a"], "aa": False, "ra": True, "error": None},
+            "r2": {"rcode": "NOERROR", "answers": ["a"], "aa": True, "ra": True, "error": None},
+        }
+        pin = {
+            "r1": {"rcode": "NOERROR", "answers": ["a"], "aa": True, "ra": True, "error": None},
+            "r2": {"rcode": "NOERROR", "answers": ["a"], "aa": False, "ra": True, "error": None},
+        }
+        baseline_result = compare_observations(baseline, axes=SECURITY_AXES)
+        pin_result = compare_observations(pin, axes=SECURITY_AXES)
+        self.assertEqual(baseline_result["divergence_count"], 1)
+        self.assertEqual(pin_result["divergence_count"], 1)
+        delta = delta_divergence(pin_result, baseline_result)
+        self.assertEqual(delta["delta_divergence_count"], 1, "polarity flip must not be masked")
+        self.assertEqual(delta["delta_divergences"][0]["axis"], "aa")
 
     def test_null_aware_gates_header_axes(self):
         """SERVFAIL vs dig timeout: only hang_or_crash enters null-aware D(p)."""

@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from oracle import GLUE_AXES, SECURITY_AXES, compare_observations  # noqa: E402
 from run_smoke import (  # noqa: E402
     RESOLVERS,
+    capture_container_images,
     collect_lab_environment,
     dig_query,
 )
@@ -243,6 +244,12 @@ def main() -> int:
         print(f"=== {profile['id']} injector={profile['injector']} ===")
         results.append(run_one(profile))
 
+    # Capture while the pinned containers are still up — before topology restore
+    # swaps them out. Read from the live containers, not asserted by the caller.
+    container_images = capture_container_images(
+        [COMPOSE_BASE, COMPOSE_ADV], list(RESOLVERS.keys())
+    )
+
     # Restore smoke topology (direct to auth — no MITM overlay mounts).
     restore = subprocess.run(
         [
@@ -310,6 +317,7 @@ def main() -> int:
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "role": "dns02_application_layer_mitm",
         "lab_environment": lab,
+        "container_images": container_images,
         "measurement_axes": {
             "default": list(SECURITY_AXES),
             "glue": list(GLUE_AXES),

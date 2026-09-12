@@ -9,11 +9,12 @@
 - Isolation: Kind CNI / hostNetwork NodeLocal; application-layer MITM in-cluster
 - Control: `example.com` via NodeLocal should **not** traverse MITM (node upstream)
 - Claim fence: laboratory Kind path under pinned zone; **not** production Kubernetes; **not** OS-layer channels
+- **Topology note:** NodeLocal forwards `lab.stackdiff` to CoreDNS, which forwards to the MITM (serial, not parallel) — NodeLocal never queries the MITM independently. It relays whatever CoreDNS returns, so hop agreement here is a pass-through fidelity result (does NodeLocal relay adversarial content without stripping it?), not an independent-agreement finding the way the August pair-mode pins are. See `docs/ARCHITECTURE.md` for a parallel-topology re-run plan.
 
 ## Digests
 
-- Artifact tree SHA index: see `SHA256SUMS.txt`
-- Combined adversarial digs fingerprint: `1804eecb393e14328e5109c38a69f852d070773b8fc8df044d50246eb9d6765e`
+- Artifact tree SHA index: see `SHA256SUMS.txt` — verify with `sha256sum -c SHA256SUMS.txt`
+- Load-bearing dig transcripts: `modes/additional-glue/digs-pin.txt` and `modes/malformed-truncate/digs-pin.txt` (per-file SHAs in `SHA256SUMS.txt`)
 
 ## How to read
 

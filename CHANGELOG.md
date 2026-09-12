@@ -20,6 +20,36 @@ GitHub Releases on SemVer tags are the Zenodo auto-mint hook when the repo is li
 
 
 
+## [0.1.8] — 2026-09-12
+
+### Fixed
+
+- Both-null soundness hole: `compare_observations()` now reports `all_null`; `layer3_change_window.py` and `layer3_version_window.sh` emit `INCONCLUSIVE` (not `PROMOTE`) when either pin's stand-ins returned no DNS message at all.
+- `hang_or_crash` compared only presence/absence of `error`, scoring a timeout on one side and a hard `dig` exit on the other as agreement. Added `classify_failure()` to compare normalized failure classes instead.
+- `ΔD` baseline subtraction (paper-side, Section III-B) matched by axis name only, which could mask a baseline axis whose divergent value-pair reverses polarity under the adversary. Added `delta_divergence()` matching on the full (axis, value-pair) tuple.
+- `run_adversarial.py` now records each resolver's configured image tag and resolved image ID (read from the live container via `docker inspect`, not asserted by the caller) into `manifest["container_images"]`.
+- `docs/TAGS.md`, the top-level `README.md`, and four `artifacts/*/README.md` files still named the paper's prior venue (TNSM, retargeted to IJNM 5 Sep) and were missing tags `v0.1.3`–`v0.1.7` entirely.
+- `artifacts/layer1-kind-20260904T231736Z/SHA256SUMS.txt` used absolute host paths, failing `sha256sum -c` from a fresh checkout; rewritten relative.
+- `artifacts/layer2-kind-20260912T004414Z/SHA256SUMS.txt` listed `run.log`, which was never committed and whose printed hash didn't match any locally available copy; removed the line rather than ship an unverified file.
+- Dropped the unreproducible "combined adversarial digs fingerprint" for the Kind L2 pack; citations now point at the two per-file SHAs, which verify.
+
+### Documented
+
+- `artifacts/layer2-kind-20260912T004414Z/SUMMARY.md` now states plainly that NodeLocal forwards to CoreDNS, which forwards to the MITM (serial, not parallel) — the pack is a pass-through fidelity result, not independent-hop agreement.
+- `docs/ARCHITECTURE.md` gained a concrete one-line-Corefile parallel-topology fix plan for the next Kind L2 re-run on Lab Test Server.
+
+## [0.1.7] — 2026-09-12
+
+### Added
+
+- Host B version-window PROMOTE instance (`scripts/layer3_version_window.sh`): MITM mode held fixed at `authority-ns-glue`, Unbound image swapped 1.24.0→1.25.1. Brackets the change-window workflow's other branch alongside the existing HOLD vignette.
+
+## [0.1.6] — 2026-09-12
+
+### Added
+
+- Kind L1 (`artifacts/layer1-kind-20260904T231736Z/`) and Kind L2 (`artifacts/layer2-kind-20260912T004414Z/`) evidence packs shipped into `artifacts/`, with `.gitignore` allowlist fix so they are actually committed (previously captured but never tracked).
+
 ## [0.1.5] — 2026-09-05
 
 ### Added

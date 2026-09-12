@@ -233,3 +233,33 @@ def compare_observations(
         "all_null": all_null,
         "gated_skipped": gated_skipped,
     }
+
+
+def delta_divergence(pin: dict[str, Any], baseline: dict[str, Any]) -> dict[str, Any]:
+    """Baseline-relative divergence, gated on (axis, value-pair) not axis name alone.
+
+    Subtracting a baseline axis by name only (as printed by hand in the manuscript)
+    can mask a polarity change: if an axis stays divergent at baseline and under the
+    adversary but which side asserts it flips, that is a new, adversary-caused
+    disagreement, not the same passthrough-default noise. Match on the full
+    (axis, left_value, right_value) tuple instead — only an identical value-pair at
+    baseline is treated as already-known.
+
+    ``pin`` and ``baseline`` are ``compare_observations(...)`` results for the same
+    resolver pairing (so "left"/"right" identity — the alphabetically-sorted base
+    role — is consistent between the two calls).
+    """
+
+    def hashable(v: Any) -> Any:
+        return tuple(v) if isinstance(v, list) else v
+
+    def key(d: dict[str, Any]) -> tuple:
+        return (d["axis"], hashable(d.get("left_value")), hashable(d.get("right_value")))
+
+    baseline_keys = {key(d) for d in baseline.get("divergences", [])}
+    delta = [d for d in pin.get("divergences", []) if key(d) not in baseline_keys]
+    return {
+        "delta_divergence_count": len(delta),
+        "delta_divergences": delta,
+        "baseline_axes": sorted({d["axis"] for d in baseline.get("divergences", [])}),
+    }
