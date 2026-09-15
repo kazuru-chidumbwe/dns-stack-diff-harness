@@ -1,0 +1,41 @@
+services:
+  auth:
+    image: coredns/coredns:1.11.3
+    command: ["-conf", "/Corefile"]
+    volumes:
+      - /opt/atlas/stackdiff-repro/repo/artifacts/layer2-compose-serial-cache-20260915T192742Z/auth-corefile:/Corefile:ro
+      - /opt/atlas/stackdiff-repro/repo/artifacts/layer2-compose-serial-cache-20260915T192742Z/zones:/zones
+    networks:
+      serialnet:
+        ipv4_address: 172.31.0.10
+  coredns_fwd:
+    image: coredns/coredns:1.11.3
+    command: ["-conf", "/Corefile"]
+    volumes:
+      - /opt/atlas/stackdiff-repro/repo/artifacts/layer2-compose-serial-cache-20260915T192742Z/coredns-fwd-corefile:/Corefile:ro
+    depends_on: [auth]
+    ports:
+      - "127.0.0.1:9154:53/udp"
+      - "127.0.0.1:9154:53/tcp"
+    networks:
+      serialnet:
+        ipv4_address: 172.31.0.30
+  unbound:
+    image: mvance/unbound:1.20.0
+    volumes:
+      - /opt/atlas/stackdiff-repro/repo/artifacts/layer2-compose-serial-cache-20260915T192742Z/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+    depends_on: [coredns_fwd]
+    ports:
+      - "127.0.0.1:9153:53/udp"
+      - "127.0.0.1:9153:53/tcp"
+    healthcheck:
+      disable: true
+    networks:
+      serialnet:
+        ipv4_address: 172.31.0.20
+networks:
+  serialnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24

@@ -20,6 +20,18 @@ Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.
 
 
 
+## [0.1.13] — 2026-09-15
+
+### Added
+
+- `scripts/layer2_compose_serial_cache.sh`: second serial-hop pairing, Unbound (cache) -> CoreDNS-forwarder (no cache) -> auth. Same remaining-TTL prediction as the Kind experiment.
+- Kind and compose TTL sweeps on Testbed B (20 / 60 / 120 / 300 s). Packs `artifacts/layer2-kind-serial-cache-20260915T185233Z` (and 185304Z / 185538Z / 185749Z) and `artifacts/layer2-compose-serial-cache-20260915T192609Z` (and 192636Z / 192742Z / 192949Z).
+
+### Fixed
+
+- `scripts/layer2_kind_serial_cache.sh`: NodeLocal no longer forwards to `10.96.0.10` (an address it binds). A dedicated `coredns-direct` Service is the upstream. `ZONE_TTL` rewrites the zone `$TTL`. Poll window is `2 * min(cache, zone) + 30`. The v0.1.12 15.65s pack remains as a self-forward measurement.
+
+
 ## [0.1.12] — 2026-09-12
 
 ### Removed
@@ -57,7 +69,7 @@ Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.
 - `hang_or_crash` compared only presence/absence of `error`, scoring a timeout on one side and a hard `dig` exit on the other as agreement. Added `classify_failure()` to compare normalized failure classes instead.
 - `ΔD` baseline subtraction (paper-side, Section III-B) matched by axis name only, which could mask a baseline axis whose divergent value-pair reverses polarity under the adversary. Added `delta_divergence()` matching on the full (axis, value-pair) tuple.
 - `run_adversarial.py` now records each resolver's configured image tag and resolved image ID (read from the live container via `docker inspect`, not asserted by the caller) into `manifest["container_images"]`.
-- `docs/TAGS.md`, the top-level `README.md`, and four `artifacts/*/README.md` files still named the paper's prior venue (TNSM, retargeted to IJNM 5 Sep) and were missing tags `v0.1.3`–`v0.1.7` entirely.
+- `docs/TAGS.md`, the top-level `README.md`, and four `artifacts/*/README.md` files still named a prior target venue and were missing tags `v0.1.3`–`v0.1.7` entirely.
 - `artifacts/layer1-kind-20260904T231736Z/SHA256SUMS.txt` used absolute host paths, failing `sha256sum -c` from a fresh checkout; rewritten relative.
 - `artifacts/layer2-kind-20260912T004414Z/SHA256SUMS.txt` listed `run.log`, which was never committed and whose printed hash didn't match any locally available copy; removed the line rather than ship an unverified file.
 - Dropped the unreproducible "combined adversarial digs fingerprint" for the Kind L2 pack; citations now point at the two per-file SHAs, which verify.
@@ -99,9 +111,9 @@ Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.
 
 
 
-- Package B malformed capture pin `artifacts/capture-malformed-20260816T032622Z/` (TNSM Table VII timeline).
+- Package B malformed capture pin `artifacts/capture-malformed-20260816T032622Z/` (malformed-capture timeline table).
 
-- Package C robustness pin `artifacts/robustness-20260816T034020Z/` + `make robustness` / `classifier/run_robustness.py` (TNSM Table IX).
+- Package C robustness pin `artifacts/robustness-20260816T034020Z/` + `make robustness` / `classifier/run_robustness.py` (robustness table).
 
 - Replay helper `scripts/capture-malformed-timeline.sh`.
 
@@ -135,7 +147,7 @@ Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.
 
 
 
-- README / venue docs retargeted to IEEE TNSM (archival Dec 2026); measurement-only stance.
+- README / venue docs made venue-neutral; measurement-only stance.
 
 
 

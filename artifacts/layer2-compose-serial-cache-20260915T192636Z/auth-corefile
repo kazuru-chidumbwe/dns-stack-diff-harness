@@ -1,0 +1,5 @@
+lab.stackdiff. {
+    file /zones/lab.stackdiff.zone
+    log
+    errors
+}

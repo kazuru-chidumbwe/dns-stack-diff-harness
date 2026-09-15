@@ -36,6 +36,22 @@ artifacts/*
 !artifacts/layer2-kind-serial-cache-20260912T130932Z/**
 !artifacts/layer2-kind-serial-cache-20260912T181106Z/
 !artifacts/layer2-kind-serial-cache-20260912T181106Z/**
+!artifacts/layer2-kind-serial-cache-20260915T185233Z/
+!artifacts/layer2-kind-serial-cache-20260915T185233Z/**
+!artifacts/layer2-kind-serial-cache-20260915T185304Z/
+!artifacts/layer2-kind-serial-cache-20260915T185304Z/**
+!artifacts/layer2-kind-serial-cache-20260915T185538Z/
+!artifacts/layer2-kind-serial-cache-20260915T185538Z/**
+!artifacts/layer2-kind-serial-cache-20260915T185749Z/
+!artifacts/layer2-kind-serial-cache-20260915T185749Z/**
+!artifacts/layer2-compose-serial-cache-20260915T192609Z/
+!artifacts/layer2-compose-serial-cache-20260915T192609Z/**
+!artifacts/layer2-compose-serial-cache-20260915T192636Z/
+!artifacts/layer2-compose-serial-cache-20260915T192636Z/**
+!artifacts/layer2-compose-serial-cache-20260915T192742Z/
+!artifacts/layer2-compose-serial-cache-20260915T192742Z/**
+!artifacts/layer2-compose-serial-cache-20260915T192949Z/
+!artifacts/layer2-compose-serial-cache-20260915T192949Z/**
 
 __pycache__/
 *.pyc
@@ -53,3 +69,11 @@ logs/
 !artifacts/layer2-kind-parallel-20260912T112004Z/run.log
 !artifacts/layer2-kind-serial-cache-20260912T130932Z/run.log
 !artifacts/layer2-kind-serial-cache-20260912T181106Z/run.log
+!artifacts/layer2-kind-serial-cache-20260915T185233Z/run.log
+!artifacts/layer2-kind-serial-cache-20260915T185304Z/run.log
+!artifacts/layer2-kind-serial-cache-20260915T185538Z/run.log
+!artifacts/layer2-kind-serial-cache-20260915T185749Z/run.log
+!artifacts/layer2-compose-serial-cache-20260915T192609Z/run.log
+!artifacts/layer2-compose-serial-cache-20260915T192636Z/run.log
+!artifacts/layer2-compose-serial-cache-20260915T192742Z/run.log
+!artifacts/layer2-compose-serial-cache-20260915T192949Z/run.log

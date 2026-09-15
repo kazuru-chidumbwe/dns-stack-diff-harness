@@ -18,7 +18,8 @@ STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 OUT="$ROOT/artifacts/layer2-kind-serial-cache-$STAMP"
 NS=stackdiff-l2sc
 QNAME="www.lab.stackdiff."
-CACHE_TTL=20
+CACHE_TTL="${CACHE_TTL:-20}"
+ZONE_TTL="${ZONE_TTL:-20}"   # record TTL; effective staleness = min(cache, record)
 BACKUP_DIR="$OUT/cm-backup"
 
 mkdir -p "$OUT" "$BACKUP_DIR"
@@ -113,6 +114,9 @@ www     IN A   203.0.113.21
 check   IN A   203.0.113.99
 EOF
 
+# Effective TTL is min(cache directive, record TTL); vary the record TTL too.
+sed -i "s/^\$TTL 20$/\$TTL $ZONE_TTL/; s/1 60 30 3600 20 )/1 60 30 3600 $ZONE_TTL )/" "$OUT/lab.stackdiff.zone.v1" "$OUT/lab.stackdiff.zone.v2"
+
 cat >"$OUT/auth-corefile" <<EOF
 lab.stackdiff.:53 {
     errors
@@ -192,6 +196,13 @@ $KUBECTL -n kube-system create configmap coredns \
 $KUBECTL -n kube-system rollout restart deploy/coredns
 $KUBECTL -n kube-system rollout status deploy/coredns --timeout=180s
 
+# Dedicated CoreDNS Service so NodeLocal forwards to CoreDNS, not to itself.
+# node-local-dns binds 10.96.0.10; forwarding there is a self-loop, not a hop.
+$KUBECTL -n kube-system get svc coredns-direct >/dev/null 2>&1 || $KUBECTL -n kube-system create service clusterip coredns-direct --tcp=53:53 >/dev/null
+$KUBECTL -n kube-system patch svc coredns-direct --type=json -p '[{"op":"replace","path":"/spec/selector","value":{"k8s-app":"kube-dns"}},{"op":"replace","path":"/spec/ports","value":[{"name":"dns","port":53,"protocol":"UDP","targetPort":53}]}]' >/dev/null
+CD_IP="$($KUBECTL -n kube-system get svc coredns-direct -o jsonpath='{.spec.clusterIP}')"
+log "CoreDNS direct service: $CD_IP (NodeLocal upstream; distinct from 10.96.0.10)"
+
 # --- NodeLocal: lab.stackdiff -> CoreDNS, WITH cache (its real production role) ---
 nl="$($KUBECTL -n kube-system get cm node-local-dns -o jsonpath='{.data.Corefile}')"
 cat >"$OUT/nodelocal-corefile-new" <<EOF
@@ -203,7 +214,7 @@ lab.stackdiff:53 {
     reload
     loop
     bind 169.254.20.10 10.96.0.10
-    forward . 10.96.0.10
+    forward . $CD_IP
 }
 $nl
 EOF
@@ -214,7 +225,7 @@ $KUBECTL -n kube-system rollout restart ds/node-local-dns
 wait_rollout
 sleep 3
 
-log "chain: NodeLocal(169.254.20.10, cache ${CACHE_TTL}s) -> CoreDNS(10.96.0.10, no cache) -> auth($AUTH_IP, zone v1)"
+log "chain: NodeLocal(169.254.20.10, cache ${CACHE_TTL}s) -> CoreDNS($CD_IP, no cache) -> auth($AUTH_IP, zone v1)"
 
 # --- Step 1: pre-change pin (populates NodeLocal's cache with v1 answer) ---
 read -r t_pre_nl a_pre_nl <<<"$(dig_one pre-nodelocal 169.254.20.10)"
@@ -241,7 +252,7 @@ log "POST-CHANGE (immediate)  CoreDNS=$a_post_cd @${t_post_cd}  NodeLocal=$a_pos
 # with ~1s resolution, not an upper bound from a single post-hoc sample
 # (Reviewer X: the original single sample at CACHE_TTL+8 only proved
 # "reconverged by then," not how long reconvergence actually took). ---
-POLL_MAX=$((CACHE_TTL + 15))
+POLL_MAX=$(( ( (CACHE_TTL < ZONE_TTL ? CACHE_TTL : ZONE_TTL) * 2 ) + 30 ))
 poll_deadline="$(python3 -c "print(float('$t_promote') + $POLL_MAX)")"
 recon_epoch=""
 recon_answer=""

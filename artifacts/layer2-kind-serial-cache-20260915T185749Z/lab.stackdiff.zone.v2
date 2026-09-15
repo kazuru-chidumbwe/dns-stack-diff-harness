@@ -1,0 +1,9 @@
+$ORIGIN lab.stackdiff.
+$TTL 300
+@       IN SOA ns.lab.stackdiff. hostmaster.lab.stackdiff. (
+            2 60 30 3600 20 )
+@       IN NS  ns.lab.stackdiff.
+ns      IN A   172.30.0.11
+agree   IN A   203.0.113.10
+www     IN A   203.0.113.21
+check   IN A   203.0.113.99
