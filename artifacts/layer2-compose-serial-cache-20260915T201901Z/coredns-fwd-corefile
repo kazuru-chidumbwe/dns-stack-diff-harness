@@ -1,0 +1,5 @@
+. {
+    forward . 172.31.0.10
+    errors
+    log
+}

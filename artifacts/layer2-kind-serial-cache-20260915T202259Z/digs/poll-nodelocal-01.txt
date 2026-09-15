@@ -1,0 +1,10 @@
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 24446
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: a45dde3a2d18c2d4 (echoed)
+;; ANSWER SECTION:
+www.lab.stackdiff.	16	IN	A	203.0.113.20

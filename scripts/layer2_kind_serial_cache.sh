@@ -278,12 +278,12 @@ log "RECONVERGED  NodeLocal=${recon_answer:-NONE} @${recon_epoch:-NA} (poll #$at
 
 # --- decision.json: score D(p) at each stage on the single 'answer' axis ---
 python3 - "$OUT" "$a_pre_nl" "$a_pre_cd" "$a_post_nl" "$a_post_cd" "${recon_answer:-NONE}" "$a_reconv_cd" \
-         "$t_pre_nl" "$t_promote" "$t_post_nl" "${recon_epoch:-NaN}" "$attempt" "$CACHE_TTL" <<'PY'
+         "$t_pre_nl" "$t_promote" "$t_post_nl" "${recon_epoch:-NaN}" "$attempt" "$CACHE_TTL" "$ZONE_TTL" <<'PY'
 import json, math, sys
 from pathlib import Path
 
 (out, pre_nl, pre_cd, post_nl, post_cd, rec_nl, rec_cd,
- t_pre_nl, t_promote, t_post_nl, t_reconv_nl, poll_attempts, cache_ttl) = sys.argv[1:]
+ t_pre_nl, t_promote, t_post_nl, t_reconv_nl, poll_attempts, cache_ttl, zone_ttl) = sys.argv[1:]
 
 def d(a, b):
     return 0 if a == b else 1
@@ -307,6 +307,7 @@ report = {
     "gate": "layer3-serial-cache-staleness",
     "chain": "NodeLocal(cache) -> CoreDNS(no cache) -> auth",
     "cache_ttl_s": int(cache_ttl_f),
+    "zone_ttl_s": int(float(zone_ttl)),
     "pre_change": {"nodelocal": pre_nl, "coredns": pre_cd, "D_answer": d(pre_nl, pre_cd)},
     "post_change_immediate": {"nodelocal": post_nl, "coredns": post_cd, "D_answer": d(post_nl, post_cd)},
     "reconverged": {"nodelocal": rec_nl, "coredns": rec_cd, "D_answer": d(rec_nl, rec_cd)},

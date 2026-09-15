@@ -4,6 +4,7 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 | Tag | Purpose |
 | --- | --- |
+| [`v0.1.14`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.14) | Table 9 n=3 at TTL 20s/60s plus cache-60/zone-300 mismatch on Kind and compose; 120s/300s n=1 rows remain from v0.1.13 |
 | [`v0.1.13`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.13) | Serial-hop TTL relationship, two pairings: Kind NodeLocal→CoreDNS via `coredns-direct`, and compose Unbound→CoreDNS-forwarder; 20/60/120/300s vs remaining-TTL prediction |
 | [`v0.1.12`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.12) | Polled serial-hop timing at TTL 20s (15.65s). Self-forwarding NodeLocal Corefile; superseded by v0.1.13 |
 | [`v0.1.11`](https://github.com/kazuru-chidumbwe/dns-stack-diff-harness/releases/tag/v0.1.11) | Real serial-hop cache-staleness experiment (`layer2-kind-serial-cache-20260912T130932Z`): NodeLocal(cache)->CoreDNS->auth chain; real zone-record change served stale by NodeLocal, reconverges after cache TTL. Superseded by v0.1.12: its ~30s figure was an upper bound (sleep duration), not a measurement |
@@ -26,7 +27,7 @@ Annotated tags mark reproducible anchors. **`main` may advance** after a tag —
 
 ```bash
 # Latest (serial-hop TTL relationship, two pairings)
-git checkout v0.1.13
+git checkout v0.1.14
 
 # Superseded self-forward serial-hop pack
 git checkout v0.1.12
@@ -79,7 +80,7 @@ sha256sum artifacts/robustness-20260816T034020Z/manifest.json
 
 ## Tag policy
 
-- **SemVer** → `v0.1.13` (current) · `v0.1.12` · `v0.1.11` · `v0.1.10` · `v0.1.9` · `v0.1.8` · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
+- **SemVer** → `v0.1.14` (current) · `v0.1.13` · `v0.1.12` · `v0.1.11` · `v0.1.10` · `v0.1.9` · `v0.1.8` · `v0.1.7` · `v0.1.6` · `v0.1.5` · `v0.1.4` · `v0.1.3` · `v0.1.2` · `v0.1.1` · `v0.1.0`. See [`CHANGELOG.md`](../CHANGELOG.md).
 - Zenodo minting stopped after `v0.1.5` (`.zenodo.json` removed); `v0.1.6` onward cite the GitHub tag directly, not a DOI.
 - DNS-01 essay → `blog-dns01-2026-07`.
 - DNS-02a July measurement essay → `blog-dns02a-2026-07`.

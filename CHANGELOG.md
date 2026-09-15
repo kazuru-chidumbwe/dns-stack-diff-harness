@@ -20,6 +20,16 @@ Zenodo minting stopped after `v0.1.5`; `.zenodo.json` removed in `v0.1.12`. `v0.
 
 
 
+## [0.1.14] — 2026-09-15
+
+### Added
+
+- Table 9 repeats and mismatch on Testbed B: Kind and compose, TTL 20s and 60s with n=3 independent repeats each, plus one cache-60 / zone-300 cell per pairing. Lag tracks remaining cache TTL, not the 300s record TTL. Packs `artifacts/layer2-kind-serial-cache-20260915T202228Z` (and 202259Z / 202339Z / 202421Z / 202543Z / 202704Z / 202827Z) and `artifacts/layer2-compose-serial-cache-20260915T201622Z` (and 201651Z / 201721Z / 201751Z / 201901Z / 202010Z / 202120Z). The v0.1.13 120s/300s matched packs remain the n=1 long-TTL rows.
+
+### Changed
+
+- `scripts/layer2_kind_serial_cache.sh` and `scripts/layer2_compose_serial_cache.sh` now write `zone_ttl_s` (and compose `cache_ttl_requested_s`) into `decision.json` so a mismatch cell is identifiable in the pack.
+
 ## [0.1.13] — 2026-09-15
 
 ### Added

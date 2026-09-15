@@ -234,12 +234,14 @@ read -r t_reconv_cd a_reconv_cd <<<"$(dig_one reconverged-coredns 127.0.0.1 "$CO
 log "RECONVERGED  Unbound=${recon_answer:-NONE} @${recon_epoch:-NA} (poll #$attempt)  CoreDNS-fwd=$a_reconv_cd @${t_reconv_cd}"
 
 python3 - "$OUT" "$a_pre_ub" "$a_pre_cd" "$a_post_ub" "$a_post_cd" "${recon_answer:-NONE}" "$a_reconv_cd" \
-         "$t_pre_ub" "$t_promote" "$t_post_ub" "${recon_epoch:-NaN}" "$attempt" "$EFF_TTL" "$UNBOUND_IMAGE" <<'PY'
+         "$t_pre_ub" "$t_promote" "$t_post_ub" "${recon_epoch:-NaN}" "$attempt" "$EFF_TTL" "$UNBOUND_IMAGE" \
+         "$CACHE_TTL" "$ZONE_TTL" <<'PY'
 import json, math, sys
 from pathlib import Path
 
 (out, pre_ub, pre_cd, post_ub, post_cd, rec_ub, rec_cd,
- t_pre_ub, t_promote, t_post_ub, t_reconv_ub, poll_attempts, cache_ttl, image) = sys.argv[1:]
+ t_pre_ub, t_promote, t_post_ub, t_reconv_ub, poll_attempts, cache_ttl, image,
+ cache_ttl_req, zone_ttl_req) = sys.argv[1:]
 
 def d(a, b):
     return 0 if a == b else 1
@@ -275,6 +277,8 @@ report = {
     "chain": "Unbound(cache) -> CoreDNS-forwarder(no cache) -> auth",
     "unbound_image": image,
     "cache_ttl_s": int(cache_ttl_f),
+    "cache_ttl_requested_s": int(cache_ttl_req),
+    "zone_ttl_s": int(zone_ttl_req),
     "status": status,
     "pre_change": {"unbound": pre_ub, "coredns_fwd": pre_cd, "D_answer": d(pre_ub, pre_cd)},
     "post_change_immediate": {"unbound": post_ub, "coredns_fwd": post_cd, "D_answer": d(post_ub, post_cd)},

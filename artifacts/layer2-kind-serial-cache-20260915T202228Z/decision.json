@@ -1,0 +1,32 @@
+{
+  "cache_ttl_s": 20,
+  "chain": "NodeLocal(cache) -> CoreDNS(no cache) -> auth",
+  "finding": "NodeLocal served a stale cached answer immediately after the authoritative change was promoted, while CoreDNS (uncached) reflected the change instantly; NodeLocal reconverged only after its cache TTL elapsed.",
+  "gate": "layer3-serial-cache-staleness",
+  "measurement_note": "propagation_lag_measured_s is a first-observation measurement from ~1s-interval polling of NodeLocal starting after promotion, resolution ~1 dig round-trip. propagation_lag_predicted_from_ttl_s is the independent mechanistic prediction (cache entry populated at pre_nodelocal_query, cache_ttl_s TTL, minus elapsed time to change_promoted); the two should agree within one poll interval.",
+  "post_change_immediate": {
+    "D_answer": 1,
+    "coredns": "203.0.113.21",
+    "nodelocal": "203.0.113.20"
+  },
+  "pre_change": {
+    "D_answer": 0,
+    "coredns": "203.0.113.20",
+    "nodelocal": "203.0.113.20"
+  },
+  "propagation_lag_measured_s": 18.156827926635742,
+  "propagation_lag_predicted_from_ttl_s": 18.153512001037598,
+  "reconverged": {
+    "D_answer": 0,
+    "coredns": "203.0.113.21",
+    "nodelocal": "203.0.113.21"
+  },
+  "reconverged_after_poll_attempts": 15,
+  "timestamps_epoch": {
+    "change_promoted": 1789503759.487819,
+    "post_change_nodelocal_query": 1789503761.7018733,
+    "pre_nodelocal_query": 1789503757.641331,
+    "reconverged_nodelocal_query": 1789503777.644647
+  },
+  "zone_ttl_s": 20
+}

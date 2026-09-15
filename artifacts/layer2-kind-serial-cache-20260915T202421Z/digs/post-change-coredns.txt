@@ -1,0 +1,11 @@
+;; communications error to 10.96.0.10#53: timed out
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4690
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 1bc6ba13ea4886a3 (echoed)
+;; ANSWER SECTION:
+www.lab.stackdiff.	60	IN	A	203.0.113.21

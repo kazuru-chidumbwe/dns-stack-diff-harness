@@ -1,0 +1,35 @@
+{
+  "cache_ttl_requested_s": 60,
+  "cache_ttl_s": 60,
+  "chain": "Unbound(cache) -> CoreDNS-forwarder(no cache) -> auth",
+  "finding": "Unbound served a stale cached answer immediately after the authoritative change was promoted, while CoreDNS-forwarder (uncached) reflected the change instantly; Unbound reconverged only after its cache TTL elapsed.",
+  "gate": "layer3-serial-cache-staleness-compose",
+  "measurement_note": "propagation_lag_measured_s is a first-observation measurement from ~1s-interval polling of Unbound starting after promotion. propagation_lag_predicted_from_ttl_s is the independent mechanistic prediction (cache entry populated at pre_unbound_query, cache_ttl_s TTL, minus elapsed time to change_promoted); the two should agree within one poll interval.",
+  "post_change_immediate": {
+    "D_answer": 1,
+    "coredns_fwd": "203.0.113.21",
+    "unbound": "203.0.113.20"
+  },
+  "pre_change": {
+    "D_answer": 0,
+    "coredns_fwd": "203.0.113.20",
+    "unbound": "203.0.113.20"
+  },
+  "propagation_lag_measured_s": 57.64672780036926,
+  "propagation_lag_predicted_from_ttl_s": 56.80669021606445,
+  "reconverged": {
+    "D_answer": 0,
+    "coredns_fwd": "203.0.113.21",
+    "unbound": "203.0.113.21"
+  },
+  "reconverged_after_poll_attempts": 55,
+  "status": "PASS",
+  "timestamps_epoch": {
+    "change_promoted": 1789503689.2324224,
+    "post_change_unbound_query": 1789503689.291888,
+    "pre_unbound_query": 1789503686.0391126,
+    "reconverged_unbound_query": 1789503746.8791502
+  },
+  "unbound_image": "mvance/unbound:1.20.0",
+  "zone_ttl_s": 300
+}
